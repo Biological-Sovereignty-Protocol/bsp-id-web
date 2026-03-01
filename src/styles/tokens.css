@@ -1,0 +1,15 @@
+:root {
+  --color-primary: #C9A84C;
+  --color-bg: #0A0A0A;
+  --color-surface: #1C1C1E;
+  --color-text: #F2F2F2;
+  --color-text-muted: #888888;
+  
+  --font-display: Arial, sans-serif;
+  --font-body: Georgia, serif;
+  --font-mono: "Courier New", monospace;
+  
+  --radius-base: 4px;
+  --radius-card: 8px;
+  --spacing-unit: 8px;
+}

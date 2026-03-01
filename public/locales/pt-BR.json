@@ -1,0 +1,23 @@
+{
+    "create": {
+        "title": "Criar meu BEO",
+        "domain_label": "Escolha seu domínio biológico",
+        "domain_placeholder": "seunome.bsp",
+        "domain_checking": "Verificando disponibilidade...",
+        "domain_available": "✓ Disponível",
+        "domain_taken": "✗ Já registrado — sugestões:",
+        "step_key": "Sua chave de soberania",
+        "step_guardian": "Proteção adicional (opcional)",
+        "step_register": "Registrando no Arweave...",
+        "guardian_skip": "Configurar depois",
+        "guardian_skip_note": "Você está protegido pela seed phrase.",
+        "cost_note": "Registro permanente e gratuito"
+    },
+    "dashboard": {
+        "title": "Acessar meu BEO"
+    },
+    "common": {
+        "footer_fee": "Registro permanente e gratuito — infraestrutura absorvida pelo Instituto Ambrósio",
+        "footer_source": "Open source · github.com/Biological-Sovereignty-Protocol/bsp-id-web"
+    }
+}
