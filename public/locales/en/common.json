@@ -1,0 +1,89 @@
+{
+    "landing": {
+        "title": "BSP Identity",
+        "subtitle": "Where your biological sovereignty begins.",
+        "subtitle_2": "No accounts, no passwords, no central database.",
+        "cta_create": "Create my BEO",
+        "cta_create_desc": "Register your permanent identity on Arweave.",
+        "cta_access": "Access my BEO",
+        "cta_access_desc": "Open your dashboard with your sovereignty key.",
+        "footer_link": "For Institutions and Laboratories"
+    },
+    "create": {
+        "title": "Create Your BEO",
+        "subtitle": "Choose your unique biological domain.",
+        "placeholder_domain": "yourname",
+        "domain_suffix": ".bsp",
+        "domain_available": "Domain available",
+        "domain_unavailable": "Already registered",
+        "key_title": "Your Sovereignty Key",
+        "key_desc": "Ambrosio Institute does not have a copy of these 24 words. They are the only way to recover your BEO if you lose this device. Do not take a screenshot.",
+        "key_confirm": "I have stored these 24 words safely",
+        "guardian_title": "Additional Protection",
+        "guardian_desc": "You can fragment your key to 3 trusted guardians now using Shamir Secret Sharing, or skip this step and rely only on your seed phrase.",
+        "guardian_skip": "Skip — Setup Guardians Later",
+        "registering_title": "Registering on Arweave",
+        "registering_desc": "The Institute is paying the transaction fee.<br />Please wait...",
+        "success_title": "Sovereignty Guaranteed",
+        "success_desc": "Your BEO <strong>{{domain}}</strong> is now permanently yours.",
+        "btn_dashboard": "Access Dashboard",
+        "btn_next": "Continue",
+        "btn_back": "Back"
+    },
+    "dashboard": {
+        "loading": "Loading identity...",
+        "require_sovereignty": "Sovereignty Required",
+        "no_key": "No biological key found on this device.",
+        "onchain_active": "On-chain Active",
+        "cards": {
+            "consent_title": "Consents",
+            "consent_desc": "Manage who can read and send your biological data.",
+            "biorecords_title": "BioRecords",
+            "biorecords_desc": "Biomarker history (Requires decoding).",
+            "guardians_title": "Guardians",
+            "guardians_desc": "Shamir fragments for decentralized social recovery.",
+            "export_title": "Export Key",
+            "export_desc": "Export your Ed25519 key stored in this browser."
+        }
+    },
+    "consent": {
+        "title": "Issue Consent",
+        "subtitle": "Authorize labs and clinics to interact with your BEO.",
+        "label_institution": "Authorized Institution (IEO Domain)",
+        "label_intents": "Allowed Intents",
+        "btn_authorize": "Authorize Institution",
+        "btn_signing": "Signing and Registering...",
+        "success": "Consent issued on-chain via Relayer!",
+        "error": "Error issuing consent.",
+        "error_no_id": "Identity not found. Please access /dashboard."
+    },
+    "guardians": {
+        "title": "Social Recovery",
+        "subtitle": "Fragmentation of your key (Shamir) to 3 trusted guardians.",
+        "warning_1": "1. You will need the phones or emails of 3 highly trusted people.",
+        "warning_2": "2. Neither Ambrosio nor the Guardians will have your full key.",
+        "warning_3": "3. If you lose your Seed Phrase, you'll need 2 of 3 guardians to recover your BEO.",
+        "btn_setup": "Setup Guardians Now"
+    },
+    "recover": {
+        "title": "Spatial Recovery",
+        "subtitle": "Lost access to this device? Restore your sovereignty here.",
+        "tab_seed": "Via Seed Phrase",
+        "tab_guardians": "Via Guardians",
+        "label_domain": "What is your BEO Domain?",
+        "label_seed": "Type the 24 words (separated by space)",
+        "btn_restore": "Restore Sovereignty",
+        "recovering": "Recovering Key...",
+        "social_title": "Social Recovery Active",
+        "social_desc": "By starting this flow, a RecoveryRequest will be written to Arweave. You will need 2 of your 3 guardians to approve the key replacement.",
+        "btn_social": "Start On-chain Request",
+        "success": "Sovereignty Restored! Key saved in browser successfully."
+    },
+    "nav": {
+        "theme_light": "Light Mode",
+        "theme_dark": "Dark Mode",
+        "lang_en": "English",
+        "lang_pt": "Portuguese",
+        "lang_es": "Spanish"
+    }
+}

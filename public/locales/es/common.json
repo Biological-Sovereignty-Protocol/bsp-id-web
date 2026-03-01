@@ -1,0 +1,89 @@
+{
+    "landing": {
+        "title": "BSP Identity",
+        "subtitle": "Donde comienza su soberanía biológica.",
+        "subtitle_2": "Sin cuentas, sin contraseñas, sin bases de datos centrales.",
+        "cta_create": "Crear mi BEO",
+        "cta_create_desc": "Registre su identidad permanente en Arweave.",
+        "cta_access": "Acceder a mi BEO",
+        "cta_access_desc": "Abra su panel con su llave de soberanía.",
+        "footer_link": "Para Instituciones y Laboratorios"
+    },
+    "create": {
+        "title": "Crea tu BEO",
+        "subtitle": "Elije tu dominio biológico único.",
+        "placeholder_domain": "tunombre",
+        "domain_suffix": ".bsp",
+        "domain_available": "Dominio disponible",
+        "domain_unavailable": "Ya registrado",
+        "key_title": "Tu Llave de Soberanía",
+        "key_desc": "Ambrosio Institute no tiene copia de estas 24 palabras. Son la única forma de recuperar su BEO si pierde este dispositivo. No tome capturas de pantalla.",
+        "key_confirm": "He guardado estas 24 palabras de forma segura",
+        "guardian_title": "Protección Adicional",
+        "guardian_desc": "Puede fragmentar su clave para 3 guardianes de confianza ahora usando Shamir Secret Sharing, o saltar este paso y confiar solo en su frase semilla.",
+        "guardian_skip": "Saltar — Configurar Guardianes Después",
+        "registering_title": "Registrando en Arweave",
+        "registering_desc": "El Instituto está pagando la tarifa de transacción. Por favor, espere...",
+        "success_title": "Soberanía Garantizada",
+        "success_desc": "Tu BEO <strong>{{domain}}</strong> es ahora permanentemente tuyo.",
+        "btn_dashboard": "Acceder al Panel",
+        "btn_next": "Continuar",
+        "btn_back": "Atrás"
+    },
+    "dashboard": {
+        "loading": "Cargando identidad...",
+        "require_sovereignty": "Soberanía Requerida",
+        "no_key": "No se encontró ninguna llave biológica en este dispositivo.",
+        "onchain_active": "On-chain Activo",
+        "cards": {
+            "consent_title": "Consentimientos",
+            "consent_desc": "Administre quién puede leer y enviar sus datos biológicos.",
+            "biorecords_title": "BioRecords",
+            "biorecords_desc": "Historial de biomarcadores (Requiere decodificación).",
+            "guardians_title": "Guardianes",
+            "guardians_desc": "Fragmentos Shamir para recuperación social descentralizada.",
+            "export_title": "Exportar Llave",
+            "export_desc": "Exportar su llave Ed25519 almacenada en este navegador."
+        }
+    },
+    "consent": {
+        "title": "Emitir Consentimiento",
+        "subtitle": "Autorice laboratorios y clínicas a interactuar con su BEO.",
+        "label_institution": "Institución Autorizada (Dominio IEO)",
+        "label_intents": "Intenciones Permitidas",
+        "btn_authorize": "Autorizar Institución",
+        "btn_signing": "Firmando y Registrando...",
+        "success": "¡Consentimiento emitido on-chain a través de Relayer!",
+        "error": "Error al emitir el consentimiento.",
+        "error_no_id": "Identidad no encontrada. Por favor acceda a /dashboard."
+    },
+    "guardians": {
+        "title": "Recuperación Social",
+        "subtitle": "Fragmentación de su llave (Shamir) para 3 guardianes de confianza.",
+        "warning_1": "1. Necesitará los teléfonos o correos electrónicos de 3 personas de extrema confianza.",
+        "warning_2": "2. Ni Ambrosio ni los Guardianes tendrán su llave completa.",
+        "warning_3": "3. Si pierde su Frase Semilla, necesitará 2 de 3 guardianes para recuperar su BEO.",
+        "btn_setup": "Configurar Guardianes Ahora"
+    },
+    "recover": {
+        "title": "Recuperación Espacial",
+        "subtitle": "¿Perdió el acceso a este dispositivo? Restaure su soberanía aquí.",
+        "tab_seed": "Vía Frase Semilla",
+        "tab_guardians": "Vía Guardianes",
+        "label_domain": "¿Cuál es su dominio BEO?",
+        "label_seed": "Escriba las 24 palabras (separadas por espacio)",
+        "btn_restore": "Restaurar Soberanía",
+        "recovering": "Recuperando Llave...",
+        "social_title": "Recuperación Social Activa",
+        "social_desc": "Al iniciar este flujo, se escribirá un RecoveryRequest en Arweave. Necesitará que 2 de sus 3 guardianes aprueben el reemplazo de la llave.",
+        "btn_social": "Iniciar Solicitud On-chain",
+        "success": "¡Soberanía Restaurada! Llave guardada en el navegador con éxito."
+    },
+    "nav": {
+        "theme_light": "Modo Claro",
+        "theme_dark": "Modo Oscuro",
+        "lang_en": "Inglés",
+        "lang_pt": "Portugués",
+        "lang_es": "Español"
+    }
+}
