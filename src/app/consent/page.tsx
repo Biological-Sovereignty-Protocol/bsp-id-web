@@ -75,7 +75,7 @@ export default function ConsentPage() {
                 <div className="space-y-3">
                     <label className="text-sm font-medium text-[var(--color-text-muted)]">{t('consent.label_intents')}</label>
                     <div className="grid grid-cols-2 gap-3">
-                        {['SUBMIT_RECORD', 'READ_RECORDS', 'ANALYZE_VITALITY', 'REQUEST_DATA'].map(intent => (
+                        {['SUBMIT_RECORD', 'READ_RECORDS', 'ANALYZE_VITALITY', 'REQUEST_SCORE', 'EXPORT_DATA', 'SYNC_PROTOCOL'].map(intent => (
                             <label key={intent} className="flex items-center gap-2 text-sm cursor-pointer p-3 border border-[var(--color-bg)] bg-[var(--color-bg)] rounded-lg hover:border-[var(--color-primary)]/50 transition-colors text-[var(--color-text)]">
                                 <input
                                     type="checkbox"

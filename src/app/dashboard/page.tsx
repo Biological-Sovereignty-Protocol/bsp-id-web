@@ -7,12 +7,14 @@ import { motion } from "framer-motion"
 import { Activity, Key, LogOut, ShieldCheck, FileText, User } from "lucide-react"
 import { useTranslation } from "react-i18next"
 import Link from "next/link"
+import ExportKeyModal from "@/components/ExportKeyModal"
 
 export default function Dashboard() {
     const { t } = useTranslation();
     const [identity, setIdentity] = useState<any>(null)
     const [onchainData, setOnchainData] = useState<any>(null)
     const [loading, setLoading] = useState(true)
+    const [showExportModal, setShowExportModal] = useState(false)
 
     useEffect(() => {
         async function load() {
@@ -61,6 +63,13 @@ export default function Dashboard() {
 
     return (
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="w-full space-y-8">
+            {showExportModal && identity && (
+                <ExportKeyModal
+                    domain={identity.domain}
+                    privateKeyHex={identity.privateKeyHex}
+                    onClose={() => setShowExportModal(false)}
+                />
+            )}
 
             {/* HEADER ROW */}
             <div className="flex items-center justify-between pb-6 border-b border-[var(--color-surface)]">
@@ -107,11 +116,14 @@ export default function Dashboard() {
                     <p className="text-sm text-[var(--color-text-muted)] mt-1">{t('dashboard.cards.guardians_desc')}</p>
                 </Link>
 
-                <div className="group bg-[var(--color-surface)] p-6 rounded-[var(--radius-card)] border border-transparent shadow-sm">
+                <div
+                    onClick={() => setShowExportModal(true)}
+                    className="group bg-[var(--color-surface)] p-6 rounded-[var(--radius-card)] hover:border-rose-500 border border-transparent transition-all shadow-sm cursor-pointer"
+                >
                     <div className="flex justify-between items-start mb-4">
-                        <div className="p-3 bg-[var(--color-bg)] rounded-full text-red-400"><Key className="w-5 h-5" /></div>
+                        <div className="p-3 bg-[var(--color-bg)] rounded-full text-red-400 group-hover:text-rose-500 transition-colors"><Key className="w-5 h-5" /></div>
                     </div>
-                    <h3 className="text-lg font-medium text-[var(--color-text)]">{t('dashboard.cards.export_title')}</h3>
+                    <h3 className="text-lg font-medium text-[var(--color-text)] group-hover:text-rose-500 transition-colors">{t('dashboard.cards.export_title')}</h3>
                     <p className="text-sm text-[var(--color-text-muted)] mt-1">{t('dashboard.cards.export_desc')}</p>
                 </div>
 
