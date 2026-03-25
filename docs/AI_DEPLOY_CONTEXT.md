@@ -31,8 +31,8 @@ To link this project to Vercel via CLI (`npx vercel --prod`), the following envi
 
 - `ARWEAVE_NETWORK` = `testnet`
 - `ARWEAVE_OPERATOR_KEY` = `{"kty":"RSA","n":"..."}` (The JSON JWK for the Gas Payer Wallet)
-- `BSP_REGISTRY_URL` = `https://registry.biologicalsovereigntyprotocol.com`
-- `NEXT_PUBLIC_EXPLORER_URL` = `https://registry.biologicalsovereigntyprotocol.com`
+- `BSP_REGISTRY_URL` = `https://api.biologicalsovereigntyprotocol.com`
+- `NEXT_PUBLIC_EXPLORER_URL` = `https://api.biologicalsovereigntyprotocol.com`
 
 ## DNS Setup (Hostinger)
 The Vercel application is permanently mapped to `id.biologicalsovereigntyprotocol.com`.
