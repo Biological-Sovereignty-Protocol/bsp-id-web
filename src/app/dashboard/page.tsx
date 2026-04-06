@@ -172,12 +172,12 @@ export default function Dashboard() {
                 <ExportKeyModal domain={identity.domain} privateKeyHex={identity.privateKeyHex} onClose={() => setShowExportModal(false)} />
             )}
 
-            <div style={{ display: 'flex', minHeight: 'calc(100vh - 64px)' }}>
+            <div style={{ display: 'flex', flex: 1 }}>
                 {/* SIDEBAR */}
                 <aside style={{
                     width: '260px', flexShrink: 0, background: 'var(--color-surface)',
                     borderRight: '1px solid var(--color-border)', padding: '2rem 0',
-                    display: 'flex', flexDirection: 'column', position: 'sticky', top: '64px', height: 'calc(100vh - 64px)'
+                    display: 'flex', flexDirection: 'column', alignSelf: 'stretch', minHeight: 'calc(100vh - 64px)'
                 }} className="hidden lg:flex">
                     {/* Profile */}
                     <div style={{ padding: '0 1.5rem 1.5rem', borderBottom: '1px solid var(--color-border)' }}>
@@ -325,6 +325,54 @@ export default function Dashboard() {
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 0' }}>
                                 <span style={{ fontSize: '0.82rem', color: 'var(--color-text-muted)' }}>Storage</span>
                                 <span style={{ fontSize: '0.82rem', color: 'var(--color-text)' }}>Arweave (Permanent)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Recent Activity */}
+                    <h3 style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--color-text)', marginBottom: '1rem', marginTop: '2.5rem', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Recent Activity</h3>
+                    <div style={{ padding: '1.5rem', borderRadius: '16px', background: 'var(--color-surface)', border: '1px solid var(--color-border)' }}>
+                        {[
+                            { action: 'BEO Created', time: 'Just now', icon: '🔑', color: 'var(--color-primary)' },
+                            { action: 'Identity verified on Arweave', time: '2 min ago', icon: '✓', color: '#10b981' },
+                            { action: 'Seed phrase backed up', time: '5 min ago', icon: '🛡️', color: '#8b5cf6' },
+                        ].map((item, i) => (
+                            <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px 0', borderBottom: i < 2 ? '1px solid var(--color-border)' : 'none' }}>
+                                <div style={{ width: 36, height: 36, borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1rem', background: `${item.color}15` }}>{item.icon}</div>
+                                <div style={{ flex: 1 }}>
+                                    <p style={{ fontSize: '0.85rem', fontWeight: 500, color: 'var(--color-text)' }}>{item.action}</p>
+                                    <p style={{ fontSize: '0.72rem', color: 'var(--color-text-muted)' }}>{item.time}</p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* Security Score */}
+                    <h3 style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--color-text)', marginBottom: '1rem', marginTop: '2.5rem', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Security Score</h3>
+                    <div style={{ padding: '1.5rem', borderRadius: '16px', background: 'var(--color-surface)', border: '1px solid var(--color-border)' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+                            <span style={{ fontSize: '2rem', fontWeight: 700, color: 'var(--color-primary)' }}>40%</span>
+                            <span style={{ fontSize: '0.75rem', color: '#f59e0b', fontWeight: 600, padding: '3px 10px', borderRadius: '20px', background: 'rgba(245,158,11,0.1)' }}>Needs Improvement</span>
+                        </div>
+                        <div style={{ height: '6px', borderRadius: '3px', background: 'var(--color-border)', overflow: 'hidden', marginBottom: '16px' }}>
+                            <div style={{ height: '100%', width: '40%', borderRadius: '3px', background: 'linear-gradient(90deg, var(--color-primary), #f59e0b)' }} />
+                        </div>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem' }}>
+                                <span style={{ color: 'var(--color-text-muted)' }}>✓ BEO created</span>
+                                <span style={{ color: '#10b981', fontWeight: 500 }}>+20%</span>
+                            </div>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem' }}>
+                                <span style={{ color: 'var(--color-text-muted)' }}>✓ Seed phrase saved</span>
+                                <span style={{ color: '#10b981', fontWeight: 500 }}>+20%</span>
+                            </div>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem' }}>
+                                <span style={{ color: 'var(--color-text-muted)' }}>○ Setup guardians (0/3)</span>
+                                <span style={{ color: 'var(--color-text-muted)' }}>+30%</span>
+                            </div>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem' }}>
+                                <span style={{ color: 'var(--color-text-muted)' }}>○ Issue first consent</span>
+                                <span style={{ color: 'var(--color-text-muted)' }}>+30%</span>
                             </div>
                         </div>
                     </div>
