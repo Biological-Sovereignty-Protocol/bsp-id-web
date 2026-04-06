@@ -70,7 +70,7 @@ export default function RecoverPage() {
     return (
         <div className="w-full">
             <DashboardHeader domain={identity.domain} initial={domainInitial} />
-            <div style={{ display: 'flex', flex: 1, paddingTop: '64px' }}>
+            <div style={{ display: 'flex', flex: 1,  }}>
                 {/* SIDEBAR */}
                 <aside style={{
                     width: '260px', flexShrink: 0, background: 'var(--color-surface)',

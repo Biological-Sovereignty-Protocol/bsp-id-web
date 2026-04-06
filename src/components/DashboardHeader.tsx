@@ -18,6 +18,7 @@ export function DashboardHeader({ domain, initial }: DashboardHeaderProps) {
     const { theme, setTheme } = useTheme();
     const { t, i18n } = useTranslation();
     const [mounted, setMounted] = useState(false);
+    const [showMenu, setShowMenu] = useState(false);
 
     useEffect(() => { setMounted(true) }, []);
     if (!mounted) return null;
@@ -43,8 +44,8 @@ export function DashboardHeader({ domain, initial }: DashboardHeaderProps) {
                 <Link href="/" style={{ display: 'flex', alignItems: 'center' }}>
                     <Image
                         src={isDark ? "/bsp-logo-light.png" : "/bsp-logo-dark.png"}
-                        alt="BSP" width={120} height={28}
-                        style={{ height: '28px', width: 'auto' }} priority />
+                        alt="BSP" width={150} height={36}
+                        style={{ height: '36px', width: 'auto' }} priority />
                 </Link>
                 {domain && (
                     <>
@@ -115,23 +116,49 @@ export function DashboardHeader({ domain, initial }: DashboardHeaderProps) {
                     </span>
                 </button>
 
-                {/* Avatar + Logout */}
+                {/* Avatar + Dropdown Menu */}
                 {initial && (
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginLeft: '4px' }}>
-                        <div style={{
+                    <div style={{ position: 'relative', marginLeft: '4px' }}>
+                        <button onClick={() => setShowMenu(!showMenu)} style={{
                             width: 32, height: 32, borderRadius: '50%',
                             background: 'linear-gradient(135deg, var(--color-primary), #3b82f6)',
                             color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                            fontSize: '0.8rem', fontWeight: 700
-                        }}>{initial}</div>
-                        <button onClick={handleLogout} title={t('dashboard_header.logout')} style={{
-                            display: 'flex', alignItems: 'center', justifyContent: 'center',
-                            width: '32px', height: '32px', borderRadius: '8px', cursor: 'pointer',
-                            background: 'transparent', border: 'none',
-                            color: isDark ? '#64748b' : '#94a3b8'
-                        }}>
-                            <LogOut size={14} />
-                        </button>
+                            fontSize: '0.8rem', fontWeight: 700, border: 'none', cursor: 'pointer'
+                        }}>{initial}</button>
+
+                        {showMenu && (
+                            <>
+                                <div onClick={() => setShowMenu(false)} style={{ position: 'fixed', inset: 0, zIndex: 40 }} />
+                                <div style={{
+                                    position: 'absolute', right: 0, top: '40px', zIndex: 50,
+                                    width: '200px', borderRadius: '12px', overflow: 'hidden',
+                                    background: isDark ? '#111520' : '#fff',
+                                    border: `1px solid ${isDark ? 'rgba(255,255,255,0.08)' : '#e2e8f0'}`,
+                                    boxShadow: '0 8px 30px rgba(0,0,0,0.12)'
+                                }}>
+                                    <div style={{ padding: '12px 16px', borderBottom: `1px solid ${isDark ? 'rgba(255,255,255,0.06)' : '#f1f5f9'}` }}>
+                                        <p style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--color-text)', margin: 0 }}>{domain}</p>
+                                        <p style={{ fontSize: '0.7rem', color: 'var(--color-text-muted)', marginTop: '2px', marginBottom: 0 }}>BSP Identity</p>
+                                    </div>
+                                    <button disabled style={{
+                                        width: '100%', padding: '10px 16px', display: 'flex', alignItems: 'center', gap: '8px',
+                                        background: 'transparent', border: 'none',
+                                        color: isDark ? '#475569' : '#94a3b8', fontSize: '0.82rem', fontWeight: 500, textAlign: 'left',
+                                        cursor: 'not-allowed', borderBottom: `1px solid ${isDark ? 'rgba(255,255,255,0.06)' : '#f1f5f9'}`
+                                    }}>
+                                        Settings <span style={{ fontSize: '0.65rem', opacity: 0.7 }}>(coming soon)</span>
+                                    </button>
+                                    <button onClick={handleLogout} style={{
+                                        width: '100%', padding: '10px 16px', display: 'flex', alignItems: 'center', gap: '8px',
+                                        background: 'transparent', border: 'none', cursor: 'pointer',
+                                        color: '#f43f5e', fontSize: '0.82rem', fontWeight: 500, textAlign: 'left'
+                                    }}>
+                                        <LogOut size={14} />
+                                        Logout
+                                    </button>
+                                </div>
+                            </>
+                        )}
                     </div>
                 )}
             </div>

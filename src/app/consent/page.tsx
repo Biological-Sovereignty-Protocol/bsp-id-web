@@ -7,13 +7,43 @@ import { useTranslation } from "react-i18next"
 import Link from "next/link"
 import { DashboardHeader } from "@/components/DashboardHeader"
 
+const intentLabels: Record<string, Record<string, string>> = {
+    en: {
+        SUBMIT_RECORD: 'Submit exams & data',
+        READ_RECORDS: 'Read your records',
+        ANALYZE_VITALITY: 'Analyze vitality',
+        REQUEST_SCORE: 'Request health score',
+        EXPORT_DATA: 'Export data',
+        SYNC_PROTOCOL: 'Sync between platforms',
+    },
+    pt: {
+        SUBMIT_RECORD: 'Enviar exames e dados',
+        READ_RECORDS: 'Ler seus registros',
+        ANALYZE_VITALITY: 'Analisar vitalidade',
+        REQUEST_SCORE: 'Solicitar score de saúde',
+        EXPORT_DATA: 'Exportar dados',
+        SYNC_PROTOCOL: 'Sincronizar entre plataformas',
+    },
+    es: {
+        SUBMIT_RECORD: 'Enviar exámenes y datos',
+        READ_RECORDS: 'Leer tus registros',
+        ANALYZE_VITALITY: 'Analizar vitalidad',
+        REQUEST_SCORE: 'Solicitar score de salud',
+        EXPORT_DATA: 'Exportar datos',
+        SYNC_PROTOCOL: 'Sincronizar entre plataformas',
+    }
+}
+
 export default function ConsentPage() {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
     const [identity, setIdentity] = useState<any>(null)
     const [ieoDomain, setIeoDomain] = useState("")
     const [intents, setIntents] = useState<string[]>(['SUBMIT_RECORD'])
     const [categories, setCategories] = useState<string[]>(['BSP-CV'])
     const [isIssuing, setIsIssuing] = useState(false)
+
+    const lang = i18n.language?.substring(0, 2) || 'en'
+    const labels = intentLabels[lang] || intentLabels.en
 
     useEffect(() => {
         getIdentity().then(id => {
@@ -92,7 +122,7 @@ export default function ConsentPage() {
     return (
         <div className="w-full">
             <DashboardHeader domain={identity.domain} initial={domainInitial} />
-            <div style={{ display: 'flex', flex: 1, paddingTop: '64px' }}>
+            <div style={{ display: 'flex', flex: 1 }}>
                 {/* SIDEBAR */}
                 <aside style={{
                     width: '260px', flexShrink: 0, background: 'var(--color-surface)',
@@ -182,7 +212,7 @@ export default function ConsentPage() {
                                                     }}
                                                     className="accent-[var(--color-primary)] w-4 h-4 cursor-pointer"
                                                 />
-                                                {intent}
+                                                {labels[intent] || intent}
                                             </label>
                                         );
                                     })}
