@@ -82,8 +82,8 @@ export default function Dashboard() {
                         <div style={{ padding: '16px', borderRadius: '16px', background: 'rgba(255,255,255,0.1)', marginBottom: '16px' }}>
                             <Key size={32} color="#fff" />
                         </div>
-                        <h2 style={{ color: '#fff', fontSize: '1.5rem', fontWeight: 700 }}>Access your BEO</h2>
-                        <p style={{ color: 'rgba(255,255,255,0.6)', marginTop: '8px', fontSize: '0.9rem' }}>Your sovereign biological identity</p>
+                        <h2 style={{ color: '#fff', fontSize: '1.5rem', fontWeight: 700 }}>{t('split.access_title')}</h2>
+                        <p style={{ color: 'rgba(255,255,255,0.6)', marginTop: '8px', fontSize: '0.9rem' }}>{t('split.access_subtitle')}</p>
                     </div>
                     <div className="absolute bottom-0 left-0 right-0 h-16 lg:hidden" style={{ background: 'linear-gradient(to top, var(--color-bg), transparent)' }} />
                 </div>
@@ -120,19 +120,19 @@ export default function Dashboard() {
                             {/* Divider */}
                             <div className="flex items-center gap-4 mb-8">
                                 <div className="flex-1 h-px" style={{ background: 'var(--color-border)' }} />
-                                <span className="text-xs text-[var(--color-text-muted)] uppercase tracking-widest">or</span>
+                                <span className="text-xs text-[var(--color-text-muted)] uppercase tracking-widest">{t('dashboard.or_divider')}</span>
                                 <div className="flex-1 h-px" style={{ background: 'var(--color-border)' }} />
                             </div>
 
                             {/* Seed Phrase Input */}
                             <div>
                                 <label className="block text-sm font-medium text-[var(--color-text)] mb-2">
-                                    Seed phrase
+                                    {t('dashboard.seed_phrase_label')}
                                 </label>
                                 <textarea
                                     value={seedInput}
                                     onChange={e => setSeedInput(e.target.value)}
-                                    placeholder="Enter your 24-word recovery phrase..."
+                                    placeholder={t('dashboard.seed_phrase_placeholder')}
                                     rows={3}
                                     className="w-full px-4 py-3 rounded-xl text-sm font-mono resize-none focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] transition-all"
                                     style={{
@@ -152,7 +152,7 @@ export default function Dashboard() {
                                         pointerEvents: seedInput.trim() ? 'auto' : 'none',
                                     }}
                                 >
-                                    Access
+                                    {t('dashboard.access_button')}
                                 </Link>
                             </div>
                         </motion.div>
@@ -166,13 +166,13 @@ export default function Dashboard() {
     const domainInitial = identity.domain ? identity.domain.charAt(0).toUpperCase() : '?'
 
     const stats = onchainData ? [
-        { label: 'Consents', value: onchainData.consents || 0, icon: FileText, color: 'var(--color-primary)' },
-        { label: 'BioRecords', value: onchainData.biorecords || 0, icon: Activity, color: '#10b981' },
-        { label: 'Guardians', value: `${onchainData.guardians?.active || 0}/${onchainData.guardians?.total || 3}`, icon: ShieldCheck, color: '#8b5cf6' },
+        { label: t('dashboard.cards.consent_title'), value: onchainData.consents || 0, icon: FileText, color: 'var(--color-primary)' },
+        { label: t('dashboard.cards.biorecords_title'), value: onchainData.biorecords || 0, icon: Activity, color: '#10b981' },
+        { label: t('dashboard.cards.guardians_title'), value: `${onchainData.guardians?.active || 0}/${onchainData.guardians?.total || 3}`, icon: ShieldCheck, color: '#8b5cf6' },
     ] : []
 
     const menuItems = [
-        { id: 'overview', label: 'Overview', icon: User },
+        { id: 'overview', label: t('dashboard.overview'), icon: User },
         { id: 'consents', label: t('dashboard.cards.consent_title'), icon: FileText, href: '/consent' },
         { id: 'biorecords', label: t('dashboard.cards.biorecords_title'), icon: Activity },
         { id: 'guardians', label: t('dashboard.cards.guardians_title'), icon: ShieldCheck, href: '/guardians' },
@@ -259,10 +259,10 @@ export default function Dashboard() {
                     {/* Greeting */}
                     <div style={{ marginBottom: '2rem' }}>
                         <h1 style={{ fontSize: '1.6rem', fontWeight: 700, color: 'var(--color-text)', marginBottom: '4px' }}>
-                            Welcome back
+                            {t('dashboard.welcome')}
                         </h1>
                         <p style={{ fontSize: '0.9rem', color: 'var(--color-text-muted)' }}>
-                            Your biological sovereignty dashboard
+                            {t('dashboard.subtitle_dashboard')}
                         </p>
                     </div>
 
@@ -288,7 +288,7 @@ export default function Dashboard() {
                     </div>
 
                     {/* Quick Actions */}
-                    <h3 style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--color-text)', marginBottom: '1rem', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Quick Actions</h3>
+                    <h3 style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--color-text)', marginBottom: '1rem', textTransform: 'uppercase', letterSpacing: '0.06em' }}>{t('dashboard.quick_actions')}</h3>
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1rem', marginBottom: '2.5rem' }}>
                         <Link href="/consent" style={{
                             display: 'flex', alignItems: 'center', gap: '12px', padding: '1rem 1.25rem',
@@ -319,38 +319,38 @@ export default function Dashboard() {
                     </div>
 
                     {/* Identity Details */}
-                    <h3 style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--color-text)', marginBottom: '1rem', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Identity Details</h3>
+                    <h3 style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--color-text)', marginBottom: '1rem', textTransform: 'uppercase', letterSpacing: '0.06em' }}>{t('dashboard.identity_details')}</h3>
                     <div style={{
                         padding: '1.5rem', borderRadius: '16px',
                         background: 'var(--color-surface)', border: '1px solid var(--color-border)'
                     }}>
                         <div style={{ display: 'grid', gap: '1rem' }}>
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 0', borderBottom: '1px solid var(--color-border)' }}>
-                                <span style={{ fontSize: '0.82rem', color: 'var(--color-text-muted)' }}>Domain</span>
+                                <span style={{ fontSize: '0.82rem', color: 'var(--color-text-muted)' }}>{t('dashboard.domain_label')}</span>
                                 <span style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--color-text)' }}>{identity.domain}</span>
                             </div>
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 0', borderBottom: '1px solid var(--color-border)' }}>
-                                <span style={{ fontSize: '0.82rem', color: 'var(--color-text-muted)' }}>Public Key</span>
+                                <span style={{ fontSize: '0.82rem', color: 'var(--color-text-muted)' }}>{t('dashboard.public_key_label')}</span>
                                 <span style={{ fontSize: '0.75rem', fontFamily: 'monospace', color: 'var(--color-text-muted)' }}>{identity.publicKeyHex.slice(0, 20)}...{identity.publicKeyHex.slice(-10)}</span>
                             </div>
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 0', borderBottom: '1px solid var(--color-border)' }}>
-                                <span style={{ fontSize: '0.82rem', color: 'var(--color-text-muted)' }}>Status</span>
+                                <span style={{ fontSize: '0.82rem', color: 'var(--color-text-muted)' }}>{t('dashboard.status_label')}</span>
                                 <span style={{ fontSize: '0.78rem', fontWeight: 600, color: '#10b981' }}>{t('dashboard.onchain_active')}</span>
                             </div>
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 0' }}>
-                                <span style={{ fontSize: '0.82rem', color: 'var(--color-text-muted)' }}>Storage</span>
-                                <span style={{ fontSize: '0.82rem', color: 'var(--color-text)' }}>Arweave (Permanent)</span>
+                                <span style={{ fontSize: '0.82rem', color: 'var(--color-text-muted)' }}>{t('dashboard.storage_label')}</span>
+                                <span style={{ fontSize: '0.82rem', color: 'var(--color-text)' }}>{t('dashboard.storage_value')}</span>
                             </div>
                         </div>
                     </div>
 
                     {/* Recent Activity */}
-                    <h3 style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--color-text)', marginBottom: '1rem', marginTop: '2.5rem', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Recent Activity</h3>
+                    <h3 style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--color-text)', marginBottom: '1rem', marginTop: '2.5rem', textTransform: 'uppercase', letterSpacing: '0.06em' }}>{t('dashboard.recent_activity')}</h3>
                     <div style={{ padding: '1.5rem', borderRadius: '16px', background: 'var(--color-surface)', border: '1px solid var(--color-border)' }}>
                         {[
-                            { action: 'BEO Created', time: 'Just now', icon: '🔑', color: 'var(--color-primary)' },
-                            { action: 'Identity verified on Arweave', time: '2 min ago', icon: '✓', color: '#10b981' },
-                            { action: 'Seed phrase backed up', time: '5 min ago', icon: '🛡️', color: '#8b5cf6' },
+                            { action: t('dashboard.beo_created'), time: t('dashboard.just_now'), icon: '🔑', color: 'var(--color-primary)' },
+                            { action: t('dashboard.identity_verified'), time: t('dashboard.min_ago_2'), icon: '✓', color: '#10b981' },
+                            { action: t('dashboard.seed_backed'), time: t('dashboard.min_ago_5'), icon: '🛡️', color: '#8b5cf6' },
                         ].map((item, i) => (
                             <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px 0', borderBottom: i < 2 ? '1px solid var(--color-border)' : 'none' }}>
                                 <div style={{ width: 36, height: 36, borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1rem', background: `${item.color}15` }}>{item.icon}</div>
@@ -363,30 +363,30 @@ export default function Dashboard() {
                     </div>
 
                     {/* Security Score */}
-                    <h3 style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--color-text)', marginBottom: '1rem', marginTop: '2.5rem', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Security Score</h3>
+                    <h3 style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--color-text)', marginBottom: '1rem', marginTop: '2.5rem', textTransform: 'uppercase', letterSpacing: '0.06em' }}>{t('dashboard.security_score')}</h3>
                     <div style={{ padding: '1.5rem', borderRadius: '16px', background: 'var(--color-surface)', border: '1px solid var(--color-border)' }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
                             <span style={{ fontSize: '2rem', fontWeight: 700, color: 'var(--color-primary)' }}>40%</span>
-                            <span style={{ fontSize: '0.75rem', color: '#f59e0b', fontWeight: 600, padding: '3px 10px', borderRadius: '20px', background: 'rgba(245,158,11,0.1)' }}>Needs Improvement</span>
+                            <span style={{ fontSize: '0.75rem', color: '#f59e0b', fontWeight: 600, padding: '3px 10px', borderRadius: '20px', background: 'rgba(245,158,11,0.1)' }}>{t('dashboard.needs_improvement')}</span>
                         </div>
                         <div style={{ height: '6px', borderRadius: '3px', background: 'var(--color-border)', overflow: 'hidden', marginBottom: '16px' }}>
                             <div style={{ height: '100%', width: '40%', borderRadius: '3px', background: 'linear-gradient(90deg, var(--color-primary), #f59e0b)' }} />
                         </div>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem' }}>
-                                <span style={{ color: 'var(--color-text-muted)' }}>✓ BEO created</span>
+                                <span style={{ color: 'var(--color-text-muted)' }}>✓ {t('dashboard.beo_created_score')}</span>
                                 <span style={{ color: '#10b981', fontWeight: 500 }}>+20%</span>
                             </div>
                             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem' }}>
-                                <span style={{ color: 'var(--color-text-muted)' }}>✓ Seed phrase saved</span>
+                                <span style={{ color: 'var(--color-text-muted)' }}>✓ {t('dashboard.seed_saved_score')}</span>
                                 <span style={{ color: '#10b981', fontWeight: 500 }}>+20%</span>
                             </div>
                             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem' }}>
-                                <span style={{ color: 'var(--color-text-muted)' }}>○ Setup guardians (0/3)</span>
+                                <span style={{ color: 'var(--color-text-muted)' }}>○ {t('dashboard.setup_guardians')} (0/3)</span>
                                 <span style={{ color: 'var(--color-text-muted)' }}>+30%</span>
                             </div>
                             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem' }}>
-                                <span style={{ color: 'var(--color-text-muted)' }}>○ Issue first consent</span>
+                                <span style={{ color: 'var(--color-text-muted)' }}>○ {t('dashboard.issue_first_consent')}</span>
                                 <span style={{ color: 'var(--color-text-muted)' }}>+30%</span>
                             </div>
                         </div>

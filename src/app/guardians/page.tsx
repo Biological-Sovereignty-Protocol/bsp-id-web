@@ -19,8 +19,8 @@ export default function GuardiansPage() {
                     <div style={{ padding: '16px', borderRadius: '16px', background: 'rgba(255,255,255,0.1)', marginBottom: '16px' }}>
                         <ShieldCheck size={32} color="#fff" />
                     </div>
-                    <h2 style={{ color: '#fff', fontSize: '1.5rem', fontWeight: 700, textAlign: 'center' }}>Social Recovery</h2>
-                    <p style={{ color: 'rgba(255,255,255,0.6)', marginTop: '8px', fontSize: '0.9rem', textAlign: 'center' }}>Protect your key with guardians</p>
+                    <h2 style={{ color: '#fff', fontSize: '1.5rem', fontWeight: 700, textAlign: 'center' }}>{t('split.guardians_title')}</h2>
+                    <p style={{ color: 'rgba(255,255,255,0.6)', marginTop: '8px', fontSize: '0.9rem', textAlign: 'center' }}>{t('split.guardians_subtitle')}</p>
                 </div>
                 <div className="lg:hidden" style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '64px', background: 'linear-gradient(to top, var(--color-bg), transparent)' }} />
             </div>
@@ -50,11 +50,11 @@ export default function GuardiansPage() {
                                         <UserPlus className="w-5 h-5" />
                                     </div>
                                     <div className="flex-1">
-                                        <p className="text-sm font-medium text-[var(--color-text)]">Guardian {num}</p>
-                                        <p className="text-xs text-[var(--color-text-muted)] mt-0.5">Not configured</p>
+                                        <p className="text-sm font-medium text-[var(--color-text)]">{t('guardians.guardian_num', { num })}</p>
+                                        <p className="text-xs text-[var(--color-text-muted)] mt-0.5">{t('guardians.not_configured')}</p>
                                     </div>
                                     <span className="px-3 py-1 text-xs font-medium rounded-full" style={{ background: 'rgba(239,68,68,0.08)', color: '#ef4444' }}>
-                                        Empty
+                                        {t('guardians.empty')}
                                     </span>
                                 </div>
                             ))}

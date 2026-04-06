@@ -33,10 +33,10 @@ export default function Home() {
         {/* Bottom tagline */}
         <div className="absolute bottom-0 left-0 right-0 p-8 text-center z-10">
           <p className="text-[10px] font-bold tracking-[0.25em] uppercase text-white/40">
-            Biological Sovereignty Protocol
+            {t('landing.protocol_name')}
           </p>
           <p className="text-sm mt-1.5 text-white/70 font-medium">
-            Your biology. Your key. Permanent on Arweave.
+            {t('landing.hero_tagline')}
           </p>
         </div>
       </div>
@@ -87,11 +87,11 @@ export default function Home() {
           </div>
 
           <div className="flex items-center flex-wrap gap-x-4 gap-y-2 text-xs" style={{ color: 'var(--color-text-muted)' }}>
-            <div className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" /><span className="font-medium">Protocol v1.0</span></div>
+            <div className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" /><span className="font-medium">{t('landing.protocol_version')}</span></div>
             <div className="w-px h-3" style={{ background: 'var(--color-border)' }} />
-            <div className="flex items-center gap-1"><Dna className="w-3 h-3" /><span className="font-medium">210+ Biomarkers</span></div>
+            <div className="flex items-center gap-1"><Dna className="w-3 h-3" /><span className="font-medium">{t('landing.biomarkers_count')}</span></div>
             <div className="w-px h-3" style={{ background: 'var(--color-border)' }} />
-            <span className="font-medium">MIT License</span>
+            <span className="font-medium">{t('landing.mit_license')}</span>
           </div>
 
           <Link href="/institution" className="inline-flex items-center gap-1.5 text-sm transition-colors hover:opacity-80"

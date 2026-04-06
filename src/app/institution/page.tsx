@@ -38,12 +38,12 @@ export default function InstitutionPage() {
                     <div style={{ width: 56, height: 56, borderRadius: '50%', background: 'rgba(255,255,255,0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1rem' }}>
                         <Building2 style={{ width: 28, height: 28, color: '#fff' }} />
                     </div>
-                    <h2 style={{ color: '#fff', fontSize: '2rem', fontWeight: 800, textAlign: 'center' }}>For Institutions & Labs</h2>
-                    <p style={{ color: 'rgba(255,255,255,0.65)', marginTop: '0.5rem', textAlign: 'center', maxWidth: '320px' }}>Register your institution on the BSP network</p>
+                    <h2 style={{ color: '#fff', fontSize: '2rem', fontWeight: 800, textAlign: 'center' }}>{t('split.institution_title')}</h2>
+                    <p style={{ color: 'rgba(255,255,255,0.65)', marginTop: '0.5rem', textAlign: 'center', maxWidth: '320px' }}>{t('split.institution_subtitle')}</p>
                 </div>
                 <div className="absolute bottom-0 left-0 right-0 p-8 text-center z-10">
                     <p className="text-[10px] font-bold tracking-[0.25em] uppercase text-white/40">
-                        Biological Sovereignty Protocol
+                        {t('landing.protocol_name')}
                     </p>
                 </div>
             </div>

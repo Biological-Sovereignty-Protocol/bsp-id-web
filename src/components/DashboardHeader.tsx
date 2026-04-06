@@ -16,7 +16,7 @@ interface DashboardHeaderProps {
 
 export function DashboardHeader({ domain, initial }: DashboardHeaderProps) {
     const { theme, setTheme } = useTheme();
-    const { i18n } = useTranslation();
+    const { t, i18n } = useTranslation();
     const [mounted, setMounted] = useState(false);
 
     useEffect(() => { setMounted(true) }, []);
@@ -65,7 +65,7 @@ export function DashboardHeader({ domain, initial }: DashboardHeaderProps) {
                     color: isDark ? '#64748b' : '#94a3b8'
                 }}>
                     <Search size={14} />
-                    <span>Search...</span>
+                    <span>{t('dashboard_header.search')}</span>
                     <kbd style={{ fontSize: '0.65rem', padding: '1px 5px', borderRadius: '4px', background: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.04)', border: `1px solid ${isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.06)'}` }}>⌘K</kbd>
                 </button>
 
@@ -124,7 +124,7 @@ export function DashboardHeader({ domain, initial }: DashboardHeaderProps) {
                             color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center',
                             fontSize: '0.8rem', fontWeight: 700
                         }}>{initial}</div>
-                        <button onClick={handleLogout} title="Logout" style={{
+                        <button onClick={handleLogout} title={t('dashboard_header.logout')} style={{
                             display: 'flex', alignItems: 'center', justifyContent: 'center',
                             width: '32px', height: '32px', borderRadius: '8px', cursor: 'pointer',
                             background: 'transparent', border: 'none',
