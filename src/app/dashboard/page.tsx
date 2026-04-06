@@ -18,7 +18,6 @@ export default function Dashboard() {
 
     useEffect(() => {
         async function load() {
-            // 1. Fetch from Local IndexedDB
             const local = await getIdentity()
             if (!local) {
                 setLoading(false)
@@ -26,7 +25,6 @@ export default function Dashboard() {
             }
             setIdentity(local)
 
-            // 2. Fetch from Arweave (BEORegistry)
             try {
                 const arweaveData = await getBEO(local.domain)
                 setOnchainData(arweaveData)
@@ -47,13 +45,13 @@ export default function Dashboard() {
     if (!identity) {
         return (
             <div className="text-center space-y-6">
-                <h1 className="text-3xl text-[var(--color-primary)] font-bold">{t('dashboard.require_sovereignty')}</h1>
+                <h1 className="text-3xl font-bold" style={{ background: 'linear-gradient(135deg, var(--color-primary), #60a5fa)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>{t('dashboard.require_sovereignty')}</h1>
                 <p className="text-[var(--color-text-muted)]">{t('dashboard.no_key')}</p>
                 <div className="flex justify-center gap-4">
-                    <Link href="/create" className="px-6 py-3 bg-[var(--color-surface)] text-[var(--color-text)] rounded-[var(--radius-card)] hover:bg-[var(--color-primary)] hover:text-black transition-colors">
+                    <Link href="/create" className="px-6 py-3 text-white rounded-xl hover:opacity-90 transition-all" style={{ background: 'linear-gradient(135deg, var(--color-primary), #3b82f6)' }}>
                         {t('landing.cta_create')}
                     </Link>
-                    <Link href="/recover" className="px-6 py-3 border border-[var(--color-surface)] text-[var(--color-text-muted)] hover:text-[var(--color-primary)] rounded-[var(--radius-card)] transition-colors">
+                    <Link href="/recover" className="px-6 py-3 text-[var(--color-text-muted)] hover:text-[var(--color-primary)] rounded-xl transition-colors" style={{ border: '1px solid var(--color-border)' }}>
                         {t('recover.title')}
                     </Link>
                 </div>
@@ -72,9 +70,9 @@ export default function Dashboard() {
             )}
 
             {/* HEADER ROW */}
-            <div className="flex items-center justify-between pb-6 border-b border-[var(--color-surface)]">
+            <div className="flex items-center justify-between pb-6" style={{ borderBottom: '1px solid var(--color-border)' }}>
                 <div>
-                    <h1 className="text-3xl font-display text-[var(--color-text)] font-semibold">{identity.domain}</h1>
+                    <h1 className="text-3xl font-display font-semibold" style={{ background: 'linear-gradient(135deg, var(--color-primary), #60a5fa)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>{identity.domain}</h1>
                     <p className="text-sm text-[var(--color-text-muted)] mt-1 font-mono">
                         {identity.publicKeyHex.slice(0, 16)}...{identity.publicKeyHex.slice(-16)}
                     </p>
@@ -89,27 +87,33 @@ export default function Dashboard() {
             {/* DASHBOARD GRID */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
-                <Link href="/consent" className="group bg-[var(--color-surface)] p-6 rounded-[var(--radius-card)] hover:border-[var(--color-primary)] border border-transparent transition-all shadow-sm">
+                <Link href="/consent" className="group p-6 transition-all" style={{ background: 'var(--color-surface)', borderRadius: 16, border: '1px solid var(--color-border)', boxShadow: '0 1px 3px rgba(0,0,0,0.04)' }}
+                    onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = 'var(--color-primary)'; (e.currentTarget as HTMLElement).style.boxShadow = '0 4px 12px rgba(0,118,255,0.08)' }}
+                    onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'var(--color-border)'; (e.currentTarget as HTMLElement).style.boxShadow = '0 1px 3px rgba(0,0,0,0.04)' }}
+                >
                     <div className="flex justify-between items-start mb-4">
-                        <div className="p-3 bg-[var(--color-bg)] rounded-full group-hover:text-[var(--color-primary)] transition-colors"><FileText className="w-5 h-5" /></div>
+                        <div className="p-3 rounded-xl" style={{ background: 'var(--color-primary-soft)', color: 'var(--color-primary)' }}><FileText className="w-5 h-5" /></div>
                         <span className="text-2xl font-light text-[var(--color-text)]">0</span>
                     </div>
                     <h3 className="text-lg font-medium text-[var(--color-text)]">{t('dashboard.cards.consent_title')}</h3>
                     <p className="text-sm text-[var(--color-text-muted)] mt-1">{t('dashboard.cards.consent_desc')}</p>
                 </Link>
 
-                <div className="group bg-[var(--color-surface)] p-6 rounded-[var(--radius-card)] border border-transparent shadow-sm">
+                <div className="group p-6 transition-all" style={{ background: 'var(--color-surface)', borderRadius: 16, border: '1px solid var(--color-border)', boxShadow: '0 1px 3px rgba(0,0,0,0.04)' }}>
                     <div className="flex justify-between items-start mb-4">
-                        <div className="p-3 bg-[var(--color-bg)] rounded-full text-blue-400"><Activity className="w-5 h-5" /></div>
+                        <div className="p-3 rounded-xl" style={{ background: 'var(--color-primary-soft)', color: 'var(--color-primary)' }}><Activity className="w-5 h-5" /></div>
                         <span className="text-2xl font-light text-[var(--color-text)]">?</span>
                     </div>
                     <h3 className="text-lg font-medium text-[var(--color-text)]">{t('dashboard.cards.biorecords_title')}</h3>
                     <p className="text-sm text-[var(--color-text-muted)] mt-1">{t('dashboard.cards.biorecords_desc')}</p>
                 </div>
 
-                <Link href="/guardians" className="group bg-[var(--color-surface)] p-6 rounded-[var(--radius-card)] hover:border-[var(--color-primary)] border border-transparent transition-all shadow-sm">
+                <Link href="/guardians" className="group p-6 transition-all" style={{ background: 'var(--color-surface)', borderRadius: 16, border: '1px solid var(--color-border)', boxShadow: '0 1px 3px rgba(0,0,0,0.04)' }}
+                    onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = 'var(--color-primary)'; (e.currentTarget as HTMLElement).style.boxShadow = '0 4px 12px rgba(0,118,255,0.08)' }}
+                    onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'var(--color-border)'; (e.currentTarget as HTMLElement).style.boxShadow = '0 1px 3px rgba(0,0,0,0.04)' }}
+                >
                     <div className="flex justify-between items-start mb-4">
-                        <div className="p-3 bg-[var(--color-bg)] rounded-full group-hover:text-[var(--color-primary)] transition-colors"><ShieldCheck className="w-5 h-5" /></div>
+                        <div className="p-3 rounded-xl" style={{ background: 'var(--color-primary-soft)', color: 'var(--color-primary)' }}><ShieldCheck className="w-5 h-5" /></div>
                         <span className="text-sm font-mono mt-1 text-[var(--color-text-muted)]">0/3</span>
                     </div>
                     <h3 className="text-lg font-medium text-[var(--color-text)]">{t('dashboard.cards.guardians_title')}</h3>
@@ -118,10 +122,13 @@ export default function Dashboard() {
 
                 <div
                     onClick={() => setShowExportModal(true)}
-                    className="group bg-[var(--color-surface)] p-6 rounded-[var(--radius-card)] hover:border-rose-500 border border-transparent transition-all shadow-sm cursor-pointer"
+                    className="group p-6 cursor-pointer transition-all"
+                    style={{ background: 'var(--color-surface)', borderRadius: 16, border: '1px solid var(--color-border)', boxShadow: '0 1px 3px rgba(0,0,0,0.04)' }}
+                    onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = '#f43f5e'; (e.currentTarget as HTMLElement).style.boxShadow = '0 4px 12px rgba(244,63,94,0.08)' }}
+                    onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'var(--color-border)'; (e.currentTarget as HTMLElement).style.boxShadow = '0 1px 3px rgba(0,0,0,0.04)' }}
                 >
                     <div className="flex justify-between items-start mb-4">
-                        <div className="p-3 bg-[var(--color-bg)] rounded-full text-red-400 group-hover:text-rose-500 transition-colors"><Key className="w-5 h-5" /></div>
+                        <div className="p-3 rounded-xl" style={{ background: 'rgba(244,63,94,0.08)', color: '#f43f5e' }}><Key className="w-5 h-5" /></div>
                     </div>
                     <h3 className="text-lg font-medium text-[var(--color-text)] group-hover:text-rose-500 transition-colors">{t('dashboard.cards.export_title')}</h3>
                     <p className="text-sm text-[var(--color-text-muted)] mt-1">{t('dashboard.cards.export_desc')}</p>

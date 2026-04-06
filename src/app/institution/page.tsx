@@ -1,8 +1,15 @@
 "use client"
 
 import { useState } from "react"
-import { Building2, ArrowRight } from "lucide-react"
+import { Building2, ArrowRight, FlaskConical, HeartPulse, Watch, Microscope } from "lucide-react"
 import { useTranslation } from "react-i18next"
+
+const typeIcons: Record<string, React.ReactNode> = {
+    LABORATORY: <FlaskConical className="w-5 h-5" />,
+    HOSPITAL: <HeartPulse className="w-5 h-5" />,
+    WEARABLE: <Watch className="w-5 h-5" />,
+    RESEARCH: <Microscope className="w-5 h-5" />,
+}
 
 export default function InstitutionPage() {
     const { t } = useTranslation();
@@ -11,7 +18,6 @@ export default function InstitutionPage() {
     const [name, setName] = useState('')
 
     const handleRegister = async () => {
-        // Scaffold UI for creating IEO
         alert(t('institution.alert_sim', { domain, type: ieoType, name }))
     }
 
@@ -19,27 +25,37 @@ export default function InstitutionPage() {
         <div className="w-full max-w-xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
 
             <div className="space-y-2">
-                <h1 className="text-3xl text-[var(--color-primary)] flex items-center gap-3 font-bold">
-                    <Building2 className="w-8 h-8" /> {t('institution.title')}
-                </h1>
+                <div className="flex items-center gap-3 mb-1">
+                    <div className="flex items-center justify-center" style={{ width: 44, height: 44, borderRadius: 12, background: 'var(--color-primary-soft)', color: 'var(--color-primary)' }}>
+                        <Building2 className="w-6 h-6" />
+                    </div>
+                    <h1 className="text-3xl font-bold" style={{ background: 'linear-gradient(135deg, var(--color-primary), #60a5fa)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>{t('institution.title')}</h1>
+                </div>
                 <p className="text-[var(--color-text-muted)]">{t('institution.subtitle')}</p>
             </div>
 
-            <div className="bg-[var(--color-surface)] p-6 rounded-[var(--radius-card)] space-y-6 shadow-sm">
-
-                <div className="space-y-3">
-                    <label className="text-sm font-medium text-[var(--color-text-muted)]">{t('institution.label_type')}</label>
-                    <select
-                        value={ieoType}
-                        onChange={(e) => setIeoType(e.target.value)}
-                        className="w-full bg-[var(--color-bg)] border border-[var(--color-surface)] rounded-lg p-3 outline-none focus:border-[var(--color-primary)] transition-colors text-sm text-[var(--color-text)]"
+            {/* Feature grid */}
+            <div className="grid grid-cols-2 gap-4">
+                {(['LABORATORY', 'HOSPITAL', 'WEARABLE', 'RESEARCH'] as const).map((type) => (
+                    <button
+                        key={type}
+                        onClick={() => setIeoType(type)}
+                        className="flex flex-col items-center gap-2 p-5 text-center transition-all cursor-pointer"
+                        style={{
+                            borderRadius: 16,
+                            background: ieoType === type ? 'var(--color-primary-soft)' : 'var(--color-surface)',
+                            border: `1px solid ${ieoType === type ? 'var(--color-primary)' : 'var(--color-border)'}`,
+                            color: ieoType === type ? 'var(--color-primary)' : 'var(--color-text-muted)',
+                            boxShadow: ieoType === type ? '0 4px 12px rgba(0,118,255,0.08)' : '0 1px 3px rgba(0,0,0,0.04)',
+                        }}
                     >
-                        <option value="LABORATORY">{t('institution.types.laboratory')}</option>
-                        <option value="HOSPITAL">{t('institution.types.hospital')}</option>
-                        <option value="WEARABLE">{t('institution.types.wearable')}</option>
-                        <option value="RESEARCH">{t('institution.types.research')}</option>
-                    </select>
-                </div>
+                        {typeIcons[type]}
+                        <span className="text-xs font-medium">{t(`institution.types.${type.toLowerCase()}`)}</span>
+                    </button>
+                ))}
+            </div>
+
+            <div className="p-6 space-y-6" style={{ background: 'var(--color-surface)', borderRadius: 16, border: '1px solid var(--color-border)', boxShadow: '0 1px 3px rgba(0,0,0,0.04)' }}>
 
                 <div className="space-y-3">
                     <label className="text-sm font-medium text-[var(--color-text-muted)]">{t('institution.label_name')}</label>
@@ -48,7 +64,10 @@ export default function InstitutionPage() {
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         placeholder={t('institution.placeholder_name')}
-                        className="w-full bg-[var(--color-bg)] border border-[var(--color-surface)] rounded-lg p-3 outline-none focus:border-[var(--color-primary)] transition-colors text-sm text-[var(--color-text)]"
+                        className="w-full bg-[var(--color-bg)] outline-none transition-all text-sm text-[var(--color-text)]"
+                        style={{ borderRadius: 12, padding: '14px 16px', border: '1px solid var(--color-border)' }}
+                        onFocus={e => { e.currentTarget.style.borderColor = 'var(--color-primary)'; e.currentTarget.style.boxShadow = '0 0 0 3px var(--color-primary-soft)' }}
+                        onBlur={e => { e.currentTarget.style.borderColor = 'var(--color-border)'; e.currentTarget.style.boxShadow = 'none' }}
                     />
                 </div>
 
@@ -60,16 +79,20 @@ export default function InstitutionPage() {
                             value={domain}
                             onChange={(e) => setDomain(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ''))}
                             placeholder={t('institution.placeholder_domain')}
-                            className="w-full bg-[var(--color-bg)] border border-[var(--color-surface)] rounded-lg p-3 outline-none focus:border-[var(--color-primary)] transition-colors text-sm text-[var(--color-text)]"
+                            className="w-full bg-[var(--color-bg)] outline-none transition-all text-sm text-[var(--color-text)]"
+                            style={{ borderRadius: 12, padding: '14px 16px', border: '1px solid var(--color-border)' }}
+                            onFocus={e => { e.currentTarget.style.borderColor = 'var(--color-primary)'; e.currentTarget.style.boxShadow = '0 0 0 3px var(--color-primary-soft)' }}
+                            onBlur={e => { e.currentTarget.style.borderColor = 'var(--color-border)'; e.currentTarget.style.boxShadow = 'none' }}
                         />
-                        <span className="absolute right-3 text-sm text-[var(--color-text-muted)]">{t('create.domain_suffix')}</span>
+                        <span className="absolute right-4 text-sm text-[var(--color-text-muted)]">{t('create.domain_suffix')}</span>
                     </div>
                 </div>
 
                 <button
                     onClick={handleRegister}
                     disabled={!domain || !name}
-                    className="w-full flex items-center justify-center gap-2 bg-[var(--color-primary)] text-black py-4 rounded-lg font-medium disabled:opacity-50 disabled:cursor-not-allowed hover:bg-opacity-90 transition-all focus:outline-none mt-6"
+                    className="w-full flex items-center justify-center gap-2 text-white py-4 font-medium disabled:opacity-50 disabled:cursor-not-allowed hover:opacity-90 transition-all focus:outline-none mt-6"
+                    style={{ borderRadius: 12, background: 'linear-gradient(135deg, var(--color-primary), #3b82f6)' }}
                 >
                     {t('institution.btn_register')} <ArrowRight className="w-5 h-5" />
                 </button>

@@ -33,6 +33,66 @@
     h5,
     h6 {
         font-family: var(--font-display);
-        font-weight: 600;
+        font-weight: 700;
     }
+
+    /*
+     * Inner pages (create, dashboard, consent, etc.) need header offset.
+     * Homepage (split layout) manages its own vertical padding.
+     * Add .page-inner to any inner page wrapper for the offset.
+     */
+    .page-inner {
+        padding-top: 72px;
+    }
+}
+
+/* ===================== BSP Symbol Glow ===================== */
+
+@keyframes glow-pulse {
+    0%, 100% {
+        filter:
+            drop-shadow(0 0 16px rgba(0, 87, 255, 0.28))
+            drop-shadow(0 0 48px rgba(0, 87, 255, 0.10));
+        transform: scale(1);
+    }
+    50% {
+        filter:
+            drop-shadow(0 0 28px rgba(0, 87, 255, 0.48))
+            drop-shadow(0 0 72px rgba(0, 87, 255, 0.18));
+        transform: scale(1.025);
+    }
+}
+
+@keyframes glow-pulse-dark {
+    0%, 100% {
+        filter:
+            drop-shadow(0 0 18px rgba(79, 143, 255, 0.40))
+            drop-shadow(0 0 56px rgba(79, 143, 255, 0.14));
+        transform: scale(1);
+    }
+    50% {
+        filter:
+            drop-shadow(0 0 32px rgba(79, 143, 255, 0.62))
+            drop-shadow(0 0 88px rgba(79, 143, 255, 0.24));
+        transform: scale(1.025);
+    }
+}
+
+.bsp-glow {
+    animation: glow-pulse 4s ease-in-out infinite;
+}
+
+.dark .bsp-glow {
+    animation: glow-pulse-dark 4s ease-in-out infinite;
+}
+
+/* ===================== Scrollbar ===================== */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+    background: var(--color-border);
+    border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: var(--color-border-strong);
 }

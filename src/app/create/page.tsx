@@ -10,6 +10,8 @@ import { useTranslation, Trans } from "react-i18next"
 
 type Step = 'domain' | 'key' | 'guardian' | 'register' | 'success'
 
+const steps: Step[] = ['domain', 'key', 'guardian', 'register']
+
 export default function CreateBEOFlow() {
     const { t } = useTranslation();
     const [step, setStep] = useState<Step>('domain')
@@ -76,15 +78,45 @@ export default function CreateBEOFlow() {
         }
     }
 
+    const currentStepIndex = steps.indexOf(step)
+
     return (
         <div className="w-full max-w-lg mx-auto min-h-[400px]">
+            {/* Step indicators */}
+            {step !== 'success' && step !== 'register' && (
+                <div className="flex items-center justify-center gap-3 mb-10">
+                    {['1', '2', '3'].map((num, i) => (
+                        <div key={num} className="flex items-center gap-3">
+                            <div
+                                className="flex items-center justify-center text-sm font-semibold transition-all"
+                                style={{
+                                    width: 36, height: 36, borderRadius: '50%',
+                                    background: i <= currentStepIndex ? 'var(--color-primary)' : 'var(--color-surface)',
+                                    color: i <= currentStepIndex ? '#fff' : 'var(--color-text-muted)',
+                                    border: i <= currentStepIndex ? 'none' : '2px solid var(--color-border)',
+                                }}
+                            >
+                                {i < currentStepIndex ? <CheckCircle2 className="w-4 h-4" /> : num}
+                            </div>
+                            {i < 2 && (
+                                <div style={{
+                                    width: 40, height: 2,
+                                    background: i < currentStepIndex ? 'var(--color-primary)' : 'var(--color-border)',
+                                    borderRadius: 1,
+                                }} />
+                            )}
+                        </div>
+                    ))}
+                </div>
+            )}
+
             <AnimatePresence mode="wait">
 
                 {/* STEP 1: DOMAIN */}
                 {step === 'domain' && (
                     <motion.div key="domain" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="space-y-6">
                         <div className="space-y-2">
-                            <h1 className="text-3xl text-[var(--color-primary)] font-bold">{t('create.title')}</h1>
+                            <h1 className="text-3xl font-bold" style={{ background: 'linear-gradient(135deg, var(--color-primary), #60a5fa)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>{t('create.title')}</h1>
                             <p className="text-[var(--color-text-muted)]">{t('create.subtitle')}</p>
                         </div>
 
@@ -95,7 +127,8 @@ export default function CreateBEOFlow() {
                                 value={domain}
                                 onChange={(e) => checkDomain(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ''))}
                                 placeholder={t('create.placeholder_domain')}
-                                className="w-full bg-[var(--color-surface)] border border-[var(--color-surface)] rounded-[var(--radius-card)] px-6 py-4 text-xl outline-none focus:border-[var(--color-primary)] transition-colors text-[var(--color-text)]"
+                                style={{ borderRadius: 12 }}
+                                className="w-full bg-[var(--color-surface)] border border-[var(--color-border)] px-6 py-4 text-xl outline-none focus:border-[var(--color-primary)] focus:shadow-[0_0_0_3px_var(--color-primary-soft)] transition-all text-[var(--color-text)]"
                                 autoComplete="off"
                                 spellCheck="false"
                             />
@@ -110,7 +143,8 @@ export default function CreateBEOFlow() {
                         <button
                             onClick={handleGenerateKey}
                             disabled={!domainAvailable}
-                            className="w-full flex items-center justify-center gap-2 bg-[var(--color-primary)] text-black py-4 rounded-[var(--radius-card)] font-medium disabled:opacity-50 disabled:cursor-not-allowed hover:bg-opacity-90 transition-all focus:outline-none"
+                            className="w-full flex items-center justify-center gap-2 text-white py-4 font-medium disabled:opacity-50 disabled:cursor-not-allowed hover:opacity-90 transition-all focus:outline-none"
+                            style={{ borderRadius: 12, background: 'linear-gradient(135deg, var(--color-primary), #3b82f6)' }}
                         >
                             {t('create.btn_next')} <ArrowRight className="w-5 h-5" />
                         </button>
@@ -121,11 +155,11 @@ export default function CreateBEOFlow() {
                 {step === 'key' && keyPair && (
                     <motion.div key="key" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="space-y-6">
                         <div className="space-y-2">
-                            <h1 className="text-3xl text-[var(--color-primary)] font-bold">{t('create.key_title')}</h1>
+                            <h1 className="text-3xl font-bold" style={{ background: 'linear-gradient(135deg, var(--color-primary), #60a5fa)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>{t('create.key_title')}</h1>
                             <p className="text-[var(--color-text-muted)]">{t('create.key_desc')}</p>
                         </div>
 
-                        <div className="bg-[var(--color-surface)] p-6 rounded-[var(--radius-card)] grid grid-cols-3 gap-3 font-mono text-sm border border-[var(--color-primary)]/20 shadow-sm">
+                        <div className="p-6 grid grid-cols-3 gap-3 font-mono text-sm shadow-sm" style={{ background: 'var(--color-surface)', borderRadius: 16, border: '1px solid var(--color-primary)', borderColor: 'color-mix(in srgb, var(--color-primary) 20%, transparent)' }}>
                             {keyPair.seedPhrase.map((word, i) => (
                                 <div key={i} className="flex gap-2 text-[var(--color-text-muted)]">
                                     <span className="opacity-50 select-none w-4 text-right">{i + 1}.</span>
@@ -136,7 +170,8 @@ export default function CreateBEOFlow() {
 
                         <button
                             onClick={() => setStep('guardian')}
-                            className="w-full flex items-center justify-center gap-2 bg-[var(--color-text)] text-[var(--color-bg)] py-4 rounded-[var(--radius-card)] font-medium hover:bg-opacity-90 transition-all focus:outline-none"
+                            className="w-full flex items-center justify-center gap-2 text-white py-4 font-medium hover:opacity-90 transition-all focus:outline-none"
+                            style={{ borderRadius: 12, background: 'linear-gradient(135deg, var(--color-primary), #3b82f6)' }}
                         >
                             {t('create.key_confirm')}
                         </button>
@@ -147,10 +182,10 @@ export default function CreateBEOFlow() {
                 {step === 'guardian' && (
                     <motion.div key="guardian" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="space-y-6">
                         <div className="space-y-2">
-                            <div className="w-12 h-12 rounded-full bg-[var(--color-primary)]/10 flex items-center justify-center mb-4 text-[var(--color-primary)]">
+                            <div className="flex items-center justify-center mb-4" style={{ width: 48, height: 48, borderRadius: '50%', background: 'var(--color-primary-soft)', color: 'var(--color-primary)' }}>
                                 <ShieldAlert className="w-6 h-6" />
                             </div>
-                            <h1 className="text-3xl text-[var(--color-primary)] font-bold">{t('create.guardian_title')}</h1>
+                            <h1 className="text-3xl font-bold" style={{ background: 'linear-gradient(135deg, var(--color-primary), #60a5fa)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>{t('create.guardian_title')}</h1>
                             <p className="text-[var(--color-text-muted)] leading-relaxed">
                                 {t('create.guardian_desc')}
                             </p>
@@ -159,7 +194,8 @@ export default function CreateBEOFlow() {
                         <div className="flex flex-col gap-4 pt-4">
                             <button
                                 onClick={handleRegister}
-                                className="w-full flex items-center justify-center gap-2 border border-[var(--color-surface)] text-[var(--color-text)] py-4 rounded-[var(--radius-card)] font-medium hover:border-[var(--color-primary)]/50 transition-all focus:outline-none"
+                                className="w-full flex items-center justify-center gap-2 border text-[var(--color-text)] py-4 font-medium hover:border-[var(--color-primary)] transition-all focus:outline-none"
+                                style={{ borderRadius: 12, borderColor: 'var(--color-border)' }}
                             >
                                 {t('create.guardian_skip')}
                             </button>
@@ -173,7 +209,7 @@ export default function CreateBEOFlow() {
 
                         {step === 'register' ? (
                             <>
-                                <div className="w-16 h-16 border-4 border-[var(--color-surface)] border-t-[var(--color-primary)] rounded-full animate-spin"></div>
+                                <div className="w-16 h-16 rounded-full animate-spin" style={{ border: '4px solid var(--color-surface)', borderTopColor: 'var(--color-primary)' }}></div>
                                 <div className="space-y-2">
                                     <h2 className="text-2xl text-[var(--color-text)]">{t('create.registering_title')}</h2>
                                     <p className="text-[var(--color-text-muted)]">
@@ -196,7 +232,7 @@ export default function CreateBEOFlow() {
                                         </Trans>
                                     </p>
                                 </div>
-                                <Link href="/dashboard" className="mt-8 px-8 py-3 bg-[var(--color-surface)] hover:bg-[var(--color-primary)] hover:text-black text-[var(--color-text)] rounded-full transition-colors">
+                                <Link href="/dashboard" className="mt-8 px-8 py-3 text-white rounded-full transition-all hover:opacity-90" style={{ background: 'linear-gradient(135deg, var(--color-primary), #3b82f6)' }}>
                                     {t('create.btn_dashboard')}
                                 </Link>
                             </>
