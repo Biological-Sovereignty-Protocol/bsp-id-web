@@ -1,17 +1,38 @@
 "use client"
 
-import { useState } from "react"
-import { ShieldCheck, ArrowRight, RefreshCw, KeyRound } from "lucide-react"
+import { useState, useEffect } from "react"
+import { ShieldCheck, RefreshCw, FileText, Activity, User } from "lucide-react"
 import { recoverBSPKeyPair } from "@/lib/crypto/keys"
-import { storeIdentity } from "@/lib/crypto/storage"
+import { storeIdentity, getIdentity } from "@/lib/crypto/storage"
 import { useTranslation } from "react-i18next"
+import Link from "next/link"
+import { DashboardHeader } from "@/components/DashboardHeader"
 
 export default function RecoverPage() {
     const { t } = useTranslation();
+    const [identity, setIdentity] = useState<any>(null)
     const [method, setMethod] = useState<'seed' | 'guardians'>('seed')
     const [domain, setDomain] = useState("")
     const [seedInput, setSeedInput] = useState("")
     const [isRecovering, setIsRecovering] = useState(false)
+
+    useEffect(() => {
+        getIdentity().then(id => {
+            if (id) setIdentity(id)
+            else window.location.href = '/dashboard'
+        })
+    }, [])
+
+    useEffect(() => {
+        if (identity) {
+            const h = document.querySelector('header');
+            if (h) h.style.display = 'none';
+        }
+        return () => {
+            const h = document.querySelector('header');
+            if (h) h.style.display = '';
+        };
+    }, [identity]);
 
     const handleSeedRecovery = async () => {
         setIsRecovering(true)
@@ -34,27 +55,62 @@ export default function RecoverPage() {
         setIsRecovering(false)
     }
 
-    return (
-        <div className="w-full min-h-[calc(100vh-64px)] flex flex-col lg:flex-row">
-            {/* LEFT — Visual */}
-            <div className="relative lg:w-[45%] lg:flex-none min-h-[30vh] lg:min-h-[calc(100vh-64px)] overflow-hidden order-1">
-                <img src="/hero-image.jpg" alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
-                <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, rgba(0,30,80,0.75), rgba(0,50,120,0.5))' }} />
-                <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.15) 1px, transparent 1px)', backgroundSize: '28px 28px', opacity: 0.2 }} />
-                <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '2rem' }}>
-                    <div style={{ padding: '16px', borderRadius: '16px', background: 'rgba(255,255,255,0.1)', marginBottom: '16px' }}>
-                        <RefreshCw size={32} color="#fff" />
-                    </div>
-                    <h2 style={{ color: '#fff', fontSize: '1.5rem', fontWeight: 700, textAlign: 'center' }}>{t('split.recover_title')}</h2>
-                    <p style={{ color: 'rgba(255,255,255,0.6)', marginTop: '8px', fontSize: '0.9rem', textAlign: 'center' }}>{t('split.recover_subtitle')}</p>
-                </div>
-                <div className="lg:hidden" style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '64px', background: 'linear-gradient(to top, var(--color-bg), transparent)' }} />
-            </div>
+    if (!identity) return <div className="flex items-center justify-center min-h-screen"><p>Loading...</p></div>
 
-            {/* RIGHT — Content */}
-            <div className="flex-1 order-2 overflow-y-auto" style={{ background: 'var(--color-bg)' }}>
-                <div style={{ maxWidth: '520px', margin: '0 auto', padding: '3rem 2rem' }}>
-                    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+    const domainInitial = identity.domain?.charAt(0).toUpperCase() || '?'
+    const activeTab = ''
+
+    const menuItems = [
+        { id: 'overview', label: 'Overview', icon: User, href: '/dashboard' },
+        { id: 'consents', label: t('dashboard.cards.consent_title'), icon: FileText, href: '/consent' },
+        { id: 'biorecords', label: t('dashboard.cards.biorecords_title'), icon: Activity },
+        { id: 'guardians', label: t('dashboard.cards.guardians_title'), icon: ShieldCheck, href: '/guardians' },
+    ]
+
+    return (
+        <div className="w-full">
+            <DashboardHeader domain={identity.domain} initial={domainInitial} />
+            <div style={{ display: 'flex', flex: 1, paddingTop: '64px' }}>
+                {/* SIDEBAR */}
+                <aside style={{
+                    width: '260px', flexShrink: 0, background: 'var(--color-surface)',
+                    borderRight: '1px solid var(--color-border)', padding: '2rem 0',
+                    display: 'flex', flexDirection: 'column', minHeight: 'calc(100vh - 64px)'
+                }} className="hidden lg:flex">
+                    {/* Profile section */}
+                    <div style={{ padding: '0 1.5rem 1.5rem', borderBottom: '1px solid var(--color-border)' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                            <div style={{ width: 44, height: 44, borderRadius: '50%', background: 'linear-gradient(135deg, var(--color-primary), #3b82f6)', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.1rem', fontWeight: 700 }}>{domainInitial}</div>
+                            <div style={{ minWidth: 0 }}>
+                                <p style={{ fontWeight: 600, fontSize: '0.9rem', color: 'var(--color-text)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{identity.domain}</p>
+                                <p style={{ fontSize: '0.7rem', color: 'var(--color-text-muted)', fontFamily: 'monospace' }}>{identity.publicKeyHex?.slice(0, 8)}...{identity.publicKeyHex?.slice(-6)}</p>
+                            </div>
+                        </div>
+                    </div>
+                    {/* Nav */}
+                    <nav style={{ flex: 1, padding: '1rem 0.75rem' }}>
+                        {menuItems.map(item => {
+                            const Icon = item.icon
+                            const isActive = item.id === activeTab
+                            const el = (
+                                <div key={item.id} style={{
+                                    display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 12px',
+                                    borderRadius: '10px', cursor: 'pointer', marginBottom: '4px',
+                                    background: isActive ? 'var(--color-primary-soft)' : 'transparent',
+                                    color: isActive ? 'var(--color-primary)' : 'var(--color-text-muted)',
+                                    fontWeight: isActive ? 600 : 400, fontSize: '0.85rem'
+                                }}>
+                                    <Icon size={18} /><span>{item.label}</span>
+                                </div>
+                            )
+                            return item.href ? <Link key={item.id} href={item.href} style={{ textDecoration: 'none' }}>{el}</Link> : el
+                        })}
+                    </nav>
+                </aside>
+
+                {/* MAIN CONTENT */}
+                <main style={{ flex: 1, padding: '2rem 2.5rem', maxWidth: '900px' }}>
+                    <div className="space-y-8">
 
                         <div className="space-y-2">
                             <div className="flex items-center gap-3 mb-1">
@@ -153,7 +209,7 @@ export default function RecoverPage() {
                         )}
 
                     </div>
-                </div>
+                </main>
             </div>
         </div>
     )
