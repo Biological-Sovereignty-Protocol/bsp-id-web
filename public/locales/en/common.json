@@ -79,6 +79,22 @@
         "btn_social": "Start On-chain Request",
         "success": "Sovereignty Restored! Key saved in browser successfully."
     },
+    "institution": {
+        "title": "Institutional Registration",
+        "subtitle": "Register your laboratory, hospital or research center on the BSP network.",
+        "types": {
+            "laboratory": "Laboratory",
+            "hospital": "Hospital",
+            "wearable": "Wearable",
+            "research": "Research"
+        },
+        "label_name": "Institution Name",
+        "placeholder_name": "Ambrosio Institute",
+        "label_domain": "IEO Domain",
+        "placeholder_domain": "ambrosio-lab",
+        "btn_register": "Register Institution",
+        "alert_sim": "Simulated: {{name}} ({{type}}) registered as {{domain}}.bsp"
+    },
     "nav": {
         "theme_light": "Light Mode",
         "theme_dark": "Dark Mode",

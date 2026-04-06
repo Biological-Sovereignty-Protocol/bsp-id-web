@@ -79,6 +79,22 @@
         "btn_social": "Iniciar Solicitação On-chain",
         "success": "Soberania Restaurada! Chave salva no navegador com sucesso."
     },
+    "institution": {
+        "title": "Registro Institucional",
+        "subtitle": "Registre seu laboratório, hospital ou centro de pesquisa na rede BSP.",
+        "types": {
+            "laboratory": "Laboratório",
+            "hospital": "Hospital",
+            "wearable": "Wearable",
+            "research": "Pesquisa"
+        },
+        "label_name": "Nome da Instituição",
+        "placeholder_name": "Instituto Ambrósio",
+        "label_domain": "Domínio IEO",
+        "placeholder_domain": "ambrosio-lab",
+        "btn_register": "Registrar Instituição",
+        "alert_sim": "Simulado: {{name}} ({{type}}) registrado como {{domain}}.bsp"
+    },
     "nav": {
         "theme_light": "Modo Claro",
         "theme_dark": "Modo Escuro",
