@@ -45,7 +45,7 @@ export function Footer() {
   };
 
   return (
-    <footer style={{ background: "var(--color-surface)", borderTop: "1px solid var(--color-border)", width: "100%", marginTop: "5rem" }}>
+    <footer style={{ background: "var(--color-surface)", borderTop: "1px solid var(--color-border)", width: "100%" }}>
       <div style={{ maxWidth: 1280, margin: "0 auto", padding: "4rem 2rem 0" }}>
 
         {/* ═══ Row 1: CTA + Learn + Protocol + Developers + Use Cases ═══ */}
