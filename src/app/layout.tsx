@@ -34,7 +34,7 @@ export default function RootLayout({
             Homepage (split layout) compensates on desktop via lg:py-0,
             but mobile stacking still benefits from the offset.
           */}
-          <main className="flex-1 w-full pt-16">
+          <main className="flex-1 w-full pt-[64px]">
             {children}
           </main>
 

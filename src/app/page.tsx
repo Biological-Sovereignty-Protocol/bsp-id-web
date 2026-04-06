@@ -9,7 +9,7 @@ export default function Home() {
   const { t } = useTranslation();
 
   return (
-    <div className="w-full min-h-[calc(100vh-72px)] flex flex-col lg:flex-row">
+    <div className="w-full min-h-[calc(100vh-64px)] flex flex-col lg:flex-row">
 
       {/* LEFT — Visual Panel with hero image */}
       <div className="relative lg:w-[50%] lg:flex-none min-h-[40vh] lg:min-h-[calc(100vh-64px)] overflow-hidden order-1">

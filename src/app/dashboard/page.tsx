@@ -15,6 +15,7 @@ export default function Dashboard() {
     const [onchainData, setOnchainData] = useState<any>(null)
     const [loading, setLoading] = useState(true)
     const [showExportModal, setShowExportModal] = useState(false)
+    const [activeTab, setActiveTab] = useState('overview')
     const [seedInput, setSeedInput] = useState("")
 
     useEffect(() => {
@@ -149,133 +150,198 @@ export default function Dashboard() {
         )
     }
 
-    /* ─── AUTHENTICATED — Dashboard ─── */
+    /* ─── AUTHENTICATED — Dashboard with Sidebar ─── */
     const domainInitial = identity.domain ? identity.domain.charAt(0).toUpperCase() : '?'
+
+    const stats = onchainData ? [
+        { label: 'Consents', value: onchainData.consents || 0, icon: FileText, color: 'var(--color-primary)' },
+        { label: 'BioRecords', value: onchainData.biorecords || 0, icon: Activity, color: '#10b981' },
+        { label: 'Guardians', value: `${onchainData.guardians?.active || 0}/${onchainData.guardians?.total || 3}`, icon: ShieldCheck, color: '#8b5cf6' },
+    ] : []
+
+    const menuItems = [
+        { id: 'overview', label: 'Overview', icon: User },
+        { id: 'consents', label: t('dashboard.cards.consent_title'), icon: FileText, href: '/consent' },
+        { id: 'biorecords', label: t('dashboard.cards.biorecords_title'), icon: Activity },
+        { id: 'guardians', label: t('dashboard.cards.guardians_title'), icon: ShieldCheck, href: '/guardians' },
+    ]
 
     return (
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="w-full">
             {showExportModal && identity && (
-                <ExportKeyModal
-                    domain={identity.domain}
-                    privateKeyHex={identity.privateKeyHex}
-                    onClose={() => setShowExportModal(false)}
-                />
+                <ExportKeyModal domain={identity.domain} privateKeyHex={identity.privateKeyHex} onClose={() => setShowExportModal(false)} />
             )}
 
-            <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '3rem 2rem' }}>
-                {/* HEADER ROW */}
-                <div className="flex items-center gap-4 pb-8 mb-8" style={{ borderBottom: '1px solid var(--color-border)' }}>
-                    <div
-                        className="flex items-center justify-center flex-shrink-0"
-                        style={{
-                            width: 52,
-                            height: 52,
-                            borderRadius: '50%',
-                            background: 'linear-gradient(135deg, var(--color-primary), #3b82f6)',
-                            color: '#fff',
-                            fontSize: '1.25rem',
-                            fontWeight: 700,
-                        }}
-                    >
-                        {domainInitial}
+            <div style={{ display: 'flex', minHeight: 'calc(100vh - 64px)' }}>
+                {/* SIDEBAR */}
+                <aside style={{
+                    width: '260px', flexShrink: 0, background: 'var(--color-surface)',
+                    borderRight: '1px solid var(--color-border)', padding: '2rem 0',
+                    display: 'flex', flexDirection: 'column', position: 'sticky', top: '64px', height: 'calc(100vh - 64px)'
+                }} className="hidden lg:flex">
+                    {/* Profile */}
+                    <div style={{ padding: '0 1.5rem 1.5rem', borderBottom: '1px solid var(--color-border)' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                            <div style={{
+                                width: 44, height: 44, borderRadius: '50%',
+                                background: 'linear-gradient(135deg, var(--color-primary), #3b82f6)',
+                                color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                fontSize: '1.1rem', fontWeight: 700
+                            }}>{domainInitial}</div>
+                            <div style={{ minWidth: 0 }}>
+                                <p style={{ fontWeight: 600, fontSize: '0.9rem', color: 'var(--color-text)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{identity.domain}</p>
+                                <p style={{ fontSize: '0.7rem', color: 'var(--color-text-muted)', fontFamily: 'monospace' }}>{identity.publicKeyHex.slice(0, 8)}...{identity.publicKeyHex.slice(-6)}</p>
+                            </div>
+                        </div>
+                        <span style={{
+                            display: 'inline-flex', alignItems: 'center', gap: '4px', marginTop: '12px',
+                            padding: '3px 10px', borderRadius: '20px', fontSize: '0.68rem', fontWeight: 600,
+                            background: 'rgba(16,185,129,0.1)', color: '#10b981', textTransform: 'uppercase', letterSpacing: '0.05em'
+                        }}>
+                            <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#10b981', display: 'inline-block' }} />
+                            {t('dashboard.onchain_active')}
+                        </span>
                     </div>
-                    <div className="flex-1 min-w-0">
-                        <h1 className="text-2xl font-display font-semibold truncate" style={{ background: 'linear-gradient(135deg, var(--color-primary), #60a5fa)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-                            {identity.domain}
+
+                    {/* Nav */}
+                    <nav style={{ flex: 1, padding: '1rem 0.75rem' }}>
+                        {menuItems.map(item => {
+                            const Icon = item.icon
+                            const isActive = activeTab === item.id
+                            const content = (
+                                <div key={item.id}
+                                    onClick={() => setActiveTab(item.id)}
+                                    style={{
+                                        display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 12px',
+                                        borderRadius: '10px', cursor: 'pointer', marginBottom: '4px',
+                                        background: isActive ? 'var(--color-primary-soft)' : 'transparent',
+                                        color: isActive ? 'var(--color-primary)' : 'var(--color-text-muted)',
+                                        fontWeight: isActive ? 600 : 400, fontSize: '0.85rem', transition: 'all 0.15s'
+                                    }}>
+                                    <Icon size={18} />
+                                    <span>{item.label}</span>
+                                </div>
+                            )
+                            return item.href ? <Link key={item.id} href={item.href} style={{ textDecoration: 'none' }}>{content}</Link> : content
+                        })}
+                    </nav>
+
+                    {/* Bottom actions */}
+                    <div style={{ padding: '0 0.75rem', borderTop: '1px solid var(--color-border)', paddingTop: '1rem' }}>
+                        <div onClick={() => setShowExportModal(true)} style={{
+                            display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 12px',
+                            borderRadius: '10px', cursor: 'pointer', color: '#f43f5e',
+                            fontSize: '0.85rem', transition: 'all 0.15s'
+                        }}>
+                            <Key size={18} />
+                            <span>{t('dashboard.cards.export_title')}</span>
+                        </div>
+                    </div>
+                </aside>
+
+                {/* MAIN CONTENT */}
+                <main style={{ flex: 1, padding: '2rem 2.5rem', maxWidth: '900px' }}>
+                    {/* Greeting */}
+                    <div style={{ marginBottom: '2rem' }}>
+                        <h1 style={{ fontSize: '1.6rem', fontWeight: 700, color: 'var(--color-text)', marginBottom: '4px' }}>
+                            Welcome back
                         </h1>
-                        <p className="text-sm text-[var(--color-text-muted)] mt-0.5 font-mono truncate">
-                            {identity.publicKeyHex.slice(0, 16)}...{identity.publicKeyHex.slice(-16)}
+                        <p style={{ fontSize: '0.9rem', color: 'var(--color-text-muted)' }}>
+                            Your biological sovereignty dashboard
                         </p>
                     </div>
-                    <span className="px-3 py-1.5 bg-emerald-500/10 text-emerald-500 text-xs font-semibold tracking-wide rounded-full uppercase flex-shrink-0">
-                        {t('dashboard.onchain_active')}
-                    </span>
-                </div>
 
-                {/* DASHBOARD GRID */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-
-                    <Link
-                        href="/consent"
-                        className="group p-6 rounded-2xl transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5"
-                        style={{
-                            background: 'var(--color-surface)',
-                            border: '1px solid var(--color-border)',
-                            boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
-                        }}
-                        onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = 'var(--color-primary)' }}
-                        onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'var(--color-border)' }}
-                    >
-                        <div className="flex justify-between items-start mb-4">
-                            <div className="p-3 rounded-xl" style={{ background: 'var(--color-primary-soft)', color: 'var(--color-primary)' }}>
-                                <FileText className="w-5 h-5" />
-                            </div>
-                            <span className="text-2xl font-light text-[var(--color-text)]">0</span>
-                        </div>
-                        <h3 className="text-lg font-medium text-[var(--color-text)]">{t('dashboard.cards.consent_title')}</h3>
-                        <p className="text-sm text-[var(--color-text-muted)] mt-1">{t('dashboard.cards.consent_desc')}</p>
-                    </Link>
-
-                    <div
-                        className="group p-6 rounded-2xl transition-all duration-200"
-                        style={{
-                            background: 'var(--color-surface)',
-                            border: '1px solid var(--color-border)',
-                            boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
-                        }}
-                    >
-                        <div className="flex justify-between items-start mb-4">
-                            <div className="p-3 rounded-xl" style={{ background: 'var(--color-primary-soft)', color: 'var(--color-primary)' }}>
-                                <Activity className="w-5 h-5" />
-                            </div>
-                            <span className="text-2xl font-light text-[var(--color-text)]">?</span>
-                        </div>
-                        <h3 className="text-lg font-medium text-[var(--color-text)]">{t('dashboard.cards.biorecords_title')}</h3>
-                        <p className="text-sm text-[var(--color-text-muted)] mt-1">{t('dashboard.cards.biorecords_desc')}</p>
+                    {/* Stats Row */}
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem', marginBottom: '2rem' }}>
+                        {stats.map((stat, i) => {
+                            const Icon = stat.icon
+                            return (
+                                <div key={i} style={{
+                                    padding: '1.25rem', borderRadius: '16px',
+                                    background: 'var(--color-surface)', border: '1px solid var(--color-border)'
+                                }}>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
+                                        <div style={{ padding: '8px', borderRadius: '10px', background: `${stat.color}15`, color: stat.color }}>
+                                            <Icon size={18} />
+                                        </div>
+                                        <span style={{ fontSize: '1.8rem', fontWeight: 300, color: 'var(--color-text)' }}>{stat.value}</span>
+                                    </div>
+                                    <p style={{ fontSize: '0.82rem', color: 'var(--color-text-muted)', fontWeight: 500 }}>{stat.label}</p>
+                                </div>
+                            )
+                        })}
                     </div>
 
-                    <Link
-                        href="/guardians"
-                        className="group p-6 rounded-2xl transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5"
-                        style={{
-                            background: 'var(--color-surface)',
-                            border: '1px solid var(--color-border)',
-                            boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
-                        }}
-                        onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = 'var(--color-primary)' }}
-                        onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'var(--color-border)' }}
-                    >
-                        <div className="flex justify-between items-start mb-4">
-                            <div className="p-3 rounded-xl" style={{ background: 'var(--color-primary-soft)', color: 'var(--color-primary)' }}>
-                                <ShieldCheck className="w-5 h-5" />
+                    {/* Quick Actions */}
+                    <h3 style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--color-text)', marginBottom: '1rem', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Quick Actions</h3>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1rem', marginBottom: '2.5rem' }}>
+                        <Link href="/consent" style={{
+                            display: 'flex', alignItems: 'center', gap: '12px', padding: '1rem 1.25rem',
+                            borderRadius: '14px', background: 'var(--color-surface)', border: '1px solid var(--color-border)',
+                            textDecoration: 'none', color: 'var(--color-text)', transition: 'all 0.2s'
+                        }}>
+                            <div style={{ padding: '8px', borderRadius: '10px', background: 'var(--color-primary-soft)', color: 'var(--color-primary)' }}>
+                                <FileText size={18} />
                             </div>
-                            <span className="text-sm font-mono mt-1 text-[var(--color-text-muted)]">0/3</span>
-                        </div>
-                        <h3 className="text-lg font-medium text-[var(--color-text)]">{t('dashboard.cards.guardians_title')}</h3>
-                        <p className="text-sm text-[var(--color-text-muted)] mt-1">{t('dashboard.cards.guardians_desc')}</p>
-                    </Link>
-
-                    <div
-                        onClick={() => setShowExportModal(true)}
-                        className="group p-6 rounded-2xl cursor-pointer transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5"
-                        style={{
-                            background: 'var(--color-surface)',
-                            border: '1px solid var(--color-border)',
-                            boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
-                        }}
-                        onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = '#f43f5e' }}
-                        onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'var(--color-border)' }}
-                    >
-                        <div className="flex justify-between items-start mb-4">
-                            <div className="p-3 rounded-xl" style={{ background: 'rgba(244,63,94,0.08)', color: '#f43f5e' }}>
-                                <Key className="w-5 h-5" />
+                            <div>
+                                <p style={{ fontWeight: 600, fontSize: '0.85rem' }}>{t('dashboard.cards.consent_title')}</p>
+                                <p style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', marginTop: '2px' }}>{t('dashboard.cards.consent_desc')}</p>
                             </div>
-                        </div>
-                        <h3 className="text-lg font-medium text-[var(--color-text)] group-hover:text-rose-500 transition-colors">{t('dashboard.cards.export_title')}</h3>
-                        <p className="text-sm text-[var(--color-text-muted)] mt-1">{t('dashboard.cards.export_desc')}</p>
+                        </Link>
+                        <Link href="/guardians" style={{
+                            display: 'flex', alignItems: 'center', gap: '12px', padding: '1rem 1.25rem',
+                            borderRadius: '14px', background: 'var(--color-surface)', border: '1px solid var(--color-border)',
+                            textDecoration: 'none', color: 'var(--color-text)', transition: 'all 0.2s'
+                        }}>
+                            <div style={{ padding: '8px', borderRadius: '10px', background: 'rgba(139,92,246,0.08)', color: '#8b5cf6' }}>
+                                <ShieldCheck size={18} />
+                            </div>
+                            <div>
+                                <p style={{ fontWeight: 600, fontSize: '0.85rem' }}>{t('dashboard.cards.guardians_title')}</p>
+                                <p style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', marginTop: '2px' }}>{t('dashboard.cards.guardians_desc')}</p>
+                            </div>
+                        </Link>
                     </div>
 
-                </div>
+                    {/* Identity Details */}
+                    <h3 style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--color-text)', marginBottom: '1rem', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Identity Details</h3>
+                    <div style={{
+                        padding: '1.5rem', borderRadius: '16px',
+                        background: 'var(--color-surface)', border: '1px solid var(--color-border)'
+                    }}>
+                        <div style={{ display: 'grid', gap: '1rem' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 0', borderBottom: '1px solid var(--color-border)' }}>
+                                <span style={{ fontSize: '0.82rem', color: 'var(--color-text-muted)' }}>Domain</span>
+                                <span style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--color-text)' }}>{identity.domain}</span>
+                            </div>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 0', borderBottom: '1px solid var(--color-border)' }}>
+                                <span style={{ fontSize: '0.82rem', color: 'var(--color-text-muted)' }}>Public Key</span>
+                                <span style={{ fontSize: '0.75rem', fontFamily: 'monospace', color: 'var(--color-text-muted)' }}>{identity.publicKeyHex.slice(0, 20)}...{identity.publicKeyHex.slice(-10)}</span>
+                            </div>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 0', borderBottom: '1px solid var(--color-border)' }}>
+                                <span style={{ fontSize: '0.82rem', color: 'var(--color-text-muted)' }}>Status</span>
+                                <span style={{ fontSize: '0.78rem', fontWeight: 600, color: '#10b981' }}>{t('dashboard.onchain_active')}</span>
+                            </div>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 0' }}>
+                                <span style={{ fontSize: '0.82rem', color: 'var(--color-text-muted)' }}>Storage</span>
+                                <span style={{ fontSize: '0.82rem', color: 'var(--color-text)' }}>Arweave (Permanent)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Mobile nav (hidden on desktop) */}
+                    <div className="lg:hidden" style={{ marginTop: '2rem', display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+                        <Link href="/consent" style={{ flex: 1, minWidth: '140px', textAlign: 'center', padding: '12px', borderRadius: '12px', background: 'var(--color-primary)', color: '#fff', textDecoration: 'none', fontWeight: 600, fontSize: '0.85rem' }}>
+                            {t('dashboard.cards.consent_title')}
+                        </Link>
+                        <Link href="/guardians" style={{ flex: 1, minWidth: '140px', textAlign: 'center', padding: '12px', borderRadius: '12px', border: '1px solid var(--color-border)', color: 'var(--color-text)', textDecoration: 'none', fontWeight: 600, fontSize: '0.85rem' }}>
+                            {t('dashboard.cards.guardians_title')}
+                        </Link>
+                        <div onClick={() => setShowExportModal(true)} style={{ flex: 1, minWidth: '140px', textAlign: 'center', padding: '12px', borderRadius: '12px', border: '1px solid rgba(244,63,94,0.3)', color: '#f43f5e', cursor: 'pointer', fontWeight: 600, fontSize: '0.85rem' }}>
+                            {t('dashboard.cards.export_title')}
+                        </div>
+                    </div>
+                </main>
             </div>
         </motion.div>
     )
