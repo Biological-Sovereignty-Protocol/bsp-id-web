@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { ShieldCheck, Plus, FileText, Activity, User } from "lucide-react"
+import { ShieldCheck, Plus, FileText, Activity, User, X, Clock, Tag } from "lucide-react"
 import { getIdentity } from "@/lib/crypto/storage"
 import { useTranslation } from "react-i18next"
 import Link from "next/link"
@@ -39,8 +39,25 @@ export default function ConsentPage() {
     const [identity, setIdentity] = useState<any>(null)
     const [ieoDomain, setIeoDomain] = useState("")
     const [intents, setIntents] = useState<string[]>(['SUBMIT_RECORD'])
-    const [categories, setCategories] = useState<string[]>(['BSP-CV'])
+    const [selectedCategories, setSelectedCategories] = useState<string[]>([])
+    const [expiresAt, setExpiresAt] = useState('')
     const [isIssuing, setIsIssuing] = useState(false)
+    const [activeConsents, setActiveConsents] = useState([
+        { id: 'ct_001', ieo: 'fleury.bsp', intents: ['SUBMIT_RECORD', 'READ_RECORDS'], categories: ['BSP-LA', 'BSP-HM'], expiresAt: '2026-07-01T00:00', status: 'active', grantedAt: '2026-04-06' },
+        { id: 'ct_002', ieo: 'dasa.bsp', intents: ['READ_RECORDS'], categories: ['BSP-GL'], expiresAt: '2026-05-15T00:00', status: 'active', grantedAt: '2026-04-01' },
+    ])
+
+    const bioCategories = [
+        { code: 'BSP-LA', label: 'Laboratory Analysis' },
+        { code: 'BSP-GL', label: 'Glucose & Metabolism' },
+        { code: 'BSP-HM', label: 'Hematology' },
+        { code: 'BSP-CL', label: 'Clinical Chemistry' },
+        { code: 'BSP-HR', label: 'Hormones' },
+        { code: 'BSP-IM', label: 'Immunology' },
+        { code: 'BSP-GN', label: 'Genomics' },
+        { code: 'BSP-WR', label: 'Wearable Data' },
+        { code: 'BSP-VT', label: 'Vitals' },
+    ]
 
     const lang = i18n.language?.substring(0, 2) || 'en'
     const labels = intentLabels[lang] || intentLabels.en
@@ -76,14 +93,24 @@ export default function ConsentPage() {
 
             if (isDemo) {
                 await new Promise(r => setTimeout(r, 1500))
+                const newConsent = {
+                    id: `ct_${String(activeConsents.length + 1).padStart(3, '0')}`,
+                    ieo: ieoDomain,
+                    intents: [...intents],
+                    categories: [...selectedCategories],
+                    expiresAt: expiresAt || '',
+                    status: 'active' as const,
+                    grantedAt: new Date().toISOString().split('T')[0],
+                }
+                setActiveConsents(prev => [newConsent, ...prev])
                 alert(t('consent.success'))
             } else {
                 const payload = {
                     beoId: identity.domain,
                     ieoId: ieoDomain,
                     intentTypes: intents,
-                    dataCategories: categories,
-                    expiresAt: Date.now() + 86400000 * 30
+                    dataCategories: selectedCategories,
+                    expiresAt: expiresAt ? new Date(expiresAt).getTime() : Date.now() + 86400000 * 30
                 }
 
                 await fetch('/api/relay', {
@@ -101,6 +128,8 @@ export default function ConsentPage() {
                 alert(t('consent.success'))
             }
             setIeoDomain("")
+            setSelectedCategories([])
+            setExpiresAt('')
         } catch (e) {
             alert(t('consent.error'))
         }
@@ -115,7 +144,7 @@ export default function ConsentPage() {
     const menuItems = [
         { id: 'overview', label: 'Overview', icon: User, href: '/dashboard' },
         { id: 'consents', label: t('dashboard.cards.consent_title'), icon: FileText, href: '/consent' },
-        { id: 'biorecords', label: t('dashboard.cards.biorecords_title'), icon: Activity },
+        { id: 'biorecords', label: t('dashboard.cards.biorecords_title'), icon: Activity, href: '/biorecords' },
         { id: 'guardians', label: t('dashboard.cards.guardians_title'), icon: ShieldCheck, href: '/guardians' },
     ]
 
@@ -217,6 +246,51 @@ export default function ConsentPage() {
                                         );
                                     })}
                                 </div>
+                            </div>
+
+                            {/* Categories Multi-Select */}
+                            <div className="space-y-3">
+                                <label className="text-sm font-medium text-[var(--color-text-muted)]">{t('consent.label_categories') || 'Authorized Data Categories'}</label>
+                                <div className="grid grid-cols-2 gap-3">
+                                    {bioCategories.map(cat => {
+                                        const isChecked = selectedCategories.includes(cat.code);
+                                        return (
+                                            <label key={cat.code} className="flex items-center gap-2 text-sm cursor-pointer transition-all text-[var(--color-text)]"
+                                                style={{
+                                                    padding: '12px 14px',
+                                                    borderRadius: 12,
+                                                    background: isChecked ? 'var(--color-primary-soft)' : 'var(--color-bg)',
+                                                    border: `1px solid ${isChecked ? 'var(--color-primary)' : 'var(--color-border)'}`,
+                                                }}
+                                            >
+                                                <input
+                                                    type="checkbox"
+                                                    checked={isChecked}
+                                                    onChange={(e) => {
+                                                        if (e.target.checked) setSelectedCategories([...selectedCategories, cat.code])
+                                                        else setSelectedCategories(selectedCategories.filter(c => c !== cat.code))
+                                                    }}
+                                                    className="accent-[var(--color-primary)] w-4 h-4 cursor-pointer"
+                                                />
+                                                <span style={{ fontFamily: 'monospace', fontSize: '0.75rem', opacity: 0.6 }}>{cat.code}</span> {cat.label}
+                                            </label>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+
+                            {/* Expiration Date Picker */}
+                            <div style={{ marginTop: '16px' }}>
+                                <label style={{ display: 'block', fontSize: '0.82rem', color: 'var(--color-text-muted)', marginBottom: '8px', fontWeight: 500 }}>
+                                    {t('consent.label_expires') || 'Consent Expiration'}
+                                </label>
+                                <input
+                                    type="datetime-local"
+                                    value={expiresAt}
+                                    onChange={e => setExpiresAt(e.target.value)}
+                                    style={{ width: '100%', padding: '12px 16px', borderRadius: '12px', border: '1px solid var(--color-border)', background: 'var(--color-bg)', color: 'var(--color-text)', fontSize: '0.85rem', outline: 'none' }}
+                                />
+                                {!expiresAt && <p style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', marginTop: '6px' }}>{t('consent.no_expiry') || 'No expiration (permanent)'}</p>}
                             </div>
 
                             <button

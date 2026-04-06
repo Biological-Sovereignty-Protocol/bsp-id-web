@@ -1,16 +1,39 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Users, AlertCircle, Share2, ShieldCheck, UserPlus, FileText, Activity, User } from "lucide-react"
+import { Users, AlertCircle, Share2, ShieldCheck, UserPlus, FileText, Activity, User, X, Plus } from "lucide-react"
 import { useTranslation } from "react-i18next"
 import { getIdentity } from "@/lib/crypto/storage"
 import Link from "next/link"
 import { DashboardHeader } from "@/components/DashboardHeader"
 
+type GuardianStatus = 'pending' | 'active' | 'empty'
+
+interface Guardian {
+    id: string
+    name: string
+    contact: string
+    status: GuardianStatus
+    addedAt: string
+}
+
+const statusConfig: Record<GuardianStatus, { bg: string; color: string; labelKey: string }> = {
+    pending: { bg: 'rgba(245,158,11,0.1)', color: '#f59e0b', labelKey: 'guardians.status_pending' },
+    active: { bg: 'rgba(16,185,129,0.1)', color: '#10b981', labelKey: 'guardians.status_active' },
+    empty: { bg: 'rgba(156,163,175,0.1)', color: '#9ca3af', labelKey: 'guardians.status_empty' },
+}
+
 export default function GuardiansPage() {
     const { t } = useTranslation();
     const [identity, setIdentity] = useState<any>(null)
-    const [step] = useState<'intro'>('intro')
+    const [guardians, setGuardians] = useState<Guardian[]>([
+        { id: 'g1', name: 'Guardian 1', contact: 'g1@email.com', status: 'pending', addedAt: '2026-04-06' },
+        { id: 'g2', name: 'Guardian 2', contact: '+55 11 99999-9999', status: 'pending', addedAt: '2026-04-06' },
+        { id: 'g3', name: '', contact: '', status: 'empty', addedAt: '' },
+    ])
+    const [showForm, setShowForm] = useState(false)
+    const [formName, setFormName] = useState('')
+    const [formContact, setFormContact] = useState('')
 
     useEffect(() => {
         getIdentity().then(id => {
@@ -41,6 +64,35 @@ export default function GuardiansPage() {
         { id: 'biorecords', label: t('dashboard.cards.biorecords_title'), icon: Activity },
         { id: 'guardians', label: t('dashboard.cards.guardians_title'), icon: ShieldCheck, href: '/guardians' },
     ]
+
+    const configuredCount = guardians.filter(g => g.status !== 'empty').length
+    const totalSlots = 3
+    const progressPct = Math.round((configuredCount / totalSlots) * 100)
+
+    const handleAddGuardian = () => {
+        if (!formName.trim() || !formContact.trim()) return
+        const emptySlot = guardians.find(g => g.status === 'empty')
+        if (!emptySlot) return
+
+        setGuardians(prev => prev.map(g =>
+            g.id === emptySlot.id
+                ? { ...g, name: formName.trim(), contact: formContact.trim(), status: 'pending' as GuardianStatus, addedAt: new Date().toISOString().split('T')[0] }
+                : g
+        ))
+        setFormName('')
+        setFormContact('')
+        setShowForm(false)
+    }
+
+    const handleRemoveGuardian = (id: string) => {
+        setGuardians(prev => prev.map(g =>
+            g.id === id
+                ? { ...g, name: '', contact: '', status: 'empty' as GuardianStatus, addedAt: '' }
+                : g
+        ))
+    }
+
+    const hasEmptySlot = guardians.some(g => g.status === 'empty')
 
     return (
         <div className="w-full">
@@ -97,25 +149,124 @@ export default function GuardiansPage() {
                             <p className="text-[var(--color-text-muted)]">{t('guardians.subtitle')}</p>
                         </div>
 
+                        {/* Progress Indicator */}
+                        <div className="p-5" style={{ background: 'var(--color-surface)', borderRadius: 16, border: '1px solid var(--color-border)', boxShadow: '0 1px 3px rgba(0,0,0,0.04)' }}>
+                            <div className="flex items-center justify-between mb-3">
+                                <span className="text-sm font-medium" style={{ color: 'var(--color-text)' }}>
+                                    {t('guardians.progress', { configured: configuredCount, total: totalSlots })}
+                                </span>
+                                <span className="text-xs font-semibold" style={{ color: configuredCount === totalSlots ? '#10b981' : '#f59e0b' }}>
+                                    {progressPct}%
+                                </span>
+                            </div>
+                            <div style={{ height: 6, borderRadius: 3, background: 'var(--color-border)', overflow: 'hidden' }}>
+                                <div style={{
+                                    height: '100%', width: `${progressPct}%`, borderRadius: 3,
+                                    background: configuredCount === totalSlots
+                                        ? 'linear-gradient(90deg, #10b981, #34d399)'
+                                        : 'linear-gradient(90deg, var(--color-primary), #f59e0b)',
+                                    transition: 'width 0.3s ease'
+                                }} />
+                            </div>
+                        </div>
+
                         {/* Guardian slots */}
                         <div className="grid gap-4">
-                            {[1, 2, 3].map((num) => (
-                                <div key={num} className="flex items-center gap-4 p-5 transition-all"
-                                    style={{ background: 'var(--color-surface)', borderRadius: 16, border: '1px solid var(--color-border)', boxShadow: '0 1px 3px rgba(0,0,0,0.04)' }}
-                                >
-                                    <div className="flex items-center justify-center shrink-0" style={{ width: 44, height: 44, borderRadius: '50%', background: 'var(--color-primary-soft)', color: 'var(--color-primary)' }}>
-                                        <UserPlus className="w-5 h-5" />
+                            {guardians.map((guardian) => {
+                                const cfg = statusConfig[guardian.status]
+                                return (
+                                    <div key={guardian.id} className="flex items-center gap-4 p-5 transition-all"
+                                        style={{ background: 'var(--color-surface)', borderRadius: 16, border: '1px solid var(--color-border)', boxShadow: '0 1px 3px rgba(0,0,0,0.04)' }}
+                                    >
+                                        <div className="flex items-center justify-center shrink-0" style={{
+                                            width: 44, height: 44, borderRadius: '50%',
+                                            background: guardian.status === 'empty' ? 'rgba(156,163,175,0.1)' : 'var(--color-primary-soft)',
+                                            color: guardian.status === 'empty' ? '#9ca3af' : 'var(--color-primary)'
+                                        }}>
+                                            {guardian.status === 'empty' ? <UserPlus className="w-5 h-5" /> : <ShieldCheck className="w-5 h-5" />}
+                                        </div>
+                                        <div className="flex-1 min-w-0">
+                                            <p className="text-sm font-medium text-[var(--color-text)]">
+                                                {guardian.status === 'empty' ? t('guardians.empty_slot') : guardian.name}
+                                            </p>
+                                            {guardian.status !== 'empty' && (
+                                                <p className="text-xs text-[var(--color-text-muted)] mt-0.5 truncate">{guardian.contact}</p>
+                                            )}
+                                            {guardian.status === 'empty' && (
+                                                <p className="text-xs text-[var(--color-text-muted)] mt-0.5">{t('guardians.not_configured')}</p>
+                                            )}
+                                        </div>
+                                        <div className="flex items-center gap-2">
+                                            <span className="px-3 py-1 text-xs font-medium rounded-full" style={{ background: cfg.bg, color: cfg.color }}>
+                                                {t(cfg.labelKey)}
+                                            </span>
+                                            {guardian.status !== 'empty' && (
+                                                <button
+                                                    onClick={() => handleRemoveGuardian(guardian.id)}
+                                                    className="p-1.5 rounded-lg transition-colors hover:bg-[rgba(239,68,68,0.1)]"
+                                                    title={t('guardians.btn_remove')}
+                                                >
+                                                    <X size={16} style={{ color: '#ef4444' }} />
+                                                </button>
+                                            )}
+                                        </div>
                                     </div>
-                                    <div className="flex-1">
-                                        <p className="text-sm font-medium text-[var(--color-text)]">{t('guardians.guardian_num', { num })}</p>
-                                        <p className="text-xs text-[var(--color-text-muted)] mt-0.5">{t('guardians.not_configured')}</p>
-                                    </div>
-                                    <span className="px-3 py-1 text-xs font-medium rounded-full" style={{ background: 'rgba(239,68,68,0.08)', color: '#ef4444' }}>
-                                        {t('guardians.empty')}
-                                    </span>
-                                </div>
-                            ))}
+                                )
+                            })}
                         </div>
+
+                        {/* Add Guardian Form */}
+                        {showForm && (
+                            <div className="p-6 space-y-4" style={{ background: 'var(--color-surface)', borderRadius: 16, border: '1px solid var(--color-primary)', boxShadow: '0 1px 3px rgba(0,0,0,0.04)' }}>
+                                <h3 className="text-sm font-semibold" style={{ color: 'var(--color-text)' }}>{t('guardians.add_title')}</h3>
+                                <div className="grid gap-3">
+                                    <input
+                                        type="text"
+                                        value={formName}
+                                        onChange={e => setFormName(e.target.value)}
+                                        placeholder={t('guardians.placeholder_name')}
+                                        className="w-full px-4 py-3 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] transition-all"
+                                        style={{ background: 'var(--color-bg)', border: '1px solid var(--color-border)', color: 'var(--color-text)' }}
+                                    />
+                                    <input
+                                        type="text"
+                                        value={formContact}
+                                        onChange={e => setFormContact(e.target.value)}
+                                        placeholder={t('guardians.placeholder_contact')}
+                                        className="w-full px-4 py-3 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] transition-all"
+                                        style={{ background: 'var(--color-bg)', border: '1px solid var(--color-border)', color: 'var(--color-text)' }}
+                                    />
+                                </div>
+                                <div className="flex gap-3">
+                                    <button
+                                        onClick={handleAddGuardian}
+                                        disabled={!formName.trim() || !formContact.trim()}
+                                        className="flex-1 flex items-center justify-center gap-2 text-white py-3 font-medium hover:opacity-90 transition-all focus:outline-none disabled:opacity-40"
+                                        style={{ borderRadius: 12, background: 'linear-gradient(135deg, var(--color-primary), #3b82f6)' }}
+                                    >
+                                        <Plus size={16} /> {t('guardians.btn_add')}
+                                    </button>
+                                    <button
+                                        onClick={() => { setShowForm(false); setFormName(''); setFormContact('') }}
+                                        className="px-6 py-3 font-medium transition-all focus:outline-none text-sm"
+                                        style={{ borderRadius: 12, border: '1px solid var(--color-border)', color: 'var(--color-text-muted)' }}
+                                    >
+                                        {t('guardians.btn_cancel')}
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Add Guardian Button */}
+                        {!showForm && hasEmptySlot && (
+                            <button
+                                onClick={() => setShowForm(true)}
+                                className="w-full flex items-center justify-center gap-2 py-4 font-medium hover:opacity-90 transition-all focus:outline-none text-sm"
+                                style={{ borderRadius: 12, border: '2px dashed var(--color-border)', color: 'var(--color-primary)', background: 'transparent' }}
+                            >
+                                <Plus size={18} /> {t('guardians.btn_add_guardian')}
+                            </button>
+                        )}
 
                         <div className="p-6 space-y-6" style={{ background: 'var(--color-surface)', borderRadius: 16, border: '1px solid var(--color-border)', boxShadow: '0 1px 3px rgba(0,0,0,0.04)' }}>
 

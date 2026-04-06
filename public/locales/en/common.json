@@ -47,6 +47,16 @@
         "recent_activity": "Recent Activity",
         "security_score": "Security Score",
         "needs_improvement": "Needs Improvement",
+        "audit_log": "Audit Log",
+        "audit": {
+            "consent_granted": "Consent granted to {{target}}",
+            "beo_created": "BEO identity created",
+            "biorecord_received": "Biorecord received from {{source}}",
+            "guardian_added": "{{name}} added as guardian",
+            "consent_revoked": "Consent to {{target}} revoked",
+            "confirmed": "Confirmed",
+            "pending": "Pending"
+        },
         "beo_created": "BEO Created",
         "identity_verified": "Identity verified on Arweave",
         "seed_backed": "Seed phrase backed up",
@@ -98,7 +108,19 @@
         "btn_setup": "Setup Guardians Now",
         "guardian_num": "Guardian {{num}}",
         "not_configured": "Not configured",
-        "empty": "Empty"
+        "empty": "Empty",
+        "status_pending": "Pending",
+        "status_active": "Active",
+        "status_empty": "Empty",
+        "empty_slot": "Empty Slot",
+        "progress": "{{configured}}/{{total}} guardians configured",
+        "add_title": "Add Guardian",
+        "placeholder_name": "Guardian name",
+        "placeholder_contact": "Email or phone number",
+        "btn_add": "Add",
+        "btn_cancel": "Cancel",
+        "btn_remove": "Remove guardian",
+        "btn_add_guardian": "Add Guardian"
     },
     "recover": {
         "title": "Spatial Recovery",

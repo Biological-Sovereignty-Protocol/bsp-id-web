@@ -47,6 +47,16 @@
         "recent_activity": "Actividad Reciente",
         "security_score": "Puntuación de Seguridad",
         "needs_improvement": "Necesita Mejorar",
+        "audit_log": "Registro de Auditoría",
+        "audit": {
+            "consent_granted": "Consentimiento otorgado a {{target}}",
+            "beo_created": "Identidad BEO creada",
+            "biorecord_received": "Biorecord recibido de {{source}}",
+            "guardian_added": "{{name}} agregado como guardián",
+            "consent_revoked": "Consentimiento para {{target}} revocado",
+            "confirmed": "Confirmado",
+            "pending": "Pendiente"
+        },
         "beo_created": "BEO Creado",
         "identity_verified": "Identidad verificada en Arweave",
         "seed_backed": "Seed phrase respaldada",
@@ -98,7 +108,19 @@
         "btn_setup": "Configurar Guardianes Ahora",
         "guardian_num": "Guardián {{num}}",
         "not_configured": "No configurado",
-        "empty": "Vacío"
+        "empty": "Vacío",
+        "status_pending": "Pendiente",
+        "status_active": "Activo",
+        "status_empty": "Vacío",
+        "empty_slot": "Slot Vacío",
+        "progress": "{{configured}}/{{total}} guardianes configurados",
+        "add_title": "Agregar Guardián",
+        "placeholder_name": "Nombre del guardián",
+        "placeholder_contact": "Email o teléfono",
+        "btn_add": "Agregar",
+        "btn_cancel": "Cancelar",
+        "btn_remove": "Eliminar guardián",
+        "btn_add_guardian": "Agregar Guardián"
     },
     "recover": {
         "title": "Recuperación Espacial",

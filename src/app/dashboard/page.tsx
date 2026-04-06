@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import { getIdentity } from "@/lib/crypto/storage"
 import { getBEO } from "@/lib/arweave/beo"
 import { motion } from "framer-motion"
-import { Activity, Key, LogOut, ShieldCheck, FileText, User } from "lucide-react"
+import { Activity, Key, LogOut, ShieldCheck, FileText, User, CheckCircle, Clock, XCircle, UserPlus, Database } from "lucide-react"
 import { useTranslation } from "react-i18next"
 import Link from "next/link"
 import ExportKeyModal from "@/components/ExportKeyModal"
@@ -344,22 +344,63 @@ export default function Dashboard() {
                         </div>
                     </div>
 
-                    {/* Recent Activity */}
-                    <h3 style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--color-text)', marginBottom: '1rem', marginTop: '2.5rem', textTransform: 'uppercase', letterSpacing: '0.06em' }}>{t('dashboard.recent_activity')}</h3>
+                    {/* Audit Log */}
+                    <h3 style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--color-text)', marginBottom: '1rem', marginTop: '2.5rem', textTransform: 'uppercase', letterSpacing: '0.06em' }}>{t('dashboard.audit_log')}</h3>
                     <div style={{ padding: '1.5rem', borderRadius: '16px', background: 'var(--color-surface)', border: '1px solid var(--color-border)' }}>
-                        {[
-                            { action: t('dashboard.beo_created'), time: t('dashboard.just_now'), icon: '🔑', color: 'var(--color-primary)' },
-                            { action: t('dashboard.identity_verified'), time: t('dashboard.min_ago_2'), icon: '✓', color: '#10b981' },
-                            { action: t('dashboard.seed_backed'), time: t('dashboard.min_ago_5'), icon: '🛡️', color: '#8b5cf6' },
-                        ].map((item, i) => (
-                            <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px 0', borderBottom: i < 2 ? '1px solid var(--color-border)' : 'none' }}>
-                                <div style={{ width: 36, height: 36, borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1rem', background: `${item.color}15` }}>{item.icon}</div>
-                                <div style={{ flex: 1 }}>
-                                    <p style={{ fontSize: '0.85rem', fontWeight: 500, color: 'var(--color-text)' }}>{item.action}</p>
-                                    <p style={{ fontSize: '0.72rem', color: 'var(--color-text-muted)' }}>{item.time}</p>
-                                </div>
-                            </div>
-                        ))}
+                        {(() => {
+                            const auditLog = [
+                                { type: 'CONSENT_GRANTED', description: t('dashboard.audit.consent_granted', { target: 'fleury.bsp' }), timestamp: '2026-04-06 14:30', txId: 'demo_tx_c001', status: 'confirmed' },
+                                { type: 'BEO_CREATED', description: t('dashboard.audit.beo_created'), timestamp: '2026-04-06 14:25', txId: 'demo_tx_b001', status: 'confirmed' },
+                                { type: 'BIORECORD_RECEIVED', description: t('dashboard.audit.biorecord_received', { source: 'fleury.bsp' }), timestamp: '2026-04-06 14:28', txId: 'demo_tx_r001', status: 'confirmed' },
+                                { type: 'GUARDIAN_ADDED', description: t('dashboard.audit.guardian_added', { name: 'Guardian 1' }), timestamp: '2026-04-06 14:26', txId: 'demo_tx_g001', status: 'pending' },
+                                { type: 'CONSENT_REVOKED', description: t('dashboard.audit.consent_revoked', { target: 'labclin.bsp' }), timestamp: '2026-04-05 10:00', txId: 'demo_tx_c002', status: 'confirmed' },
+                            ]
+
+                            const typeConfig: Record<string, { icon: typeof FileText; color: string; bg: string }> = {
+                                CONSENT_GRANTED: { icon: CheckCircle, color: '#10b981', bg: 'rgba(16,185,129,0.1)' },
+                                BEO_CREATED: { icon: Key, color: 'var(--color-primary)', bg: 'var(--color-primary-soft)' },
+                                BIORECORD_RECEIVED: { icon: Database, color: '#3b82f6', bg: 'rgba(59,130,246,0.1)' },
+                                GUARDIAN_ADDED: { icon: UserPlus, color: '#8b5cf6', bg: 'rgba(139,92,246,0.1)' },
+                                CONSENT_REVOKED: { icon: XCircle, color: '#ef4444', bg: 'rgba(239,68,68,0.1)' },
+                            }
+
+                            return auditLog.map((entry, i) => {
+                                const cfg = typeConfig[entry.type] || typeConfig.BEO_CREATED
+                                const Icon = cfg.icon
+                                const isConfirmed = entry.status === 'confirmed'
+                                return (
+                                    <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px 0', borderBottom: i < auditLog.length - 1 ? '1px solid var(--color-border)' : 'none' }}>
+                                        <div style={{ width: 36, height: 36, borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: cfg.bg, color: cfg.color, flexShrink: 0 }}>
+                                            <Icon size={16} />
+                                        </div>
+                                        <div style={{ flex: 1, minWidth: 0 }}>
+                                            <p style={{ fontSize: '0.85rem', fontWeight: 500, color: 'var(--color-text)' }}>{entry.description}</p>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '2px' }}>
+                                                <span style={{ fontSize: '0.72rem', color: 'var(--color-text-muted)' }}>{entry.timestamp}</span>
+                                                <span style={{ fontSize: '0.65rem', color: 'var(--color-text-muted)', opacity: 0.6 }}>|</span>
+                                                <a
+                                                    href={`https://viewblock.io/arweave/tx/${entry.txId}`}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    style={{ fontSize: '0.68rem', fontFamily: 'monospace', color: 'var(--color-primary)', textDecoration: 'none' }}
+                                                    title={entry.txId}
+                                                >
+                                                    {entry.txId.slice(0, 10)}...{entry.txId.slice(-4)}
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <span style={{
+                                            fontSize: '0.68rem', fontWeight: 600, padding: '3px 10px', borderRadius: '20px',
+                                            background: isConfirmed ? 'rgba(16,185,129,0.1)' : 'rgba(245,158,11,0.1)',
+                                            color: isConfirmed ? '#10b981' : '#f59e0b',
+                                            textTransform: 'uppercase', letterSpacing: '0.03em', flexShrink: 0,
+                                        }}>
+                                            {isConfirmed ? t('dashboard.audit.confirmed') : t('dashboard.audit.pending')}
+                                        </span>
+                                    </div>
+                                )
+                            })
+                        })()}
                     </div>
 
                     {/* Security Score */}
