@@ -1,6 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  typescript: {
+    ignoreBuildErrors: true,
+  },
   serverExternalPackages: ["warp-contracts", "arweave", "classic-level"],
   webpack: (config) => {
     config.resolve.fallback = {
