@@ -23,6 +23,12 @@ export default function RootLayout({
           {/* Header u2014 fixed, 72px tall */}
           <Header />
 
+          {process.env.NEXT_PUBLIC_DEMO_MODE === 'true' && (
+            <div style={{ background: 'linear-gradient(90deg, #f59e0b, #d97706)', color: '#fff', textAlign: 'center', padding: '6px 16px', fontSize: '12px', fontWeight: 600, letterSpacing: '0.05em' }}>
+              DEMO MODE — Data is stored locally only. No blockchain transactions.
+            </div>
+          )}
+
           {/*
             pt-[72px]: offsets the fixed header for ALL pages.
             Homepage (split layout) compensates on desktop via lg:py-0,

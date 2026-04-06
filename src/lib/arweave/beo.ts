@@ -1,6 +1,13 @@
 import { arweave, warp, contracts } from './client'
 
+const isDemo = process.env.NEXT_PUBLIC_DEMO_MODE === 'true'
+
 export async function createBEO(domain: string, publicKeyHex: string, recoveryConfig: any) {
+    if (isDemo) {
+        await new Promise(r => setTimeout(r, 2000))
+        return { txId: 'demo_' + Date.now(), status: 'ok' }
+    }
+
     // We send this to the /api/relay proxy so the server pays the gas
     const payload = { domain, publicKey: publicKeyHex, recovery: recoveryConfig }
 
@@ -28,6 +35,18 @@ export async function createBEO(domain: string, publicKeyHex: string, recoveryCo
 }
 
 export async function getBEO(domain: string) {
+    if (isDemo) {
+        return {
+            domain,
+            publicKey: 'demo_public_key',
+            createdAt: new Date().toISOString(),
+            status: 'active',
+            consents: [],
+            biorecords: 3,
+            guardians: { total: 3, active: 0 }
+        }
+    }
+
     // Reads are free and public, no relay needed. Connect via Warp directly.
     const swContract = warp.contract(contracts.beoRegistry)
     const { cachedValue } = await swContract.readState()

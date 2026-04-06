@@ -22,27 +22,36 @@ export default function ConsentPage() {
         }
 
         try {
-            const payload = {
-                beoId: identity.domain,
-                ieoId: ieoDomain,
-                intentTypes: intents,
-                dataCategories: categories,
-                expiresAt: Date.now() + 86400000 * 30
-            }
+            const isDemo = process.env.NEXT_PUBLIC_DEMO_MODE === 'true'
 
-            await fetch('/api/relay', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    contract: 'AccessControl',
-                    function: 'issueConsent',
-                    payload,
-                    signature: 'dummy_sig',
-                    publicKey: identity.publicKeyHex
+            if (isDemo) {
+                // Demo mode: simulate consent
+                await new Promise(r => setTimeout(r, 1500))
+                alert(t('consent.success'))
+            } else {
+                // Production: call relay API
+                const payload = {
+                    beoId: identity.domain,
+                    ieoId: ieoDomain,
+                    intentTypes: intents,
+                    dataCategories: categories,
+                    expiresAt: Date.now() + 86400000 * 30
+                }
+
+                await fetch('/api/relay', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contract: 'AccessControl',
+                        function: 'issueConsent',
+                        payload,
+                        signature: 'dummy_sig',
+                        publicKey: identity.publicKeyHex
+                    })
                 })
-            })
 
-            alert(t('consent.success'))
+                alert(t('consent.success'))
+            }
             setIeoDomain("")
         } catch (e) {
             alert(t('consent.error'))

@@ -43,29 +43,38 @@ export default function CreateBEOFlow() {
         setStep('register')
 
         try {
-            const payload = {
-                domain: `${domain}.bsp`,
-                publicKey: keyPair.publicKeyHex,
-                recovery: {}
-            }
+            const isDemo = process.env.NEXT_PUBLIC_DEMO_MODE === 'true'
 
-            const res = await fetch('/api/relay', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    contract: 'BEORegistry',
-                    function: 'createBEO',
-                    payload,
-                    signature: 'dummy_sig',
-                    publicKey: keyPair.publicKeyHex
+            if (isDemo) {
+                // Demo mode: simulate registration
+                await new Promise(r => setTimeout(r, 2000))
+                await storeIdentity(`${domain}.bsp`, keyPair.privateKeyHex, keyPair.publicKeyHex)
+                setStep('success')
+            } else {
+                // Production: call relay API
+                const payload = {
+                    domain: `${domain}.bsp`,
+                    publicKey: keyPair.publicKeyHex,
+                    recovery: {}
+                }
+
+                const res = await fetch('/api/relay', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contract: 'BEORegistry',
+                        function: 'createBEO',
+                        payload,
+                        signature: 'dummy_sig',
+                        publicKey: keyPair.publicKeyHex
+                    })
                 })
-            })
 
-            if (!res.ok) throw new Error('Falha no registro Arweave')
+                if (!res.ok) throw new Error('Falha no registro Arweave')
 
-            await storeIdentity(`${domain}.bsp`, keyPair.privateKeyHex, keyPair.publicKeyHex)
-
-            setStep('success')
+                await storeIdentity(`${domain}.bsp`, keyPair.privateKeyHex, keyPair.publicKeyHex)
+                setStep('success')
+            }
         } catch (e) {
             alert(t('errors.relay_failed', 'Error connecting to relayer. Please ensure your Arweave Wallet is configured.'))
             setStep('guardian')

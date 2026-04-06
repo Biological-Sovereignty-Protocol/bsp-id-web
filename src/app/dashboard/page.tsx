@@ -26,6 +26,19 @@ export default function Dashboard() {
             }
             setIdentity(local)
 
+            if (process.env.NEXT_PUBLIC_DEMO_MODE === 'true') {
+                setOnchainData({
+                    domain: local.domain,
+                    status: 'active',
+                    createdAt: local.savedAt || new Date().toISOString(),
+                    consents: 2,
+                    biorecords: 5,
+                    guardians: { total: 3, active: 0 }
+                })
+                setLoading(false)
+                return
+            }
+
             try {
                 const arweaveData = await getBEO(local.domain)
                 setOnchainData(arweaveData)
