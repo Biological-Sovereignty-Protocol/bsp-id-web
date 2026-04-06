@@ -8,6 +8,7 @@ import { Activity, Key, LogOut, ShieldCheck, FileText, User } from "lucide-react
 import { useTranslation } from "react-i18next"
 import Link from "next/link"
 import ExportKeyModal from "@/components/ExportKeyModal"
+import { DashboardHeader } from "@/components/DashboardHeader"
 
 export default function Dashboard() {
     const { t } = useTranslation();
@@ -50,6 +51,17 @@ export default function Dashboard() {
         }
         load()
     }, [])
+
+    // Hide global header when authenticated, show dashboard-specific header instead
+    useEffect(() => {
+        const globalHeader = document.querySelector('header');
+        if (globalHeader && identity) {
+            globalHeader.style.display = 'none';
+        }
+        return () => {
+            if (globalHeader) globalHeader.style.display = '';
+        };
+    }, [identity]);
 
     if (loading) {
         return <div className="animate-pulse flex items-center justify-center min-h-[400px] text-[var(--color-text-muted)]">
@@ -171,6 +183,9 @@ export default function Dashboard() {
             {showExportModal && identity && (
                 <ExportKeyModal domain={identity.domain} privateKeyHex={identity.privateKeyHex} onClose={() => setShowExportModal(false)} />
             )}
+
+            {/* Dashboard-specific header */}
+            <DashboardHeader domain={identity.domain} initial={domainInitial} />
 
             <div style={{ display: 'flex', flex: 1 }}>
                 {/* SIDEBAR */}

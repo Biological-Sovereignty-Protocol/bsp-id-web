@@ -1,0 +1,140 @@
+"use client";
+
+import { useTheme } from "next-themes";
+import { useTranslation } from "react-i18next";
+import { Sun, Moon, Bell, Search, LogOut } from "lucide-react";
+import { useEffect, useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { clearIdentity } from "@/lib/crypto/storage";
+import "@/lib/i18n/config";
+
+interface DashboardHeaderProps {
+    domain?: string;
+    initial?: string;
+}
+
+export function DashboardHeader({ domain, initial }: DashboardHeaderProps) {
+    const { theme, setTheme } = useTheme();
+    const { i18n } = useTranslation();
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => { setMounted(true) }, []);
+    if (!mounted) return null;
+
+    const isDark = theme === "dark";
+
+    const handleLogout = async () => {
+        await clearIdentity();
+        window.location.href = '/';
+    };
+
+    return (
+        <header style={{
+            position: 'fixed', top: 0, left: 0, right: 0, zIndex: 50,
+            height: '64px', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            padding: '0 24px',
+            background: isDark ? 'rgba(8,11,18,0.9)' : 'rgba(255,255,255,0.9)',
+            backdropFilter: 'blur(20px)',
+            borderBottom: `1px solid ${isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)'}`
+        }}>
+            {/* Left — Logo + breadcrumb */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                <Link href="/" style={{ display: 'flex', alignItems: 'center' }}>
+                    <Image
+                        src={isDark ? "/bsp-logo-light.png" : "/bsp-logo-dark.png"}
+                        alt="BSP" width={120} height={28}
+                        style={{ height: '28px', width: 'auto' }} priority />
+                </Link>
+                {domain && (
+                    <>
+                        <span style={{ color: isDark ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.15)', fontSize: '1.2rem' }}>/</span>
+                        <span style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--color-text)' }}>{domain}</span>
+                    </>
+                )}
+            </div>
+
+            {/* Right — Actions */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                {/* Search */}
+                <button style={{
+                    display: 'flex', alignItems: 'center', gap: '8px', padding: '6px 14px',
+                    borderRadius: '8px', fontSize: '0.8rem', cursor: 'pointer',
+                    background: isDark ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.03)',
+                    border: `1px solid ${isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.06)'}`,
+                    color: isDark ? '#64748b' : '#94a3b8'
+                }}>
+                    <Search size={14} />
+                    <span>Search...</span>
+                    <kbd style={{ fontSize: '0.65rem', padding: '1px 5px', borderRadius: '4px', background: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.04)', border: `1px solid ${isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.06)'}` }}>⌘K</kbd>
+                </button>
+
+                {/* Notifications */}
+                <button style={{
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    width: '32px', height: '32px', borderRadius: '8px', cursor: 'pointer', position: 'relative',
+                    background: isDark ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.03)',
+                    border: `1px solid ${isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.06)'}`,
+                    color: isDark ? '#94a3b8' : '#64748b'
+                }}>
+                    <Bell size={14} />
+                    <span style={{ position: 'absolute', top: '-2px', right: '-2px', width: '8px', height: '8px', borderRadius: '50%', background: '#3b82f6', border: '2px solid var(--color-bg)' }} />
+                </button>
+
+                {/* Language */}
+                <div style={{
+                    display: 'inline-flex', alignItems: 'center', gap: '4px',
+                    background: isDark ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.03)',
+                    border: `1px solid ${isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.06)'}`,
+                    borderRadius: '8px', padding: '4px 8px'
+                }}>
+                    <select
+                        value={i18n.language.substring(0, 2)}
+                        onChange={e => i18n.changeLanguage(e.target.value)}
+                        style={{ appearance: 'none', background: 'transparent', border: 'none', color: isDark ? '#94a3b8' : '#64748b', fontSize: '0.75rem', fontWeight: 500, cursor: 'pointer', outline: 'none', width: '26px' }}>
+                        <option value="en">EN</option>
+                        <option value="pt">PT</option>
+                        <option value="es">ES</option>
+                    </select>
+                </div>
+
+                {/* Theme */}
+                <button onClick={() => setTheme(isDark ? "light" : "dark")}
+                    style={{
+                        position: 'relative', display: 'flex', alignItems: 'center',
+                        width: '36px', height: '20px', borderRadius: '10px', border: 'none', cursor: 'pointer',
+                        background: isDark ? '#3b82f6' : '#cbd5e1', transition: 'background 0.3s', padding: 0
+                    }}>
+                    <span style={{
+                        position: 'absolute', top: '2px', left: isDark ? '18px' : '2px',
+                        width: '16px', height: '16px', borderRadius: '50%', background: '#fff',
+                        transition: 'left 0.3s', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        boxShadow: '0 1px 2px rgba(0,0,0,0.2)'
+                    }}>
+                        {isDark ? <Moon size={8} strokeWidth={2.5} color="#3b82f6" /> : <Sun size={8} strokeWidth={2.5} color="#f59e0b" />}
+                    </span>
+                </button>
+
+                {/* Avatar + Logout */}
+                {initial && (
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginLeft: '4px' }}>
+                        <div style={{
+                            width: 32, height: 32, borderRadius: '50%',
+                            background: 'linear-gradient(135deg, var(--color-primary), #3b82f6)',
+                            color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            fontSize: '0.8rem', fontWeight: 700
+                        }}>{initial}</div>
+                        <button onClick={handleLogout} title="Logout" style={{
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            width: '32px', height: '32px', borderRadius: '8px', cursor: 'pointer',
+                            background: 'transparent', border: 'none',
+                            color: isDark ? '#64748b' : '#94a3b8'
+                        }}>
+                            <LogOut size={14} />
+                        </button>
+                    </div>
+                )}
+            </div>
+        </header>
+    );
+}
