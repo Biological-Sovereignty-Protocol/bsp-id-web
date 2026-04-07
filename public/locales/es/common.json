@@ -95,6 +95,18 @@
         "rotate_key_btn": "Rotar Llave",
         "rotate_key_confirm": "Esto generará una nueva llave y re-encriptará sus datos. Su frase semilla cambiará. ¿Continuar?",
         "rotate_key_success": "Llave rotada exitosamente. Nueva frase semilla generada.",
+        "lock_title": "Bloquear BEO",
+        "lock_desc": "Congele temporalmente su BEO. Ningún dato puede ser leído o escrito mientras esté bloqueado. Útil si sospecha acceso no autorizado.",
+        "lock_btn": "Bloquear BEO",
+        "unlock_btn": "Desbloquear BEO",
+        "lock_success": "BEO bloqueado. Todo acceso está congelado.",
+        "unlock_success": "BEO desbloqueado. Acceso normal restaurado.",
+        "transfer_title": "Transferir Dominio",
+        "transfer_desc": "Transfiera su dominio .bsp a otro titular de BEO. El nuevo dueño controlará este dominio.",
+        "transfer_btn": "Transferir",
+        "transfer_prompt": "Ingrese la llave pública del nuevo dueño:",
+        "transfer_confirm": "¿Transferir {{domain}} a {{newOwner}}? Esto no se puede deshacer.",
+        "transfer_success": "Transferencia de dominio iniciada. Pendiente de confirmación del nuevo dueño.",
         "cards": {
             "consent_title": "Consentimientos",
             "consent_desc": "Administre quién puede leer y enviar sus datos biológicos.",
@@ -158,7 +170,11 @@
         "btn_add": "Agregar",
         "btn_cancel": "Cancelar",
         "btn_remove": "Eliminar guardián",
-        "btn_add_guardian": "Agregar Guardián"
+        "btn_add_guardian": "Agregar Guardián",
+        "recovery_status": "Estado de Recuperación",
+        "no_active_recovery": "Sin solicitud de recuperación activa",
+        "recovery_info": "Si pierde su llave y tiene 3 guardianes configurados, puede iniciar la recuperación social. 2 de 3 guardianes deben aprobar.",
+        "start_recovery": "Iniciar Recuperación (requiere guardianes)"
     },
     "recover": {
         "title": "Recuperación Espacial",

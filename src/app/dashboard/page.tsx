@@ -18,6 +18,7 @@ export default function Dashboard() {
     const [showExportModal, setShowExportModal] = useState(false)
     const [activeTab, setActiveTab] = useState('overview')
     const [seedInput, setSeedInput] = useState("")
+    const [isLocked, setIsLocked] = useState(false)
 
     useEffect(() => {
         async function load() {
@@ -79,6 +80,13 @@ export default function Dashboard() {
     const handleRotateKey = async () => {
         if (!confirm(t('dashboard.rotate_key_confirm'))) return
         alert(t('dashboard.rotate_key_success'))
+    }
+
+    const handleTransferDomain = () => {
+        const newOwner = prompt(t('dashboard.transfer_prompt'))
+        if (!newOwner) return
+        if (!confirm(t('dashboard.transfer_confirm', { domain: identity?.domain, newOwner }))) return
+        alert(t('dashboard.transfer_success'))
     }
 
     if (loading) {
@@ -457,6 +465,65 @@ export default function Dashboard() {
                         {t('dashboard.danger_zone')}
                     </h3>
                     <div style={{ padding: '1.5rem', borderRadius: '16px', background: 'var(--color-surface)', border: '1px solid rgba(244,63,94,0.2)' }}>
+                        {/* Lock/Unlock BEO */}
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
+                            <div>
+                                <p style={{ fontWeight: 600, fontSize: '0.9rem', color: 'var(--color-text)' }}>{t('dashboard.lock_title')}</p>
+                                <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', marginTop: '4px', maxWidth: '400px' }}>{t('dashboard.lock_desc')}</p>
+                            </div>
+                            <button onClick={() => { setIsLocked(!isLocked); alert(isLocked ? t('dashboard.unlock_success') : t('dashboard.lock_success')) }} style={{
+                                padding: '10px 20px', borderRadius: '10px',
+                                border: `1px solid ${isLocked ? '#10b981' : '#f59e0b'}`,
+                                background: 'transparent',
+                                color: isLocked ? '#10b981' : '#f59e0b',
+                                fontWeight: 600, fontSize: '0.82rem', cursor: 'pointer'
+                            }}>{isLocked ? t('dashboard.unlock_btn') : t('dashboard.lock_btn')}</button>
+                        </div>
+                        <div style={{ marginTop: '1rem', paddingTop: '1rem', borderTop: '1px solid var(--color-border)' }} />
+
+                        {/* Transfer Domain */}
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
+                            <div>
+                                <p style={{ fontWeight: 600, fontSize: '0.9rem', color: 'var(--color-text)' }}>{t('dashboard.transfer_title')}</p>
+                                <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', marginTop: '4px', maxWidth: '400px' }}>{t('dashboard.transfer_desc')}</p>
+                            </div>
+                            <button onClick={handleTransferDomain} style={{
+                                padding: '10px 20px', borderRadius: '10px',
+                                border: '1px solid var(--color-primary)', background: 'transparent',
+                                color: 'var(--color-primary)', fontWeight: 600, fontSize: '0.82rem', cursor: 'pointer'
+                            }}>{t('dashboard.transfer_btn')}</button>
+                        </div>
+                        <div style={{ marginTop: '1rem', paddingTop: '1rem', borderTop: '1px solid var(--color-border)' }} />
+
+                        {/* Rotate Key */}
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
+                            <div>
+                                <p style={{ fontWeight: 600, fontSize: '0.9rem', color: 'var(--color-text)' }}>{t('dashboard.rotate_key_title')}</p>
+                                <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', marginTop: '4px', maxWidth: '400px' }}>{t('dashboard.rotate_key_desc')}</p>
+                            </div>
+                            <button onClick={handleRotateKey} style={{
+                                padding: '10px 20px', borderRadius: '10px', border: '1px solid var(--color-primary)',
+                                background: 'transparent', color: 'var(--color-primary)', fontWeight: 600, fontSize: '0.82rem',
+                                cursor: 'pointer'
+                            }}>{t('dashboard.rotate_key_btn')}</button>
+                        </div>
+                        <div style={{ marginTop: '1rem', paddingTop: '1rem', borderTop: '1px solid var(--color-border)' }} />
+
+                        {/* Revoke All */}
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
+                            <div>
+                                <p style={{ fontWeight: 600, fontSize: '0.9rem', color: 'var(--color-text)' }}>{t('dashboard.revoke_all_title')}</p>
+                                <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', marginTop: '4px', maxWidth: '400px' }}>{t('dashboard.revoke_all_desc')}</p>
+                            </div>
+                            <button onClick={handleRevokeAll} style={{
+                                padding: '10px 20px', borderRadius: '10px', border: '1px solid #f59e0b',
+                                background: 'transparent', color: '#f59e0b', fontWeight: 600, fontSize: '0.82rem',
+                                cursor: 'pointer'
+                            }}>{t('dashboard.revoke_all_btn')}</button>
+                        </div>
+                        <div style={{ marginTop: '1rem', paddingTop: '1rem', borderTop: '1px solid var(--color-border)' }} />
+
+                        {/* Destroy Key */}
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
                             <div>
                                 <p style={{ fontWeight: 600, fontSize: '0.9rem', color: 'var(--color-text)' }}>{t('dashboard.destroy_title')}</p>
@@ -467,34 +534,6 @@ export default function Dashboard() {
                                 background: 'transparent', color: '#f43f5e', fontWeight: 600, fontSize: '0.82rem',
                                 cursor: 'pointer', transition: 'all 0.2s'
                             }}>{t('dashboard.destroy_btn')}</button>
-                        </div>
-
-                        <div style={{ marginTop: '1rem', paddingTop: '1rem', borderTop: '1px solid var(--color-border)' }}>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
-                                <div>
-                                    <p style={{ fontWeight: 600, fontSize: '0.9rem', color: 'var(--color-text)' }}>{t('dashboard.revoke_all_title')}</p>
-                                    <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', marginTop: '4px', maxWidth: '400px' }}>{t('dashboard.revoke_all_desc')}</p>
-                                </div>
-                                <button onClick={handleRevokeAll} style={{
-                                    padding: '10px 20px', borderRadius: '10px', border: '1px solid #f59e0b',
-                                    background: 'transparent', color: '#f59e0b', fontWeight: 600, fontSize: '0.82rem',
-                                    cursor: 'pointer'
-                                }}>{t('dashboard.revoke_all_btn')}</button>
-                            </div>
-                        </div>
-
-                        <div style={{ marginTop: '1rem', paddingTop: '1rem', borderTop: '1px solid var(--color-border)' }}>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
-                                <div>
-                                    <p style={{ fontWeight: 600, fontSize: '0.9rem', color: 'var(--color-text)' }}>{t('dashboard.rotate_key_title')}</p>
-                                    <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', marginTop: '4px', maxWidth: '400px' }}>{t('dashboard.rotate_key_desc')}</p>
-                                </div>
-                                <button onClick={handleRotateKey} style={{
-                                    padding: '10px 20px', borderRadius: '10px', border: '1px solid var(--color-primary)',
-                                    background: 'transparent', color: 'var(--color-primary)', fontWeight: 600, fontSize: '0.82rem',
-                                    cursor: 'pointer'
-                                }}>{t('dashboard.rotate_key_btn')}</button>
-                            </div>
                         </div>
                     </div>
 

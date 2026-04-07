@@ -268,6 +268,20 @@ export default function GuardiansPage() {
                             </button>
                         )}
 
+                        {/* Recovery Status */}
+                        <div style={{ marginTop: '2rem', padding: '1.5rem', borderRadius: '16px', background: 'var(--color-surface)', border: '1px solid var(--color-border)' }}>
+                            <h3 style={{ fontSize: '1rem', fontWeight: 600, color: 'var(--color-text)', marginBottom: '1rem' }}>{t('guardians.recovery_status')}</h3>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '1rem' }}>
+                                <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#10b981' }} />
+                                <span style={{ fontSize: '0.85rem', color: 'var(--color-text)' }}>{t('guardians.no_active_recovery')}</span>
+                            </div>
+                            <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', marginBottom: '1rem' }}>{t('guardians.recovery_info')}</p>
+                            <button style={{
+                                padding: '10px 20px', borderRadius: '10px', border: '1px solid var(--color-border)',
+                                background: 'transparent', color: 'var(--color-text)', fontWeight: 500, fontSize: '0.82rem', cursor: 'pointer'
+                            }} disabled>{t('guardians.start_recovery')}</button>
+                        </div>
+
                         <div className="p-6 space-y-6" style={{ background: 'var(--color-surface)', borderRadius: 16, border: '1px solid var(--color-border)', boxShadow: '0 1px 3px rgba(0,0,0,0.04)' }}>
 
                             <div className="flex gap-4 p-4 text-sm" style={{ background: 'rgba(249,115,22,0.06)', borderRadius: 12, border: '1px solid rgba(249,115,22,0.15)', color: 'var(--color-text)' }}>

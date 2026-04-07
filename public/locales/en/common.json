@@ -95,6 +95,18 @@
         "rotate_key_btn": "Rotate Key",
         "rotate_key_confirm": "This will generate a new key and re-encrypt your data. Your seed phrase will change. Continue?",
         "rotate_key_success": "Key rotated successfully. New seed phrase generated.",
+        "lock_title": "Lock BEO",
+        "lock_desc": "Temporarily freeze your BEO. No data can be read or written while locked. Useful if you suspect unauthorized access.",
+        "lock_btn": "Lock BEO",
+        "unlock_btn": "Unlock BEO",
+        "lock_success": "BEO locked. All access is frozen.",
+        "unlock_success": "BEO unlocked. Normal access restored.",
+        "transfer_title": "Transfer Domain",
+        "transfer_desc": "Transfer your .bsp domain to another BEO holder. The new owner will control this domain.",
+        "transfer_btn": "Transfer",
+        "transfer_prompt": "Enter the public key of the new owner:",
+        "transfer_confirm": "Transfer {{domain}} to {{newOwner}}? This cannot be undone.",
+        "transfer_success": "Domain transfer initiated. Pending confirmation from new owner.",
         "cards": {
             "consent_title": "Consents",
             "consent_desc": "Manage who can read and send your biological data.",
@@ -158,7 +170,11 @@
         "btn_add": "Add",
         "btn_cancel": "Cancel",
         "btn_remove": "Remove guardian",
-        "btn_add_guardian": "Add Guardian"
+        "btn_add_guardian": "Add Guardian",
+        "recovery_status": "Recovery Status",
+        "no_active_recovery": "No active recovery request",
+        "recovery_info": "If you lose your key and have 3 guardians configured, you can initiate social recovery. 2 of 3 guardians must approve.",
+        "start_recovery": "Start Recovery (requires guardians)"
     },
     "recover": {
         "title": "Spatial Recovery",

@@ -373,6 +373,48 @@ export default function ConsentPage() {
                             </div>
                         )}
 
+                        {/* Custom Intent Management */}
+                        <div style={{ marginTop: '2rem', padding: '1.5rem', borderRadius: '16px', background: 'var(--color-surface)', border: '1px solid var(--color-border)' }}>
+                            <h3 style={{ fontSize: '1rem', fontWeight: 600, color: 'var(--color-text)', marginBottom: '1rem' }}>{t('consent.manage_intents')}</h3>
+                            <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', marginBottom: '1rem' }}>{t('consent.manage_intents_desc')}</p>
+
+                            {/* Current intents list */}
+                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '1rem' }}>
+                                {['SUBMIT_RECORD', 'READ_RECORDS', 'ANALYZE_VITALITY', 'REQUEST_SCORE', 'EXPORT_DATA', 'SYNC_PROTOCOL'].map(intent => (
+                                    <span key={intent} style={{
+                                        display: 'inline-flex', alignItems: 'center', gap: '6px',
+                                        padding: '6px 12px', borderRadius: '8px', fontSize: '0.78rem', fontWeight: 500,
+                                        background: 'var(--color-primary-soft)', color: 'var(--color-primary)',
+                                        border: '1px solid rgba(0,87,255,0.15)'
+                                    }}>
+                                        {intentLabels[i18n.language?.substring(0,2) || 'en']?.[intent] || intent}
+                                        <button onClick={() => alert(t('consent.intent_removed'))} style={{
+                                            background: 'none', border: 'none', cursor: 'pointer', color: 'var(--color-text-muted)',
+                                            fontSize: '1rem', lineHeight: 1, padding: 0
+                                        }}>x</button>
+                                    </span>
+                                ))}
+                            </div>
+
+                            {/* Add new intent */}
+                            <div style={{ display: 'flex', gap: '8px' }}>
+                                <input
+                                    type="text"
+                                    placeholder={t('consent.new_intent_placeholder')}
+                                    style={{
+                                        flex: 1, padding: '10px 14px', borderRadius: '10px',
+                                        border: '1px solid var(--color-border)', background: 'var(--color-bg)',
+                                        color: 'var(--color-text)', fontSize: '0.82rem', outline: 'none'
+                                    }}
+                                />
+                                <button onClick={() => alert(t('consent.intent_added'))} style={{
+                                    padding: '10px 16px', borderRadius: '10px',
+                                    background: 'var(--color-primary)', color: '#fff',
+                                    border: 'none', fontWeight: 600, fontSize: '0.82rem', cursor: 'pointer'
+                                }}>{t('consent.add_intent')}</button>
+                            </div>
+                        </div>
+
                     </div>
                 </main>
             </div>
