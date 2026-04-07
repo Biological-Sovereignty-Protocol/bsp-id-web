@@ -303,6 +303,76 @@ export default function ConsentPage() {
                             </button>
                         </div>
 
+                        {/* Active Consents List */}
+                        {activeConsents.length > 0 && (
+                            <div className="space-y-4">
+                                <h2 className="text-lg font-semibold text-[var(--color-text)] flex items-center gap-2">
+                                    <Clock size={18} className="text-[var(--color-primary)]" />
+                                    {t('consent.label_active_consents') || 'Active Consents'}
+                                </h2>
+                                <div className="grid gap-3">
+                                    {activeConsents.map(consent => {
+                                        const isExpired = consent.expiresAt && new Date(consent.expiresAt) < new Date()
+                                        const statusLabel = consent.status === 'revoked'
+                                            ? (t('consent.status_revoked') || 'Revoked')
+                                            : isExpired
+                                                ? (t('consent.status_expired') || 'Expired')
+                                                : (t('consent.status_active') || 'Active')
+                                        const statusColor = consent.status === 'revoked' ? '#ef4444' : isExpired ? '#f59e0b' : '#22c55e'
+
+                                        return (
+                                            <div key={consent.id} className="p-4" style={{
+                                                background: 'var(--color-surface)', borderRadius: 14,
+                                                border: '1px solid var(--color-border)', boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
+                                                opacity: consent.status === 'revoked' ? 0.5 : 1,
+                                            }}>
+                                                <div className="flex items-center justify-between mb-3">
+                                                    <div className="flex items-center gap-2">
+                                                        <span style={{ fontWeight: 600, fontSize: '0.9rem', color: 'var(--color-text)' }}>{consent.ieo}</span>
+                                                        <span style={{ fontSize: '0.7rem', padding: '2px 8px', borderRadius: 20, background: `${statusColor}15`, color: statusColor, fontWeight: 600 }}>
+                                                            {statusLabel}
+                                                        </span>
+                                                    </div>
+                                                    {consent.status === 'active' && !isExpired && (
+                                                        <button
+                                                            onClick={() => {
+                                                                setActiveConsents(prev => prev.map(c =>
+                                                                    c.id === consent.id ? { ...c, status: 'revoked' } : c
+                                                                ))
+                                                                alert(t('consent.revoked_success') || 'Consent revoked successfully')
+                                                            }}
+                                                            className="flex items-center gap-1 text-xs font-medium px-3 py-1.5 rounded-lg hover:opacity-80 transition-all"
+                                                            style={{ background: 'rgba(239,68,68,0.08)', color: '#ef4444', border: '1px solid rgba(239,68,68,0.2)' }}
+                                                        >
+                                                            <X size={14} /> {t('consent.btn_revoke') || 'Revoke'}
+                                                        </button>
+                                                    )}
+                                                </div>
+                                                <div className="flex flex-wrap gap-1.5 mb-2">
+                                                    {consent.intents.map(i => (
+                                                        <span key={i} style={{ fontSize: '0.7rem', padding: '2px 8px', borderRadius: 8, background: 'var(--color-primary-soft)', color: 'var(--color-primary)', fontWeight: 500 }}>
+                                                            {labels[i] || i}
+                                                        </span>
+                                                    ))}
+                                                </div>
+                                                <div className="flex flex-wrap gap-1.5 mb-2">
+                                                    {consent.categories.map(c => (
+                                                        <span key={c} style={{ fontSize: '0.7rem', padding: '2px 8px', borderRadius: 8, background: 'var(--color-bg)', color: 'var(--color-text-muted)', fontFamily: 'monospace', border: '1px solid var(--color-border)' }}>
+                                                            {c}
+                                                        </span>
+                                                    ))}
+                                                </div>
+                                                <div className="flex items-center gap-4 text-xs text-[var(--color-text-muted)]">
+                                                    <span>Granted: {consent.grantedAt}</span>
+                                                    {consent.expiresAt && <span>Expires: {consent.expiresAt.split('T')[0]}</span>}
+                                                </div>
+                                            </div>
+                                        )
+                                    })}
+                                </div>
+                            </div>
+                        )}
+
                     </div>
                 </main>
             </div>
