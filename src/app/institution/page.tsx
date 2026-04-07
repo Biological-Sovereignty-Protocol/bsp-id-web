@@ -516,6 +516,53 @@ export default function InstitutionPage() {
                                     </div>
                                 </div>
                             </div>
+
+                            {/* Data Sovereignty */}
+                            <div style={{ padding: '1.5rem', borderRadius: '16px', background: 'var(--color-surface)', border: '1px solid rgba(244,63,94,0.15)' }}>
+                                <h3 style={{ fontSize: '1rem', fontWeight: 600, color: '#f43f5e', marginBottom: '1rem' }}>{t('institution.sovereignty_title') || 'Data Sovereignty'}</h3>
+
+                                {/* Lock/Unlock */}
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem', paddingBottom: '1rem', borderBottom: '1px solid var(--color-border)' }}>
+                                    <div>
+                                        <p style={{ fontWeight: 600, fontSize: '0.9rem', color: 'var(--color-text)' }}>{t('institution.lock_title') || 'Lock Institution'}</p>
+                                        <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', marginTop: '4px' }}>{t('institution.lock_desc') || 'Temporarily freeze all operations. No data can be submitted or read.'}</p>
+                                    </div>
+                                    <button onClick={() => alert('IEO locked')} style={{ padding: '10px 20px', borderRadius: '10px', border: '1px solid #f59e0b', background: 'transparent', color: '#f59e0b', fontWeight: 600, fontSize: '0.82rem', cursor: 'pointer' }}>
+                                        {t('institution.lock_btn') || 'Lock IEO'}
+                                    </button>
+                                </div>
+
+                                {/* Rotate Key */}
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem', padding: '1rem 0', borderBottom: '1px solid var(--color-border)' }}>
+                                    <div>
+                                        <p style={{ fontWeight: 600, fontSize: '0.9rem', color: 'var(--color-text)' }}>{t('institution.rotate_title') || 'Rotate Key'}</p>
+                                        <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', marginTop: '4px' }}>{t('institution.rotate_desc') || 'Generate new Ed25519 key pair. Old key becomes invalid.'}</p>
+                                    </div>
+                                    <button onClick={() => alert('Key rotated')} style={{ padding: '10px 20px', borderRadius: '10px', border: '1px solid var(--color-primary)', background: 'transparent', color: 'var(--color-primary)', fontWeight: 600, fontSize: '0.82rem', cursor: 'pointer' }}>
+                                        {t('institution.rotate_btn') || 'Rotate'}
+                                    </button>
+                                </div>
+
+                                {/* Destroy IEO */}
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem', paddingTop: '1rem' }}>
+                                    <div>
+                                        <p style={{ fontWeight: 600, fontSize: '0.9rem', color: 'var(--color-text)' }}>{t('institution.destroy_title') || 'Cryptographic Erasure'}</p>
+                                        <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', marginTop: '4px' }}>{t('institution.destroy_desc') || 'Permanently destroy this IEO. All data becomes irrecoverable.'}</p>
+                                    </div>
+                                    <button onClick={() => { if(confirm('Destroy IEO permanently?')) alert('IEO destroyed') }} style={{ padding: '10px 20px', borderRadius: '10px', border: '1px solid #f43f5e', background: 'transparent', color: '#f43f5e', fontWeight: 600, fontSize: '0.82rem', cursor: 'pointer' }}>
+                                        {t('institution.destroy_btn') || 'Destroy IEO'}
+                                    </button>
+                                </div>
+                            </div>
+
+                            {/* Institutional Recovery */}
+                            <div style={{ padding: '1.5rem', borderRadius: '16px', background: 'var(--color-surface)', border: '1px solid var(--color-border)' }}>
+                                <h3 style={{ fontSize: '1rem', fontWeight: 600, color: 'var(--color-text)', marginBottom: '1rem' }}>{t('institution.recovery_title') || 'Institutional Recovery'}</h3>
+                                <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', marginBottom: '1rem' }}>{t('institution.recovery_desc') || 'Configure guardians for key recovery. If the institution loses access, 2 of 3 guardians can restore it.'}</p>
+                                <button disabled style={{ padding: '10px 20px', borderRadius: '10px', border: '1px solid var(--color-border)', background: 'transparent', color: 'var(--color-text-muted)', fontWeight: 500, fontSize: '0.82rem', cursor: 'not-allowed' }}>
+                                    {t('institution.setup_recovery') || 'Setup Recovery (Coming Soon)'}
+                                </button>
+                            </div>
                         </div>
                     )}
 

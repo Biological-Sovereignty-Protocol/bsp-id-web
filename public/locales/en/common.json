@@ -238,7 +238,20 @@
         "col_expires": "Expires",
         "registered_since": "Registered since",
         "current_level": "Current",
-        "setting_type": "Type"
+        "setting_type": "Type",
+        "sovereignty_title": "Data Sovereignty",
+        "lock_title": "Lock Institution",
+        "lock_desc": "Temporarily freeze all operations. No data can be submitted or read while locked.",
+        "lock_btn": "Lock IEO",
+        "rotate_title": "Rotate Cryptographic Key",
+        "rotate_desc": "Generate new Ed25519 key pair. Previous key becomes invalid.",
+        "rotate_btn": "Rotate Key",
+        "destroy_title": "Cryptographic Erasure",
+        "destroy_desc": "Permanently destroy this IEO. All consent tokens are revoked. Data becomes irrecoverable.",
+        "destroy_btn": "Destroy IEO",
+        "recovery_title": "Institutional Recovery",
+        "recovery_desc": "Configure guardians for key recovery. If the institution loses access, 2 of 3 guardians can restore it.",
+        "setup_recovery": "Setup Recovery (Coming Soon)"
     },
     "dashboard_header": {
         "search": "Search...",

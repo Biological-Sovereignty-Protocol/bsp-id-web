@@ -238,7 +238,20 @@
         "col_expires": "Expira",
         "registered_since": "Registrado desde",
         "current_level": "Atual",
-        "setting_type": "Tipo"
+        "setting_type": "Tipo",
+        "sovereignty_title": "Soberania de Dados",
+        "lock_title": "Bloquear Instituição",
+        "lock_desc": "Congele temporariamente todas as operações. Nenhum dado pode ser enviado ou lido enquanto bloqueado.",
+        "lock_btn": "Bloquear IEO",
+        "rotate_title": "Rotacionar Chave Criptográfica",
+        "rotate_desc": "Gerar novo par de chaves Ed25519. A chave anterior se torna inválida.",
+        "rotate_btn": "Rotacionar Chave",
+        "destroy_title": "Apagamento Criptográfico",
+        "destroy_desc": "Destruir permanentemente este IEO. Todos os tokens de consentimento são revogados. Dados se tornam irrecuperáveis.",
+        "destroy_btn": "Destruir IEO",
+        "recovery_title": "Recuperação Institucional",
+        "recovery_desc": "Configure guardiões para recuperação de chave. Se a instituição perder acesso, 2 de 3 guardiões podem restaurá-lo.",
+        "setup_recovery": "Configurar Recuperação (Em Breve)"
     },
     "dashboard_header": {
         "search": "Buscar...",
