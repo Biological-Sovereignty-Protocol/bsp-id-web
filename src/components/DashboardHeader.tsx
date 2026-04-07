@@ -9,12 +9,19 @@ import Link from "next/link";
 import { clearIdentity } from "@/lib/crypto/storage";
 import "@/lib/i18n/config";
 
+interface SearchItem {
+    label: string;
+    href: string;
+    icon: string;
+}
+
 interface DashboardHeaderProps {
     domain?: string;
     initial?: string;
+    customSearchItems?: SearchItem[];
 }
 
-export function DashboardHeader({ domain, initial }: DashboardHeaderProps) {
+export function DashboardHeader({ domain, initial, customSearchItems }: DashboardHeaderProps) {
     const { theme, setTheme } = useTheme();
     const { t, i18n } = useTranslation();
     const [mounted, setMounted] = useState(false);
@@ -40,14 +47,16 @@ export function DashboardHeader({ domain, initial }: DashboardHeaderProps) {
 
     const isDark = theme === "dark";
 
-    const searchItems = [
+    const defaultSearchItems = [
         { label: t('dashboard.cards.consent_title'), href: '/consent', icon: '📋' },
-        { label: t('dashboard.cards.biorecords_title'), href: '#', icon: '📊' },
+        { label: t('dashboard.cards.biorecords_title'), href: '/biorecords', icon: '📊' },
         { label: t('dashboard.cards.guardians_title'), href: '/guardians', icon: '🛡️' },
         { label: t('dashboard.cards.export_title'), href: '#', icon: '🔑' },
         { label: t('recover.title'), href: '/recover', icon: '🔄' },
         { label: 'Overview', href: '/dashboard', icon: '🏠' },
     ]
+
+    const searchItems = customSearchItems || defaultSearchItems
 
     const filtered = searchQuery
         ? searchItems.filter(i => i.label.toLowerCase().includes(searchQuery.toLowerCase()))

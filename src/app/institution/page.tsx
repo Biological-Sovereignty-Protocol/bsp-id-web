@@ -215,7 +215,17 @@ export default function InstitutionPage() {
     return (
         <div className="w-full">
             {/* Dashboard-specific header (same as BEO) */}
-            <DashboardHeader domain={institution.domain} initial={domainInitial} />
+            <DashboardHeader
+                domain={institution.domain}
+                initial={domainInitial}
+                customSearchItems={[
+                    { label: t('institution.recent_submissions'), href: '/institution', icon: '📊' },
+                    { label: t('institution.consents_received') || 'Consents Received', href: '/institution', icon: '📋' },
+                    { label: t('institution.certification_level'), href: '/institution', icon: '🏅' },
+                    { label: 'Settings', href: '/institution', icon: '⚙️' },
+                    { label: 'Overview', href: '/institution', icon: '🏠' },
+                ]}
+            />
 
             <div style={{ display: 'flex', flex: 1 }}>
                 {/* SIDEBAR — exact same style as BEO dashboard */}
