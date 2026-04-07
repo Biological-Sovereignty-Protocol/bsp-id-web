@@ -34,8 +34,8 @@ export function Header() {
                     <Image
                         src={isDark ? "/bsp-logo-light.png" : "/bsp-logo-dark.png"}
                         alt="Biological Sovereignty Protocol"
-                        width={200} height={48}
-                        style={{ height: '48px', width: 'auto' }} priority />
+                        width={220} height={55}
+                        style={{ height: '55px', width: 'auto' }} priority />
                 </Link>
 
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
