@@ -1,10 +1,10 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { getIdentity } from "@/lib/crypto/storage"
+import { getIdentity, clearIdentity } from "@/lib/crypto/storage"
 import { getBEO } from "@/lib/arweave/beo"
 import { motion } from "framer-motion"
-import { Activity, Key, LogOut, ShieldCheck, FileText, User, CheckCircle, Clock, XCircle, UserPlus, Database } from "lucide-react"
+import { Activity, Key, LogOut, Shield, ShieldCheck, FileText, User, CheckCircle, Clock, XCircle, UserPlus, Database } from "lucide-react"
 import { useTranslation } from "react-i18next"
 import Link from "next/link"
 import ExportKeyModal from "@/components/ExportKeyModal"
@@ -62,6 +62,24 @@ export default function Dashboard() {
             if (globalHeader) globalHeader.style.display = '';
         };
     }, [identity]);
+
+    const handleDestroyBEO = async () => {
+        if (!confirm(t('dashboard.destroy_confirm'))) return
+        if (!confirm(t('dashboard.destroy_confirm_final'))) return
+        await clearIdentity()
+        alert(t('dashboard.destroy_success'))
+        window.location.href = '/'
+    }
+
+    const handleRevokeAll = async () => {
+        if (!confirm(t('dashboard.revoke_all_confirm'))) return
+        alert(t('dashboard.revoke_all_success'))
+    }
+
+    const handleRotateKey = async () => {
+        if (!confirm(t('dashboard.rotate_key_confirm'))) return
+        alert(t('dashboard.rotate_key_success'))
+    }
 
     if (loading) {
         return <div className="animate-pulse flex items-center justify-center min-h-[400px] text-[var(--color-text-muted)]">
@@ -176,6 +194,7 @@ export default function Dashboard() {
         { id: 'consents', label: t('dashboard.cards.consent_title'), icon: FileText, href: '/consent' },
         { id: 'biorecords', label: t('dashboard.cards.biorecords_title'), icon: Activity, href: '/biorecords' },
         { id: 'guardians', label: t('dashboard.cards.guardians_title'), icon: ShieldCheck, href: '/guardians' },
+        { id: 'sovereignty', label: t('dashboard.sovereignty'), icon: Shield, href: '#sovereignty' },
     ]
 
     return (
@@ -429,6 +448,52 @@ export default function Dashboard() {
                             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem' }}>
                                 <span style={{ color: 'var(--color-text-muted)' }}>○ {t('dashboard.issue_first_consent')}</span>
                                 <span style={{ color: 'var(--color-text-muted)' }}>+30%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Danger Zone */}
+                    <h3 id="sovereignty" style={{ fontSize: '0.85rem', fontWeight: 600, color: '#f43f5e', marginBottom: '1rem', marginTop: '2.5rem', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+                        {t('dashboard.danger_zone')}
+                    </h3>
+                    <div style={{ padding: '1.5rem', borderRadius: '16px', background: 'var(--color-surface)', border: '1px solid rgba(244,63,94,0.2)' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
+                            <div>
+                                <p style={{ fontWeight: 600, fontSize: '0.9rem', color: 'var(--color-text)' }}>{t('dashboard.destroy_title')}</p>
+                                <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', marginTop: '4px', maxWidth: '400px' }}>{t('dashboard.destroy_desc')}</p>
+                            </div>
+                            <button onClick={handleDestroyBEO} style={{
+                                padding: '10px 20px', borderRadius: '10px', border: '1px solid #f43f5e',
+                                background: 'transparent', color: '#f43f5e', fontWeight: 600, fontSize: '0.82rem',
+                                cursor: 'pointer', transition: 'all 0.2s'
+                            }}>{t('dashboard.destroy_btn')}</button>
+                        </div>
+
+                        <div style={{ marginTop: '1rem', paddingTop: '1rem', borderTop: '1px solid var(--color-border)' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
+                                <div>
+                                    <p style={{ fontWeight: 600, fontSize: '0.9rem', color: 'var(--color-text)' }}>{t('dashboard.revoke_all_title')}</p>
+                                    <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', marginTop: '4px', maxWidth: '400px' }}>{t('dashboard.revoke_all_desc')}</p>
+                                </div>
+                                <button onClick={handleRevokeAll} style={{
+                                    padding: '10px 20px', borderRadius: '10px', border: '1px solid #f59e0b',
+                                    background: 'transparent', color: '#f59e0b', fontWeight: 600, fontSize: '0.82rem',
+                                    cursor: 'pointer'
+                                }}>{t('dashboard.revoke_all_btn')}</button>
+                            </div>
+                        </div>
+
+                        <div style={{ marginTop: '1rem', paddingTop: '1rem', borderTop: '1px solid var(--color-border)' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
+                                <div>
+                                    <p style={{ fontWeight: 600, fontSize: '0.9rem', color: 'var(--color-text)' }}>{t('dashboard.rotate_key_title')}</p>
+                                    <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', marginTop: '4px', maxWidth: '400px' }}>{t('dashboard.rotate_key_desc')}</p>
+                                </div>
+                                <button onClick={handleRotateKey} style={{
+                                    padding: '10px 20px', borderRadius: '10px', border: '1px solid var(--color-primary)',
+                                    background: 'transparent', color: 'var(--color-primary)', fontWeight: 600, fontSize: '0.82rem',
+                                    cursor: 'pointer'
+                                }}>{t('dashboard.rotate_key_btn')}</button>
                             </div>
                         </div>
                     </div>
