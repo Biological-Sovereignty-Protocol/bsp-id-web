@@ -136,7 +136,13 @@
         "revoked_success": "Consentimento revogado com sucesso",
         "status_active": "Ativo",
         "status_revoked": "Revogado",
-        "status_expired": "Expirado"
+        "status_expired": "Expirado",
+        "manage_intents": "Gerenciar Intents",
+        "manage_intents_desc": "Intents de acesso a dados customizados registrados para seu BEO.",
+        "new_intent_placeholder": "ex: SHARE_REPORT",
+        "add_intent": "Adicionar",
+        "intent_added": "Intent adicionado com sucesso",
+        "intent_removed": "Intent removido"
     },
     "biorecords": {
         "title": "BioRecords",
@@ -312,6 +318,19 @@
         "brand_tagline": "Sua biologia. Seus dados. Suas regras.",
         "copyright": "\u00a9 2026 Instituto Ambrósio",
         "open_standard": "Padrão Aberto"
+    },
+    "governance": {
+        "title": "Governanca",
+        "active_proposals": "Propostas Ativas",
+        "history": "Historico",
+        "keyholders": "Detentores de Chave",
+        "propose": "Nova Proposta",
+        "approve": "Aprovar",
+        "reject": "Rejeitar",
+        "votes": "Votos",
+        "pending": "Pendente",
+        "approved": "Aprovado",
+        "rejected": "Rejeitado"
     },
     "nav": {
         "theme_light": "Modo Claro",

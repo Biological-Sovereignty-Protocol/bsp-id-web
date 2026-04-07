@@ -136,7 +136,13 @@
         "revoked_success": "Consent revoked successfully",
         "status_active": "Active",
         "status_revoked": "Revoked",
-        "status_expired": "Expired"
+        "status_expired": "Expired",
+        "manage_intents": "Manage Intents",
+        "manage_intents_desc": "Custom data access intents registered for your BEO.",
+        "new_intent_placeholder": "e.g. SHARE_REPORT",
+        "add_intent": "Add",
+        "intent_added": "Intent added successfully",
+        "intent_removed": "Intent removed"
     },
     "biorecords": {
         "title": "BioRecords",
@@ -312,6 +318,19 @@
         "brand_tagline": "Your biology. Your data. Your rules.",
         "copyright": "\u00a9 2026 Ambr\u00f3sio Institute",
         "open_standard": "Open Standard"
+    },
+    "governance": {
+        "title": "Governance",
+        "active_proposals": "Active Proposals",
+        "history": "History",
+        "keyholders": "Keyholders",
+        "propose": "New Proposal",
+        "approve": "Approve",
+        "reject": "Reject",
+        "votes": "Votes",
+        "pending": "Pending",
+        "approved": "Approved",
+        "rejected": "Rejected"
     },
     "nav": {
         "theme_light": "Light Mode",
