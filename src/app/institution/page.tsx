@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import { Building2, ArrowRight, FlaskConical, HeartPulse, Watch, Microscope, BarChart3, FileCheck, Shield, Settings, Clock, CheckCircle2, AlertCircle, ChevronRight, Activity, ShieldCheck, FileText, User, Key } from "lucide-react"
 import { useTranslation } from "react-i18next"
 import { DashboardHeader } from "@/components/DashboardHeader"
+import { getIdentity } from "@/lib/crypto/storage"
 
 const typeIcons: Record<string, React.ReactNode> = {
     LABORATORY: <FlaskConical className="w-5 h-5" />,
@@ -70,15 +71,72 @@ export default function InstitutionPage() {
     const { t } = useTranslation()
     const [isRegistered, setIsRegistered] = useState(true) // demo mode
     const [activeTab, setActiveTab] = useState<SidebarTab>('overview')
-    const [institution] = useState(mockInstitution)
+    const [institution, setInstitution] = useState(mockInstitution)
 
     // Onboarding state
     const [ieoType, setIeoType] = useState('LABORATORY')
     const [domain, setDomain] = useState('')
     const [name, setName] = useState('')
 
+    // Load real IEO data from API when not in demo mode
+    useEffect(() => {
+        if (process.env.NEXT_PUBLIC_DEMO_MODE === 'true') return
+        const registryUrl = process.env.NEXT_PUBLIC_BSP_REGISTRY_URL || ''
+        if (!registryUrl) return
+
+        async function loadIEO() {
+            try {
+                const id = await getIdentity()
+                if (!id || !(id as any).ieoDomain) return
+                const res = await fetch(`${registryUrl}/api/ieos/domain/${encodeURIComponent((id as any).ieoDomain)}`)
+                if (!res.ok) return
+                const data = await res.json()
+                if (data.ieo) {
+                    setInstitution({
+                        domain: data.ieo.domain,
+                        name: data.ieo.display_name,
+                        type: data.ieo.ieo_type,
+                        certification: data.ieo.certification?.level || 'UNCERTIFIED',
+                        status: data.ieo.status,
+                        registeredAt: data.ieo.created_at?.split('T')[0] || '',
+                        stats: mockInstitution.stats,
+                    })
+                }
+            } catch {
+                // fallback to mock
+            }
+        }
+        loadIEO()
+    }, [])
+
     const handleRegister = async () => {
-        alert(t('institution.alert_sim', { domain, type: ieoType, name }))
+        if (process.env.NEXT_PUBLIC_DEMO_MODE === 'true') {
+            alert(t('institution.alert_sim', { domain, type: ieoType, name }))
+            return
+        }
+        // Real registration via relay
+        const { CryptoUtils } = await import('@bsp/sdk')
+        const { generateBSPKeyPair, signBSPTransaction } = await import('@/lib/crypto/keys')
+        const kp = await generateBSPKeyPair()
+        const nonce = CryptoUtils.generateNonce()
+        const timestamp = new Date().toISOString()
+        const payload = { function: 'createIEO', domain: domain + '.bsp', ieoType, displayName: name, publicKey: kp.publicKeyHex, nonce, timestamp }
+        const signature = signBSPTransaction(payload, kp.privateKeyHex)
+
+        const res = await fetch('/api/relay', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                function: 'createIEO',
+                contract: 'IEORegistry',
+                payload: { domain: domain + '.bsp', ieoType, displayName: name, publicKey: kp.publicKeyHex, _userSignature: signature, _nonce: nonce, _timestamp: timestamp },
+                signature,
+                publicKey: kp.publicKeyHex,
+            }),
+        })
+        if (!res.ok) { alert('Registration failed'); return }
+        alert(`IEO registered! Store your seed securely:\n\n${kp.seedPhrase.join(' ')}`)
+        setIsRegistered(true)
     }
 
     // Hide global header when in dashboard mode (same as BEO dashboard)
