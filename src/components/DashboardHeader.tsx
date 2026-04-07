@@ -79,8 +79,8 @@ export function DashboardHeader({ domain, initial }: DashboardHeaderProps) {
                 <Link href="/" style={{ display: 'flex', alignItems: 'center' }}>
                     <Image
                         src={isDark ? "/bsp-logo-light.png" : "/bsp-logo-dark.png"}
-                        alt="BSP" width={160} height={40}
-                        style={{ height: '40px', width: 'auto' }} priority />
+                        alt="BSP" width={220} height={48}
+                        style={{ height: '48px', width: 'auto' }} priority />
                 </Link>
                 {domain && (
                     <>
