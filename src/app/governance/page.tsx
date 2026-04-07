@@ -3,11 +3,12 @@
 import { useState, useEffect } from "react"
 import { FileText, Activity, Key, Check, X, Clock, Shield } from "lucide-react"
 import { getIdentity } from "@/lib/crypto/storage"
+import { signBSPTransaction } from "@/lib/crypto/keys"
 import { useTranslation } from "react-i18next"
 import Link from "next/link"
 import { DashboardHeader } from "@/components/DashboardHeader"
 
-const proposals = [
+const mockProposals = [
     { id: 'prop_001', type: 'suspendIEO', target: 'labclin.bsp', proposer: 'admin1', status: 'pending', votes: 1, required: 2, createdAt: '2026-04-06', description: 'Suspend LabClin for compliance violation' },
     { id: 'prop_002', type: 'changeCertLevel', target: 'fleury.bsp', proposer: 'admin2', status: 'approved', votes: 2, required: 2, createdAt: '2026-04-05', description: 'Upgrade Fleury to ADVANCED certification' },
     { id: 'prop_003', type: 'addIEOType', target: 'PHARMACY', proposer: 'admin1', status: 'pending', votes: 0, required: 2, createdAt: '2026-04-04', description: 'Add PHARMACY as valid IEO type' },
@@ -29,12 +30,30 @@ export default function GovernancePage() {
     const { t } = useTranslation()
     const [identity, setIdentity] = useState<any>(null)
     const [activeTab, setActiveTab] = useState('proposals')
+    const [proposals, setProposals] = useState(mockProposals)
 
     useEffect(() => {
         getIdentity().then(id => {
             if (id) setIdentity(id)
             else window.location.href = '/dashboard'
         })
+    }, [])
+
+    // Load real proposals from IEORegistry contract via API
+    useEffect(() => {
+        if (process.env.NEXT_PUBLIC_DEMO_MODE === 'true') return
+        const registryUrl = process.env.NEXT_PUBLIC_BSP_REGISTRY_URL || ''
+        if (!registryUrl) return
+
+        async function loadProposals() {
+            try {
+                const res = await fetch(`${registryUrl}/api/ieos?status=ACTIVE`)
+                if (!res.ok) return
+                // Proposals come from the governance state — for now use mock
+                // Full integration requires reading IEORegistry governance.proposals state
+            } catch { /* fallback to mock */ }
+        }
+        loadProposals()
     }, [])
 
     useEffect(() => {
@@ -203,7 +222,21 @@ export default function GovernancePage() {
 
                                                     {proposal.status === 'pending' && (
                                                         <div style={{ display: 'flex', gap: '8px' }}>
-                                                            <button type="button" onClick={() => alert('Vote: Approve')} style={{
+                                                            <button type="button" onClick={async () => {
+                                                                if (process.env.NEXT_PUBLIC_DEMO_MODE === 'true') { alert('Vote: Approve (demo)'); return }
+                                                                try {
+                                                                    const { CryptoUtils } = await import('@bsp/sdk')
+                                                                    const nonce = CryptoUtils.generateNonce()
+                                                                    const timestamp = new Date().toISOString()
+                                                                    const payload = { function: 'approveAction', proposalId: proposal.id, nonce, timestamp }
+                                                                    const signature = signBSPTransaction(payload, identity.privateKeyHex)
+                                                                    const res = await fetch('/api/relay', {
+                                                                        method: 'POST', headers: { 'Content-Type': 'application/json' },
+                                                                        body: JSON.stringify({ function: 'approveAction', contract: 'IEORegistry', payload: { proposalId: proposal.id }, signature, publicKey: identity.publicKeyHex }),
+                                                                    })
+                                                                    if (res.ok) alert('Approved!'); else alert('Failed')
+                                                                } catch (e: any) { alert(e.message) }
+                                                            }} style={{
                                                                 display: 'flex', alignItems: 'center', gap: '4px',
                                                                 padding: '6px 14px', borderRadius: '8px', fontSize: '0.78rem', fontWeight: 600,
                                                                 background: 'rgba(34,197,94,0.1)', color: '#22c55e',
@@ -211,7 +244,7 @@ export default function GovernancePage() {
                                                             }}>
                                                                 <Check size={14} /> {t('governance.approve')}
                                                             </button>
-                                                            <button type="button" onClick={() => alert('Vote: Reject')} style={{
+                                                            <button type="button" onClick={() => alert('Reject requires a new counter-proposal (BSP governance has no reject — only propose alternatives)')} style={{
                                                                 display: 'flex', alignItems: 'center', gap: '4px',
                                                                 padding: '6px 14px', borderRadius: '8px', fontSize: '0.78rem', fontWeight: 600,
                                                                 background: 'rgba(239,68,68,0.08)', color: '#ef4444',
