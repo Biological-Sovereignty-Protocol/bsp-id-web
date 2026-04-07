@@ -1,8 +1,9 @@
 "use client"
 
-import { useState } from "react"
-import { Building2, ArrowRight, FlaskConical, HeartPulse, Watch, Microscope, BarChart3, FileCheck, Shield, Settings, Clock, CheckCircle2, AlertCircle, ChevronRight } from "lucide-react"
+import { useEffect, useState } from "react"
+import { Building2, ArrowRight, FlaskConical, HeartPulse, Watch, Microscope, BarChart3, FileCheck, Shield, Settings, Clock, CheckCircle2, AlertCircle, ChevronRight, Activity, ShieldCheck, FileText, User, Key } from "lucide-react"
 import { useTranslation } from "react-i18next"
+import { DashboardHeader } from "@/components/DashboardHeader"
 
 const typeIcons: Record<string, React.ReactNode> = {
     LABORATORY: <FlaskConical className="w-5 h-5" />,
@@ -79,6 +80,18 @@ export default function InstitutionPage() {
     const handleRegister = async () => {
         alert(t('institution.alert_sim', { domain, type: ieoType, name }))
     }
+
+    // Hide global header when in dashboard mode (same as BEO dashboard)
+    useEffect(() => {
+        if (isRegistered) {
+            const h = document.querySelector('header');
+            if (h) h.style.display = 'none';
+        }
+        return () => {
+            const h = document.querySelector('header');
+            if (h) h.style.display = '';
+        };
+    }, [isRegistered]);
 
     if (!isRegistered) {
         return (
@@ -185,87 +198,106 @@ export default function InstitutionPage() {
         )
     }
 
-    // === REGISTERED STATE — IEO DASHBOARD ===
+    // === REGISTERED STATE — IEO DASHBOARD (unified with BEO style) ===
 
-    const sidebarItems: { key: SidebarTab; icon: React.ReactNode; label: string }[] = [
-        { key: 'overview', icon: <BarChart3 className="w-4 h-4" />, label: t('institution.nav_overview') },
-        { key: 'submissions', icon: <FileCheck className="w-4 h-4" />, label: t('institution.nav_submissions') },
-        { key: 'consents', icon: <Shield className="w-4 h-4" />, label: t('institution.nav_consents') },
-        { key: 'certification', icon: <CheckCircle2 className="w-4 h-4" />, label: t('institution.nav_certification') },
-        { key: 'settings', icon: <Settings className="w-4 h-4" />, label: t('institution.nav_settings') },
+    const domainInitial = institution.name ? institution.name.charAt(0).toUpperCase() : '?'
+
+    const menuItems = [
+        { id: 'overview' as SidebarTab, label: t('institution.nav_overview'), icon: Building2 },
+        { id: 'submissions' as SidebarTab, label: t('institution.recent_submissions'), icon: Activity },
+        { id: 'consents' as SidebarTab, label: t('institution.nav_consents'), icon: FileText },
+        { id: 'certification' as SidebarTab, label: t('institution.certification_level'), icon: ShieldCheck },
+        { id: 'settings' as SidebarTab, label: t('institution.nav_settings'), icon: Settings },
     ]
 
     const certColor = certificationColors[institution.certification] || certificationColors.BASIC
 
     return (
-        <div className="w-full min-h-[calc(100vh-64px)] flex">
-            {/* Sidebar */}
-            <aside className="hidden lg:flex flex-col w-[260px] flex-none border-r" style={{ borderColor: 'var(--color-border)', background: 'var(--color-surface)' }}>
-                <div className="p-6 border-b" style={{ borderColor: 'var(--color-border)' }}>
-                    <div className="flex items-center gap-3">
-                        <div className="flex items-center justify-center" style={{ width: 40, height: 40, borderRadius: 10, background: 'var(--color-primary-soft)', color: 'var(--color-primary)' }}>
-                            {typeIcons[institution.type] || <Building2 className="w-5 h-5" />}
+        <div className="w-full">
+            {/* Dashboard-specific header (same as BEO) */}
+            <DashboardHeader domain={institution.domain} initial={domainInitial} />
+
+            <div style={{ display: 'flex', flex: 1 }}>
+                {/* SIDEBAR — exact same style as BEO dashboard */}
+                <aside style={{
+                    width: '260px', flexShrink: 0, background: 'var(--color-surface)',
+                    borderRight: '1px solid var(--color-border)', padding: '2rem 0',
+                    display: 'flex', flexDirection: 'column', alignSelf: 'stretch', minHeight: 'calc(100vh - 64px)'
+                }} className="hidden lg:flex">
+                    {/* Profile */}
+                    <div style={{ padding: '0 1.5rem 1.5rem', borderBottom: '1px solid var(--color-border)' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                            <div style={{
+                                width: 44, height: 44, borderRadius: '50%',
+                                background: 'linear-gradient(135deg, var(--color-primary), #3b82f6)',
+                                color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                fontSize: '1.1rem', fontWeight: 700
+                            }}>{domainInitial}</div>
+                            <div style={{ minWidth: 0 }}>
+                                <p style={{ fontWeight: 600, fontSize: '0.9rem', color: 'var(--color-text)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{institution.name}</p>
+                                <p style={{ fontSize: '0.7rem', color: 'var(--color-text-muted)', fontFamily: 'monospace' }}>{institution.domain}</p>
+                            </div>
                         </div>
-                        <div className="min-w-0">
-                            <p className="text-sm font-semibold truncate">{institution.name}</p>
-                            <p className="text-xs text-[var(--color-text-muted)]">{institution.domain}</p>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '12px' }}>
+                            <span style={{
+                                display: 'inline-flex', alignItems: 'center', gap: '4px',
+                                padding: '3px 10px', borderRadius: '20px', fontSize: '0.68rem', fontWeight: 600,
+                                background: 'rgba(16,185,129,0.1)', color: '#10b981', textTransform: 'uppercase', letterSpacing: '0.05em'
+                            }}>
+                                <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#10b981', display: 'inline-block' }} />
+                                {institution.status}
+                            </span>
+                            <span style={{
+                                display: 'inline-flex', padding: '3px 10px', borderRadius: '20px',
+                                fontSize: '0.68rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em',
+                                background: certColor.bg, color: certColor.text
+                            }}>
+                                {institution.certification}
+                            </span>
                         </div>
                     </div>
-                    <div className="mt-3 flex items-center gap-2">
-                        <span className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full" style={{ background: 'rgba(16,185,129,0.1)', color: '#10b981' }}>
-                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" /> {institution.status}
-                        </span>
-                        <span className="inline-flex text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full" style={{ background: certColor.bg, color: certColor.text }}>
-                            {institution.certification}
-                        </span>
+
+                    {/* Nav */}
+                    <nav style={{ flex: 1, padding: '1rem 0.75rem' }}>
+                        {menuItems.map(item => {
+                            const Icon = item.icon
+                            const isActive = activeTab === item.id
+                            return (
+                                <div key={item.id}
+                                    onClick={() => setActiveTab(item.id)}
+                                    style={{
+                                        display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 12px',
+                                        borderRadius: '10px', cursor: 'pointer', marginBottom: '4px',
+                                        background: isActive ? 'var(--color-primary-soft)' : 'transparent',
+                                        color: isActive ? 'var(--color-primary)' : 'var(--color-text-muted)',
+                                        fontWeight: isActive ? 600 : 400, fontSize: '0.85rem', transition: 'all 0.15s'
+                                    }}>
+                                    <Icon size={18} />
+                                    <span>{item.label}</span>
+                                </div>
+                            )
+                        })}
+                    </nav>
+
+                    {/* Bottom actions */}
+                    <div style={{ padding: '0 0.75rem', borderTop: '1px solid var(--color-border)', paddingTop: '1rem' }}>
+                        <div onClick={() => setIsRegistered(false)} style={{
+                            display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 12px',
+                            borderRadius: '10px', cursor: 'pointer', color: 'var(--color-text-muted)',
+                            fontSize: '0.85rem', transition: 'all 0.15s'
+                        }}>
+                            <Key size={18} />
+                            <span>{t('institution.switch_to_register')}</span>
+                        </div>
                     </div>
-                </div>
-                <nav className="flex-1 p-3 space-y-1">
-                    {sidebarItems.map(item => (
-                        <button
-                            key={item.key}
-                            onClick={() => setActiveTab(item.key)}
-                            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors cursor-pointer"
-                            style={{
-                                background: activeTab === item.key ? 'var(--color-primary-soft)' : 'transparent',
-                                color: activeTab === item.key ? 'var(--color-primary)' : 'var(--color-text-muted)',
-                            }}
-                        >
-                            {item.icon}
-                            {item.label}
-                        </button>
-                    ))}
-                </nav>
-                <div className="p-4 border-t" style={{ borderColor: 'var(--color-border)' }}>
-                    <button onClick={() => setIsRegistered(false)} className="text-xs text-[var(--color-text-muted)] hover:text-[var(--color-text)] transition-colors cursor-pointer">
-                        {t('institution.switch_to_register')}
-                    </button>
-                </div>
-            </aside>
+                </aside>
 
-            {/* Mobile tab bar */}
-            <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 flex border-t" style={{ background: 'var(--color-surface)', borderColor: 'var(--color-border)' }}>
-                {sidebarItems.map(item => (
-                    <button
-                        key={item.key}
-                        onClick={() => setActiveTab(item.key)}
-                        className="flex-1 flex flex-col items-center gap-1 py-2 text-[10px] font-medium transition-colors cursor-pointer"
-                        style={{ color: activeTab === item.key ? 'var(--color-primary)' : 'var(--color-text-muted)' }}
-                    >
-                        {item.icon}
-                        {item.label}
-                    </button>
-                ))}
-            </div>
-
-            {/* Main content */}
-            <div className="flex-1 overflow-y-auto pb-20 lg:pb-0">
-                <div className="max-w-[1100px] mx-auto p-6 lg:p-8">
-
+                {/* MAIN CONTENT */}
+                <main style={{ flex: 1, padding: '2rem 2.5rem', maxWidth: '900px' }}>
                     {/* Dashboard title */}
-                    <div className="mb-8">
-                        <h1 className="text-2xl font-bold">{t('institution.dashboard_title')}</h1>
-                        <p className="text-sm text-[var(--color-text-muted)] mt-1">{institution.name} &middot; {institution.domain}</p>
+                    <div style={{ marginBottom: '2rem' }}>
+                        <h1 style={{ fontSize: '1.6rem', fontWeight: 700, color: 'var(--color-text)', marginBottom: '4px' }}>{t('institution.dashboard_title')}</h1>
+                        <p style={{ fontSize: '0.9rem', color: 'var(--color-text-muted)' }}>{institution.name} &middot; {institution.domain}</p>
                     </div>
 
                     {/* Overview Tab */}
@@ -477,7 +509,7 @@ export default function InstitutionPage() {
                         </div>
                     )}
 
-                </div>
+                </main>
             </div>
         </div>
     )
