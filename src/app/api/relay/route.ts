@@ -19,10 +19,12 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
         }
 
-        // 1. Verify the signature against the payload
-        // In a real implementation we would import CryptoUtils from @bsp/sdk
-        // const isValid = CryptoUtils.verifySignature(payload, signature, publicKey)
-        // if (!isValid) return NextResponse.json({ error: 'Invalid signature' }, { status: 401 })
+        // 1. Verify the Ed25519 signature against the payload
+        const { CryptoUtils } = await import('@bsp/sdk')
+        const isValid = CryptoUtils.verifySignature(payload, signature, publicKey)
+        if (!isValid) {
+            return NextResponse.json({ error: 'Invalid Ed25519 signature' }, { status: 401 })
+        }
 
         // 2. Load the Operator Wallet (Gas Payer)
         const wallet = getOperatorWallet()
