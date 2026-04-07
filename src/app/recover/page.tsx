@@ -63,7 +63,7 @@ export default function RecoverPage() {
     const menuItems = [
         { id: 'overview', label: 'Overview', icon: User, href: '/dashboard' },
         { id: 'consents', label: t('dashboard.cards.consent_title'), icon: FileText, href: '/consent' },
-        { id: 'biorecords', label: t('dashboard.cards.biorecords_title'), icon: Activity },
+        { id: 'biorecords', label: t('dashboard.cards.biorecords_title'), icon: Activity, href: '/biorecords' },
         { id: 'guardians', label: t('dashboard.cards.guardians_title'), icon: ShieldCheck, href: '/guardians' },
     ]
 
