@@ -25,6 +25,10 @@
 
 // ── Helpers ────────────────────────────────────────────────────────────────
 
+function toBuffer(arr: Uint8Array): ArrayBuffer {
+    return arr.buffer.slice(arr.byteOffset, arr.byteOffset + arr.byteLength)
+}
+
 function bytesToBase64(bytes: Uint8Array): string {
     return btoa(String.fromCharCode(...bytes))
 }
@@ -50,11 +54,11 @@ function bytesToHex(bytes: Uint8Array): string {
 
 async function deriveAESKey(password: string, salt: Uint8Array, usage: KeyUsage[]): Promise<CryptoKey> {
     const keyMaterial = await crypto.subtle.importKey(
-        'raw', new TextEncoder().encode(password),
+        'raw', toBuffer(new TextEncoder().encode(password)),
         'PBKDF2', false, ['deriveKey']
     )
     return crypto.subtle.deriveKey(
-        { name: 'PBKDF2', salt, iterations: 600_000, hash: 'SHA-256' },
+        { name: 'PBKDF2', salt: toBuffer(salt), iterations: 600_000, hash: 'SHA-256' },
         keyMaterial,
         { name: 'AES-GCM', length: 256 },
         false, usage
@@ -80,9 +84,9 @@ export async function exportKeyToFile(
     const iv        = crypto.getRandomValues(new Uint8Array(12))
     const aesKey    = await deriveAESKey(password, salt, ['encrypt'])
     const encrypted = await crypto.subtle.encrypt(
-        { name: 'AES-GCM', iv },
+        { name: 'AES-GCM', iv: toBuffer(iv) },
         aesKey,
-        hexToBytes(privateKeyHex)
+        toBuffer(hexToBytes(privateKeyHex))
     )
 
     return JSON.stringify({
@@ -126,7 +130,7 @@ export async function importKeyFromFile(
 
     let decrypted: ArrayBuffer
     try {
-        decrypted = await crypto.subtle.decrypt({ name: 'AES-GCM', iv }, aesKey, data)
+        decrypted = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: toBuffer(iv) }, aesKey, toBuffer(data))
     } catch {
         throw new Error('Senha incorreta ou arquivo corrompido')
     }

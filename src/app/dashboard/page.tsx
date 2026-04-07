@@ -33,7 +33,7 @@ export default function Dashboard() {
                 setOnchainData({
                     domain: local.domain,
                     status: 'active',
-                    createdAt: local.savedAt || new Date().toISOString(),
+                    createdAt: (local as any).savedAt || new Date().toISOString(),
                     consents: 2,
                     biorecords: 5,
                     guardians: { total: 3, active: 0 }
