@@ -1,7 +1,7 @@
 /**
  * BSP Key Export / Import
  *
- * Exporta a chave privada Ed25519 cifrada com AES-256-GCM + PBKDF2-SHA256 (600k iterações).
+ * Exporta a chave privada Ed25519 cifrada com AES-256-GCM + PBKDF2-SHA256 (1M iterações).
  * A chave NUNCA sai em texto claro — apenas o arquivo cifrado é produzido.
  *
  * Formato do arquivo .bspkey:
@@ -10,7 +10,7 @@
  *   "protocol": "BSP",
  *   "domain": "alice.bsp",
  *   "algorithm": "AES-256-GCM",
- *   "kdf": "PBKDF2-SHA256-600000",
+ *   "kdf": "PBKDF2-SHA256-1000000",
  *   "salt": "<base64>",
  *   "iv": "<base64>",
  *   "data": "<base64>",       ← private key bytes cifrados
@@ -19,7 +19,7 @@
  *
  * Segurança:
  * - Sem a senha, o arquivo é inútil (AES-GCM com tag de autenticação)
- * - PBKDF2 com 600k iterações dificulta ataques de força bruta
+ * - PBKDF2 com 1M iterações dificulta ataques de força bruta
  * - salt e iv únicos por export — cada arquivo é diferente mesmo com a mesma chave
  */
 
@@ -58,7 +58,7 @@ async function deriveAESKey(password: string, salt: Uint8Array, usage: KeyUsage[
         'PBKDF2', false, ['deriveKey']
     )
     return crypto.subtle.deriveKey(
-        { name: 'PBKDF2', salt: toBuffer(salt), iterations: 600_000, hash: 'SHA-256' },
+        { name: 'PBKDF2', salt: toBuffer(salt), iterations: 1_000_000, hash: 'SHA-256' },
         keyMaterial,
         { name: 'AES-GCM', length: 256 },
         false, usage
@@ -94,7 +94,7 @@ export async function exportKeyToFile(
         protocol:    'BSP',
         domain,
         algorithm:   'AES-256-GCM',
-        kdf:         'PBKDF2-SHA256-600000',
+        kdf:         'PBKDF2-SHA256-1000000',
         salt:        bytesToBase64(salt),
         iv:          bytesToBase64(iv),
         data:        bytesToBase64(new Uint8Array(encrypted)),

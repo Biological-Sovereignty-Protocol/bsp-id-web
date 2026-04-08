@@ -2,6 +2,27 @@ import { NextResponse } from 'next/server'
 import { warp, contracts } from '@/lib/arweave/client'
 import { getOperatorWallet } from '@/lib/arweave/wallet'
 
+// Rate limit: 10 requests per minute per IP
+const rateLimitMap = new Map<string, { count: number; resetAt: number }>()
+function checkRateLimit(ip: string): boolean {
+    const now = Date.now()
+    const entry = rateLimitMap.get(ip)
+    if (!entry || now > entry.resetAt) {
+        rateLimitMap.set(ip, { count: 1, resetAt: now + 60_000 })
+        return true
+    }
+    if (entry.count >= 10) return false
+    entry.count++
+    return true
+}
+// Cleanup stale entries every 5 minutes
+setInterval(() => {
+    const now = Date.now()
+    for (const [ip, entry] of rateLimitMap) {
+        if (now > entry.resetAt) rateLimitMap.delete(ip)
+    }
+}, 300_000)
+
 /**
  * POST /api/relay
  * Gasless Proxy for BSP Transactions.
@@ -12,6 +33,12 @@ import { getOperatorWallet } from '@/lib/arweave/wallet'
  */
 export async function POST(req: Request) {
     try {
+        // Rate limit by IP
+        const ip = req.headers.get('x-forwarded-for') ?? req.headers.get('x-real-ip') ?? 'unknown'
+        if (!checkRateLimit(ip)) {
+            return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
+        }
+
         const body = await req.json()
         const { function: fn, contract, payload, signature, publicKey } = body
 
