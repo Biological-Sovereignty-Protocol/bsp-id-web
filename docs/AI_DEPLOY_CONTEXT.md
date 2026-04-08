@@ -21,9 +21,9 @@ npm start        # next start
 ## Crypto Constraints
 
 - `tweetnacl` (Ed25519) runs in the browser — no native bindings needed
-- `warp-contracts` uses Node.js APIs — runs only in server components and `/api/relay`
 - Key generation, signing, and verification happen client-side via `CryptoUtils`
-- The relay API (`/api/relay`) verifies signatures server-side before relaying to Arweave
+- All API calls go directly to `bsp-registry-api` (no local relay — removed)
+- The registry API verifies Ed25519 signatures before relaying to Arweave
 
 ## Environment Variables
 
