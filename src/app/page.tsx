@@ -91,7 +91,7 @@ export default function Home() {
             <div className="w-px h-3" style={{ background: 'var(--color-border)' }} />
             <div className="flex items-center gap-1"><Dna className="w-3 h-3" /><span className="font-medium">{t('landing.biomarkers_count')}</span></div>
             <div className="w-px h-3" style={{ background: 'var(--color-border)' }} />
-            <span className="font-medium">{t('landing.mit_license')}</span>
+            <span className="font-medium">{t('landing.license')}</span>
           </div>
 
           <Link href="/institution" className="inline-flex items-center gap-1.5 text-sm transition-colors hover:opacity-80"

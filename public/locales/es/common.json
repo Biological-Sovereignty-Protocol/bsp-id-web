@@ -12,7 +12,7 @@
         "hero_tagline": "Tu biología. Tu llave. Permanente en Arweave.",
         "protocol_version": "Protocol v1.0",
         "biomarkers_count": "210+ Biomarcadores",
-        "mit_license": "Licencia MIT"
+        "license": "Apache 2.0"
     },
     "create": {
         "title": "Crea tu BEO",
@@ -327,7 +327,7 @@
         "legal": "Legal",
         "privacy_policy": "Política de Privacidad",
         "terms_of_use": "Términos de Uso",
-        "mit_license": "Licencia MIT",
+        "license": "Apache 2.0",
         "brand_tagline": "Tu biología. Tus datos. Tus reglas.",
         "copyright": "\u00a9 2026 Instituto Ambrósio",
         "open_standard": "Estándar Abierto"

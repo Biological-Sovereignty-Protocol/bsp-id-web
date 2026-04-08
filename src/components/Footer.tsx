@@ -177,7 +177,7 @@ export function Footer() {
             <ul style={ul}>
               <li><a href={`${BSP}/legal/privacy`} target="_blank" rel="noopener" style={link}>{t('footer.privacy_policy')}</a></li>
               <li><a href={`${BSP}/legal/terms`} target="_blank" rel="noopener" style={link}>{t('footer.terms_of_use')}</a></li>
-              <li><a href={`${GH}/bsp-spec/blob/main/LICENSE`} target="_blank" rel="noopener" style={link}>{t('footer.mit_license')}</a></li>
+              <li><a href={`${GH}/bsp-spec/blob/main/LICENSE`} target="_blank" rel="noopener" style={link}>{t('footer.license')}</a></li>
             </ul>
           </div>
         </div>
@@ -193,7 +193,7 @@ export function Footer() {
               <svg width="8" height="8" viewBox="0 0 24 24" fill="currentColor" style={{ marginRight: 4 }}><circle cx="12" cy="12" r="10"/></svg>
               {t('footer.open_standard')}
             </span>
-            <span style={{ fontSize: "0.72rem", fontWeight: 600, padding: "2px 8px", borderRadius: 20, background: "rgba(0,118,255,0.08)", color: "var(--color-primary)", border: "1px solid rgba(0,118,255,0.2)" }}>{t('footer.mit_license')}</span>
+            <span style={{ fontSize: "0.72rem", fontWeight: 600, padding: "2px 8px", borderRadius: 20, background: "rgba(0,118,255,0.08)", color: "var(--color-primary)", border: "1px solid rgba(0,118,255,0.2)" }}>{t('footer.license')}</span>
           </div>
 
           {/* Right — language selector */}
