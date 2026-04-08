@@ -15,13 +15,13 @@ To deploy this securely and effortlessly to Vercel:
 
 1. **Edge Runtime:** The `src/app/api/relay/route.ts` API route MUST export `export const runtime = 'edge'`. This strips out Node.js native dependencies and forces the V8 Edge environment.
 2. **Mocked Relay on Edge:** Since `warp-contracts` uses native Node functions, it cannot be executed fully on the Edge runtime. The deployed Vercel API `/api/relay` mocks the response. For a fully decentralized gasless relay, this API should be hosted on a standard Linux VPS (like Hostinger VPS).
-3. **No Turbopack:** Vercel Next.js 16.1.6 uses Turbopack by default, which fails to resolve local `@bsp/sdk` paths. The `package.json` build command MUST specify `next build --webpack`.
-4. **Internal SDK Resolution (`tsconfig.json`):** Instead of using npm `file:./lib/sdk` (which causes `Module not found` in Vercel), the `@bsp/sdk` is injected directly into the Next.js compilation step via `tsconfig.json` paths:
+3. **No Turbopack:** Vercel Next.js 16.1.6 uses Turbopack by default, which fails to resolve local `bsp-sdk` paths. The `package.json` build command MUST specify `next build --webpack`.
+4. **Internal SDK Resolution (`tsconfig.json`):** Instead of using npm `file:./lib/sdk` (which causes `Module not found` in Vercel), the `bsp-sdk` is injected directly into the Next.js compilation step via `tsconfig.json` paths:
    ```json
    "paths": {
        "@/*": ["./src/*"],
-       "@bsp/sdk": ["./lib/sdk/src/index.ts"],
-       "@bsp/sdk/*": ["./lib/sdk/src/*"]
+       "bsp-sdk": ["./lib/sdk/src/index.ts"],
+       "bsp-sdk/*": ["./lib/sdk/src/*"]
    }
    ```
 
