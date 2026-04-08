@@ -1,4 +1,4 @@
-![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js) ![License](https://img.shields.io/badge/license-MIT-blue) [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/Biological-Sovereignty-Protocol/bsp-id-web)
+![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js) ![License](https://img.shields.io/badge/license-Apache%202.0-blue)
 
 # bsp-id-web
 
@@ -94,18 +94,14 @@ For a detailed walkthrough, see [`/docs/FORKING.md`](/docs/FORKING.md).
 
 ## Deploying
 
-The fastest path is Vercel:
+Deployed via Coolify (self-hosted on VPS). For any deployment:
 
 ```bash
-npm install -g vercel
-vercel --prod
+npm run build
+npm start
 ```
 
-During setup, Vercel will prompt for environment variables. Add every variable from the table above.
-
-Alternatively, click the deploy button at the top of this README to fork-and-deploy in one step.
-
-For self-hosted deployments, run `npm run build && npm start` behind any reverse proxy (nginx, Caddy, etc.).
+Use behind a reverse proxy (nginx, Caddy, Coolify, etc.).
 
 ---
 

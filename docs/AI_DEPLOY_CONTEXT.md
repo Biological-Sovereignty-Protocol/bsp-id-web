@@ -1,39 +1,41 @@
-# Vercel Deployment & AI Context
+# Deployment & AI Context
 
-This document exists to provide future AI agents and developers with the exact technical context on how this Next.js project is deployed to Vercel, specifically addressing the challenges of cryptography libraries in serverless environments.
+This document provides AI agents and developers with the technical context on how this Next.js project is deployed.
 
-## 🚨 Critical Vercel Build Constraints 🚨
+## Hosting
 
-The Biological Sovereignty Protocol uses `warp-contracts` to interact with the Arweave blockchain. 
-`warp-contracts` relies on `classic-level`, which uses **complex native C++ Node.js bindings**.
+Deployed on **Coolify** (self-hosted VPS, Hostinger) at:
+- **URL:** https://id.biologicalsovereigntyprotocol.com
+- **Platform:** Coolify with Docker
+- **Framework:** Next.js 16
 
-If you attempt to build this project on Vercel using the default Node.js Serverless runtime, the `next build` command will **fail** with `ENOMEM` (Out of Memory) or timeout errors because Vercel's temporary build machines cannot compile the C++ binaries.
+## Build
 
-### The Solution: Edge Runtime & Webpack Aliasing
+```bash
+npm run build    # next build --webpack (Turbopack disabled)
+npm start        # next start
+```
 
-To deploy this securely and effortlessly to Vercel:
+**Why `--webpack`?** Turbopack fails to resolve the `@biological-sovereignty-protocol/sdk` package paths. The `--webpack` flag forces the classic bundler.
 
-1. **Edge Runtime:** The `src/app/api/relay/route.ts` API route MUST export `export const runtime = 'edge'`. This strips out Node.js native dependencies and forces the V8 Edge environment.
-2. **Mocked Relay on Edge:** Since `warp-contracts` uses native Node functions, it cannot be executed fully on the Edge runtime. The deployed Vercel API `/api/relay` mocks the response. For a fully decentralized gasless relay, this API should be hosted on a standard Linux VPS (like Hostinger VPS).
-3. **No Turbopack:** Vercel Next.js 16.1.6 uses Turbopack by default, which fails to resolve local `bsp-sdk` paths. The `package.json` build command MUST specify `next build --webpack`.
-4. **Internal SDK Resolution (`tsconfig.json`):** Instead of using npm `file:./lib/sdk` (which causes `Module not found` in Vercel), the `bsp-sdk` is injected directly into the Next.js compilation step via `tsconfig.json` paths:
-   ```json
-   "paths": {
-       "@/*": ["./src/*"],
-       "bsp-sdk": ["./lib/sdk/src/index.ts"],
-       "bsp-sdk/*": ["./lib/sdk/src/*"]
-   }
-   ```
+## Crypto Constraints
 
-## Production Environment Variables
+- `tweetnacl` (Ed25519) runs in the browser — no native bindings needed
+- `warp-contracts` uses Node.js APIs — runs only in server components and `/api/relay`
+- Key generation, signing, and verification happen client-side via `CryptoUtils`
+- The relay API (`/api/relay`) verifies signatures server-side before relaying to Arweave
 
-To link this project to Vercel via CLI (`npx vercel --prod`), the following environment variables were injected:
+## Environment Variables
 
-- `ARWEAVE_NETWORK` = `testnet`
-- `ARWEAVE_OPERATOR_KEY` = `{"kty":"RSA","n":"..."}` (The JSON JWK for the Gas Payer Wallet)
-- `BSP_REGISTRY_URL` = `https://api.biologicalsovereigntyprotocol.com`
-- `NEXT_PUBLIC_EXPLORER_URL` = `https://api.biologicalsovereigntyprotocol.com`
-
-## DNS Setup (Hostinger)
-The Vercel application is permanently mapped to `id.biologicalsovereigntyprotocol.com`.
-In Hostinger's DNS Zone, a `CNAME` record named `id` points exactly to `cname.vercel-dns.com`. Vercel automatically routes the traffic and provisions the SSL certificate.
+| Variable | Description |
+|----------|-------------|
+| `ARWEAVE_NETWORK` | `testnet` or `mainnet` |
+| `ARWEAVE_OPERATOR_JWK` | Arweave wallet JSON (gas payer) |
+| `BSP_CONTRACT_BEO_REGISTRY` | BEORegistry contract address |
+| `BSP_CONTRACT_IEO_REGISTRY` | IEORegistry contract address |
+| `BSP_CONTRACT_DOMAIN_REGISTRY` | DomainRegistry contract address |
+| `BSP_CONTRACT_ACCESS_CONTROL` | AccessControl contract address |
+| `NEXT_PUBLIC_BSP_REGISTRY_URL` | Registry API URL |
+| `NEXT_PUBLIC_CANONICAL_URL` | `https://id.biologicalsovereigntyprotocol.com` |
+| `NEXT_PUBLIC_DEFAULT_LOCALE` | `pt-BR` |
+| `NEXT_PUBLIC_DEMO_MODE` | `true` or `false` |
