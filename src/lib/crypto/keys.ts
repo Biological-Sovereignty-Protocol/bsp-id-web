@@ -1,4 +1,4 @@
-import { CryptoUtils } from '@bsp/sdk'
+import { CryptoUtils } from '@biological-sovereignty-protocol/sdk'
 import { generateSeedPhrase, seedPhraseToPrivateKeyBuffer } from './bip39'
 import bs58 from 'bs58'
 import nacl from 'tweetnacl'

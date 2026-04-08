@@ -225,7 +225,7 @@ export default function GovernancePage() {
                                                             <button type="button" onClick={async () => {
                                                                 if (process.env.NEXT_PUBLIC_DEMO_MODE === 'true') { alert('Vote: Approve (demo)'); return }
                                                                 try {
-                                                                    const { CryptoUtils } = await import('@bsp/sdk')
+                                                                    const { CryptoUtils } = await import('@biological-sovereignty-protocol/sdk')
                                                                     const nonce = CryptoUtils.generateNonce()
                                                                     const timestamp = new Date().toISOString()
                                                                     const payload = { function: 'approveAction', proposalId: proposal.id, nonce, timestamp }

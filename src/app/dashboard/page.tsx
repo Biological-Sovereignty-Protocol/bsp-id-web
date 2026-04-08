@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import { getIdentity, clearIdentity } from "@/lib/crypto/storage"
 import { signBSPTransaction } from "@/lib/crypto/keys"
-import { CryptoUtils } from "@bsp/sdk"
+import { CryptoUtils } from "@biological-sovereignty-protocol/sdk"
 import { getBEO } from "@/lib/arweave/beo"
 import { motion } from "framer-motion"
 import { Activity, Key, LogOut, Shield, ShieldCheck, FileText, User, CheckCircle, Clock, XCircle, UserPlus, Database } from "lucide-react"

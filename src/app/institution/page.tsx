@@ -115,7 +115,7 @@ export default function InstitutionPage() {
             return
         }
         // Real registration via relay
-        const { CryptoUtils } = await import('@bsp/sdk')
+        const { CryptoUtils } = await import('@biological-sovereignty-protocol/sdk')
         const { generateBSPKeyPair, signBSPTransaction } = await import('@/lib/crypto/keys')
         const kp = await generateBSPKeyPair()
         const nonce = CryptoUtils.generateNonce()

@@ -20,7 +20,7 @@ export async function POST(req: Request) {
         }
 
         // 1. Verify the Ed25519 signature against the payload
-        const { CryptoUtils } = await import('@bsp/sdk')
+        const { CryptoUtils } = await import('@biological-sovereignty-protocol/sdk')
         const isValid = CryptoUtils.verifySignature(payload, signature, publicKey)
         if (!isValid) {
             return NextResponse.json({ error: 'Invalid Ed25519 signature' }, { status: 401 })

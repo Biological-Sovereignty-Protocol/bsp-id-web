@@ -9,7 +9,7 @@
     "lint": "eslint"
   },
   "dependencies": {
-    "@bsp/sdk": "^1.0.0",
+    "@biological-sovereignty-protocol/sdk": "^1.0.0",
     "arweave": "^1.15.7",
     "bip39": "^3.1.0",
     "bs58": "^6.0.0",
