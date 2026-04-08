@@ -39,7 +39,7 @@ export default function GovernancePage() {
         })
     }, [])
 
-    // Load real proposals from IEORegistry contract via API
+    // Load real proposals from IEORegistry process via API
     useEffect(() => {
         if (process.env.NEXT_PUBLIC_DEMO_MODE === 'true') return
         const registryUrl = process.env.NEXT_PUBLIC_BSP_REGISTRY_URL || ''

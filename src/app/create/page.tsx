@@ -72,7 +72,7 @@ export default function CreateBEOFlow() {
                 setStep('success')
             }
         } catch (e) {
-            alert(t('errors.relay_failed', 'Error connecting to relayer. Please ensure your Arweave Wallet is configured.'))
+            alert(t('errors.relay_failed', 'Error connecting to the BSP registry. Please check your internet connection and try again.'))
             setStep('guardian')
             setIsRegistering(false)
         }
