@@ -24,4 +24,4 @@ Simply edit `src/styles/tokens.css` and change the colors and typography to matc
 ```
 
 ## 4. Deploying
-This codebase is a standard Next.js App Router project. Deploy via Coolify, Docker, or any Node.js hosting. Ensure your environment variables are mapped to either `testnet` or `mainnet` and point to the valid SmartWeave contract IDs.
+This codebase is a standard Next.js App Router project. Deploy via Coolify, Docker, or any Node.js hosting. Ensure your environment variables are mapped to either `testnet` or `mainnet` and point to the valid AO process IDs.

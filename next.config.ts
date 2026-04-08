@@ -4,7 +4,7 @@ const nextConfig: NextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
-  serverExternalPackages: ["warp-contracts", "arweave", "classic-level"],
+  serverExternalPackages: ["@permaweb/aoconnect", "arweave", "classic-level"],
   webpack: (config) => {
     config.resolve.fallback = {
       ...config.resolve.fallback,

@@ -26,7 +26,7 @@
     "react-i18next": "^16.5.4",
     "secrets.js-grempe": "^2.0.0",
     "tweetnacl": "^1.0.3",
-    "warp-contracts": "^1.4.45"
+    "@permaweb/aoconnect": "^0.0.74"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",

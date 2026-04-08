@@ -28,7 +28,7 @@
 | Styling | Tailwind CSS v4 + `tokens.css` custom properties |
 | Cryptography | TweetNaCl (Ed25519 sign/verify), BIP39 (seed phrases), secrets.js-grempe (Shamir SSS) |
 | Key storage | IndexedDB via `classic-level` — client-only, never synced to server |
-| On-chain ops | Warp SmartWeave contracts on Arweave |
+| On-chain ops | AO processes on Arweave |
 | Animations | Framer Motion |
 
 For full protocol specifications, see the [`bsp-spec`](https://github.com/Biological-Sovereignty-Protocol/bsp-spec) repository.
@@ -66,10 +66,10 @@ The app starts at `http://localhost:3000`.
 | `ARWEAVE_NETWORK` | Required | Arweave network to target | `testnet` or `mainnet` |
 | `ARWEAVE_OPERATOR_KEY` | Required | JSON-serialized Arweave JWK wallet used to relay transactions on behalf of users | `{"kty":"RSA","n":"..."}` |
 | `BSP_REGISTRY_URL` | Required | Base URL of the BSP Registry API | `https://api.biologicalsovereigntyprotocol.com` |
-| `BSP_CONTRACT_BEO_REGISTRY` | Required | Warp contract address for the BEO (Biological Entity Object) registry | `<contract_address>` |
-| `BSP_CONTRACT_IEO_REGISTRY` | Required | Warp contract address for the IEO (Institutional Entity Object) registry | `<contract_address>` |
-| `BSP_CONTRACT_DOMAIN_REGISTRY` | Required | Warp contract address for the `.bsp` domain registry | `<contract_address>` |
-| `BSP_CONTRACT_ACCESS_CONTROL` | Required | Warp contract address for access control (ConsentToken enforcement) | `<contract_address>` |
+| `BSP_PROCESS_BEO_REGISTRY` | Required | AO process ID for the BEO (Biological Entity Object) registry | `<process_id>` |
+| `BSP_PROCESS_IEO_REGISTRY` | Required | AO process ID for the IEO (Institutional Entity Object) registry | `<process_id>` |
+| `BSP_PROCESS_DOMAIN_REGISTRY` | Required | AO process ID for the `.bsp` domain registry | `<process_id>` |
+| `BSP_PROCESS_ACCESS_CONTROL` | Required | AO process ID for access control (ConsentToken enforcement) | `<process_id>` |
 | `ARWEAVE_BALANCE_ALERT_THRESHOLD` | Optional | Minimum AR balance before an alert fires | `1.0` |
 | `ALERT_EMAIL` | Optional | Email address for low-balance alerts | `ops@yourorg.com` |
 | `NEXT_PUBLIC_APP_URL` | Required | Public base URL of this deployment | `https://id.yourorg.com` |

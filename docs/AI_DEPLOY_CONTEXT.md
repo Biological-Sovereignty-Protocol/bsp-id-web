@@ -31,10 +31,10 @@ npm start        # next start
 |----------|-------------|
 | `ARWEAVE_NETWORK` | `testnet` or `mainnet` |
 | `ARWEAVE_OPERATOR_JWK` | Arweave wallet JSON (gas payer) |
-| `BSP_CONTRACT_BEO_REGISTRY` | BEORegistry contract address |
-| `BSP_CONTRACT_IEO_REGISTRY` | IEORegistry contract address |
-| `BSP_CONTRACT_DOMAIN_REGISTRY` | DomainRegistry contract address |
-| `BSP_CONTRACT_ACCESS_CONTROL` | AccessControl contract address |
+| `BSP_PROCESS_BEO_REGISTRY` | BEORegistry AO process ID |
+| `BSP_PROCESS_IEO_REGISTRY` | IEORegistry AO process ID |
+| `BSP_PROCESS_DOMAIN_REGISTRY` | DomainRegistry AO process ID |
+| `BSP_PROCESS_ACCESS_CONTROL` | AccessControl AO process ID |
 | `NEXT_PUBLIC_BSP_REGISTRY_URL` | Registry API URL |
 | `NEXT_PUBLIC_CANONICAL_URL` | `https://id.biologicalsovereigntyprotocol.com` |
 | `NEXT_PUBLIC_DEFAULT_LOCALE` | `pt-BR` |
