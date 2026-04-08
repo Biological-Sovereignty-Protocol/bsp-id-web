@@ -52,25 +52,21 @@ export default function CreateBEOFlow() {
                 setStep('success')
             } else {
                 // Production: call relay API
-                const payload = {
+                const { CryptoUtils } = await import('@biological-sovereignty-protocol/sdk')
+                const nonce = CryptoUtils.generateNonce()
+                const timestamp = new Date().toISOString()
+                const payloadToSign = { function: 'createBEO', domain: `${domain}.bsp`, publicKey: keyPair.publicKeyHex, recovery: null, nonce, timestamp }
+                const signature = (await import('@/lib/crypto/keys')).signBSPTransaction(payloadToSign, keyPair.privateKeyHex)
+
+                const { apiPost } = await import('@/lib/api')
+                await apiPost('/api/relayer/beo', {
                     domain: `${domain}.bsp`,
                     publicKey: keyPair.publicKeyHex,
-                    recovery: {}
-                }
-
-                const res = await fetch('/api/relay', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        contract: 'BEORegistry',
-                        function: 'createBEO',
-                        payload,
-                        signature: 'dummy_sig',
-                        publicKey: keyPair.publicKeyHex
-                    })
+                    recovery: null,
+                    signature,
+                    nonce,
+                    timestamp,
                 })
-
-                if (!res.ok) throw new Error('Falha no registro Arweave')
 
                 await storeIdentity(`${domain}.bsp`, keyPair.privateKeyHex, keyPair.publicKeyHex)
                 setStep('success')

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import { getIdentity, clearIdentity } from "@/lib/crypto/storage"
 import { signBSPTransaction } from "@/lib/crypto/keys"
 import { CryptoUtils } from "@biological-sovereignty-protocol/sdk"
+import { apiPost } from "@/lib/api"
 import { getBEO } from "@/lib/arweave/beo"
 import { motion } from "framer-motion"
 import { Activity, Key, LogOut, Shield, ShieldCheck, FileText, User, CheckCircle, Clock, XCircle, UserPlus, Database } from "lucide-react"
@@ -76,18 +77,7 @@ export default function Dashboard() {
             const payload = { function: 'destroyBEO', beoId, nonce, timestamp }
             const signature = signBSPTransaction(payload, identity.privateKeyHex)
 
-            const res = await fetch('/api/relay', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    function: 'destroyBEO',
-                    contract: 'BEORegistry',
-                    payload: { beoId, _userSignature: signature, _nonce: nonce, _timestamp: timestamp },
-                    signature,
-                    publicKey: identity.publicKeyHex,
-                }),
-            })
-            if (!res.ok) throw new Error('Destroy failed')
+            await apiPost('/api/relayer/beo/destroy', { beoId, signature, nonce, timestamp })
             await clearIdentity()
             alert(t('dashboard.destroy_success'))
             window.location.href = '/'
@@ -105,18 +95,7 @@ export default function Dashboard() {
             const payload = { function: 'revokeAllTokens', beoId, nonce, timestamp }
             const signature = signBSPTransaction(payload, identity.privateKeyHex)
 
-            const res = await fetch('/api/relay', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    function: 'revokeAllTokens',
-                    contract: 'AccessControl',
-                    payload: { beoId, _userSignature: signature, _nonce: nonce, _timestamp: timestamp },
-                    signature,
-                    publicKey: identity.publicKeyHex,
-                }),
-            })
-            if (!res.ok) throw new Error('Revoke failed')
+            await apiPost('/api/relayer/beo/revoke-all', { beoId, signature, nonce, timestamp })
             alert(t('dashboard.revoke_all_success'))
         } catch (e: any) {
             alert(e.message || 'Failed to revoke all tokens')
@@ -133,18 +112,7 @@ export default function Dashboard() {
             const payload = { function: 'rotateKey', beoId, newPublicKey: newKeyPair.publicKey, nonce, timestamp }
             const signature = signBSPTransaction(payload, identity.privateKeyHex)
 
-            const res = await fetch('/api/relay', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    function: 'rotateKey',
-                    contract: 'BEORegistry',
-                    payload: { beoId, newPublicKey: newKeyPair.publicKey, _userSignature: signature, _nonce: nonce, _timestamp: timestamp },
-                    signature,
-                    publicKey: identity.publicKeyHex,
-                }),
-            })
-            if (!res.ok) throw new Error('Rotate failed')
+            await apiPost('/api/relayer/beo/rotate-key', { beoId, newPublicKey: newKeyPair.publicKey, signature, nonce, timestamp })
             alert(t('dashboard.rotate_key_success') + '\n\nNew seed: ' + newKeyPair.seed + '\n\nStore this securely!')
         } catch (e: any) {
             alert(e.message || 'Failed to rotate key')

@@ -230,11 +230,9 @@ export default function GovernancePage() {
                                                                     const timestamp = new Date().toISOString()
                                                                     const payload = { function: 'approveAction', proposalId: proposal.id, nonce, timestamp }
                                                                     const signature = signBSPTransaction(payload, identity.privateKeyHex)
-                                                                    const res = await fetch('/api/relay', {
-                                                                        method: 'POST', headers: { 'Content-Type': 'application/json' },
-                                                                        body: JSON.stringify({ function: 'approveAction', contract: 'IEORegistry', payload: { proposalId: proposal.id }, signature, publicKey: identity.publicKeyHex }),
-                                                                    })
-                                                                    if (res.ok) alert('Approved!'); else alert('Failed')
+                                                                    const { apiPost } = await import('@/lib/api')
+                                                                    await apiPost('/api/ieo/approve', { proposalId: proposal.id, signature, nonce, timestamp })
+                                                                    alert('Approved!')
                                                                 } catch (e: any) { alert(e.message) }
                                                             }} style={{
                                                                 display: 'flex', alignItems: 'center', gap: '4px',

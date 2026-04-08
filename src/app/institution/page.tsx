@@ -123,18 +123,12 @@ export default function InstitutionPage() {
         const payload = { function: 'createIEO', domain: domain + '.bsp', ieoType, displayName: name, publicKey: kp.publicKeyHex, nonce, timestamp }
         const signature = signBSPTransaction(payload, kp.privateKeyHex)
 
-        const res = await fetch('/api/relay', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                function: 'createIEO',
-                contract: 'IEORegistry',
-                payload: { domain: domain + '.bsp', ieoType, displayName: name, publicKey: kp.publicKeyHex, _userSignature: signature, _nonce: nonce, _timestamp: timestamp },
-                signature,
-                publicKey: kp.publicKeyHex,
-            }),
-        })
-        if (!res.ok) { alert('Registration failed'); return }
+        const { apiPost } = await import('@/lib/api')
+        try {
+            await apiPost('/api/ieo', {
+                domain: domain + '.bsp', ieoType, displayName: name, publicKey: kp.publicKeyHex, signature, nonce, timestamp,
+            })
+        } catch { alert('Registration failed'); return }
         alert(`IEO registered! Store your seed securely:\n\n${kp.seedPhrase.join(' ')}`)
         setIsRegistered(true)
     }

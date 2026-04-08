@@ -1,37 +1,21 @@
-import { arweave, warp, contracts } from './client'
+import { apiPost, apiGet } from '../api'
 
 const isDemo = process.env.NEXT_PUBLIC_DEMO_MODE === 'true'
 
-export async function createBEO(domain: string, publicKeyHex: string, recoveryConfig: any) {
+export async function createBEO(domain: string, publicKeyHex: string, recoveryConfig: any, signature: string, nonce: string, timestamp: string) {
     if (isDemo) {
         await new Promise(r => setTimeout(r, 2000))
-        return { txId: 'demo_' + Date.now(), status: 'ok' }
+        return { transactionId: 'demo_' + Date.now(), success: true }
     }
 
-    // We send this to the /api/relay proxy so the server pays the gas
-    const payload = { domain, publicKey: publicKeyHex, recovery: recoveryConfig }
-
-    // In production, the client would sign this payload here:
-    // const signature = signBSPTransaction(payload, getLocalPrivateKey())
-
-    const response = await fetch('/api/relay', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            contract: 'BEORegistry',
-            function: 'createBEO',
-            payload,
-            signature: 'dummy_signature_for_testnet',
-            publicKey: publicKeyHex
-        })
+    return apiPost('/api/relayer/beo', {
+        domain,
+        publicKey: publicKeyHex,
+        recovery: recoveryConfig,
+        signature,
+        nonce,
+        timestamp,
     })
-
-    if (!response.ok) {
-        const err = await response.json()
-        throw new Error(err.error || 'Failed to relay BEO creation')
-    }
-
-    return response.json()
 }
 
 export async function getBEO(domain: string) {
@@ -47,16 +31,6 @@ export async function getBEO(domain: string) {
         }
     }
 
-    // Reads are free and public, no relay needed. Connect via Warp directly.
-    const swContract = warp.contract(contracts.beoRegistry)
-    const { cachedValue } = await swContract.readState()
-
-    // Reverse lookup domain -> id using index
-    const state: any = cachedValue.state
-    if (!state.domainIndex) return null
-
-    const id = state.domainIndex[domain]
-    if (!id) return null
-
-    return state.beos[id]
+    const result = await apiGet(`/api/beos/domain/${encodeURIComponent(domain)}`)
+    return result.beo
 }

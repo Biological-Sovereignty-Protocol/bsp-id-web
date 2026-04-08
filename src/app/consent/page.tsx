@@ -113,16 +113,18 @@ export default function ConsentPage() {
                     expiresAt: expiresAt ? new Date(expiresAt).getTime() : Date.now() + 86400000 * 30
                 }
 
-                await fetch('/api/relay', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        contract: 'AccessControl',
-                        function: 'issueConsent',
-                        payload,
-                        signature: 'dummy_sig',
-                        publicKey: identity.publicKeyHex
-                    })
+                const { CryptoUtils } = await import('@biological-sovereignty-protocol/sdk')
+                const { signBSPTransaction } = await import('@/lib/crypto/keys')
+                const { apiPost } = await import('@/lib/api')
+                const nonce = CryptoUtils.generateNonce()
+                const timestamp = new Date().toISOString()
+                const scope = { intents, categories: selectedCategories }
+                const beoId = identity.beoId || 'pending'
+                const payloadToSign = { function: 'grantConsent', beoId, ieoId: ieoDomain, scope, expiresInDays: expiresAt ? Math.ceil((new Date(expiresAt).getTime() - Date.now()) / 86400000) : null, nonce, timestamp }
+                const signature = signBSPTransaction(payloadToSign, identity.privateKeyHex)
+
+                await apiPost('/api/relayer/consent', {
+                    beoId, ieoId: ieoDomain, scope, expiresInDays: payloadToSign.expiresInDays, signature, nonce, timestamp,
                 })
 
                 alert(t('consent.success'))
