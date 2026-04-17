@@ -6,7 +6,7 @@ import { Footer } from "@/components/Footer";
 
 export const metadata: Metadata = {
   title: "BSP Identity | Biological Sovereignty Protocol",
-  description: "Create and manage your sovereign biological identity permanently on Arweave.",
+  description: "Create and manage your sovereign biological identity on Aptos.",
 };
 
 export default function RootLayout({

@@ -5,7 +5,7 @@ import { getIdentity, clearIdentity } from "@/lib/crypto/storage"
 import { signBSPTransaction } from "@/lib/crypto/keys"
 import { CryptoUtils } from "@biological-sovereignty-protocol/sdk"
 import { apiPost } from "@/lib/api"
-import { getBEO } from "@/lib/arweave/beo"
+import { getBEO } from "@/lib/chain/beo"
 import { motion } from "framer-motion"
 import { Activity, Key, LogOut, Shield, ShieldCheck, FileText, User, CheckCircle, Clock, XCircle, UserPlus, Database } from "lucide-react"
 import { useTranslation } from "react-i18next"
@@ -46,8 +46,8 @@ export default function Dashboard() {
             }
 
             try {
-                const arweaveData = await getBEO(local.domain)
-                setOnchainData(arweaveData)
+                const chainData = await getBEO(local.domain)
+                setOnchainData(chainData)
             } catch (e) {
                 console.error("Failed to load on-chain BEO data")
             }
@@ -443,7 +443,7 @@ export default function Dashboard() {
                                                 <span style={{ fontSize: '0.72rem', color: 'var(--color-text-muted)' }}>{entry.timestamp}</span>
                                                 <span style={{ fontSize: '0.65rem', color: 'var(--color-text-muted)', opacity: 0.6 }}>|</span>
                                                 <a
-                                                    href={`https://viewblock.io/arweave/tx/${entry.txId}`}
+                                                    href={`https://explorer.aptoslabs.com/txn/${entry.txId}`}
                                                     target="_blank"
                                                     rel="noopener noreferrer"
                                                     style={{ fontSize: '0.68rem', fontFamily: 'monospace', color: 'var(--color-primary)', textDecoration: 'none' }}

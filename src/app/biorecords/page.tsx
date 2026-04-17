@@ -139,13 +139,13 @@ export default function BioRecordsPage() {
                                                 </span>
                                             </div>
                                             <a
-                                                href={`https://viewblock.io/arweave/tx/${record.txId}`}
+                                                href={`https://explorer.aptoslabs.com/txn/${record.txId}`}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
                                                 className="flex items-center gap-1 text-xs hover:opacity-80 transition-all"
                                                 style={{ color: 'var(--color-primary)', fontWeight: 500 }}
                                             >
-                                                <ExternalLink size={13} /> {t('biorecords.view_tx') || 'View on Arweave'}
+                                                <ExternalLink size={13} /> {t('biorecords.view_tx') || 'View on Aptos'}
                                             </a>
                                         </div>
                                         <div className="flex items-baseline gap-2 mb-3">

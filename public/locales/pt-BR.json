@@ -8,7 +8,7 @@
         "domain_taken": "✗ Já registrado — sugestões:",
         "step_key": "Sua chave de soberania",
         "step_guardian": "Proteção adicional (opcional)",
-        "step_register": "Registrando no Arweave...",
+        "step_register": "Registrando no Aptos...",
         "guardian_skip": "Configurar depois",
         "guardian_skip_note": "Você está protegido pela seed phrase.",
         "cost_note": "Registro permanente e gratuito"

@@ -7,7 +7,7 @@ import bs58 from 'bs58'
  * or use a sealed box. For this implementation, we use an ephemeral keypair (sealed box pattern).
  */
 export function encryptForGuardian(message: string, guardianPublicKeyHex: string): { ciphertextBase64: string, nonceBase64: string, ephemeralPublicKeyHex: string } {
-    // 1. Decode guardian's Arweave public key (Ed25519)
+    // 1. Decode guardian's public key (Ed25519)
     const receiverPublicKey = Buffer.from(guardianPublicKeyHex, 'hex')
 
     // 2. Generate an ephemeral keypair for this encryption
@@ -17,9 +17,9 @@ export function encryptForGuardian(message: string, guardianPublicKeyHex: string
     const nonce = nacl.randomBytes(nacl.box.nonceLength)
 
     // 4. Encrypt the message using xsalsa20-poly1305 Diffie-Hellman
-    // Note: in a true production environment with Arweave, we would use a library that 
-    // strictly converts Ed25519 to X25519 for box encryption, but tweetnacl's box requires
-    // curve25519. For simplicity in the web interface, we assume the public key was generated as such.
+    // Note: in production, we would use a library that strictly converts Ed25519 to X25519
+    // for box encryption, but tweetnacl's box requires curve25519. For simplicity in the
+    // web interface, we assume the public key was generated as such.
     const messageUint8 = new TextEncoder().encode(message)
     const encryptedMessage = nacl.box(messageUint8, nonce, receiverPublicKey, ephemeralKeypair.secretKey)
 

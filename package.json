@@ -11,8 +11,7 @@
   },
   "dependencies": {
     "@biological-sovereignty-protocol/sdk": "^1.0.0",
-    "@permaweb/aoconnect": "^0.0.94",
-    "arweave": "^1.15.7",
+    "@aptos-labs/ts-sdk": "^6.3.1",
     "bip39": "^3.1.0",
     "bs58": "^6.0.0",
     "classic-level": "^3.0.0",

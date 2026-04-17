@@ -23,19 +23,16 @@ npm start        # next start
 - `tweetnacl` (Ed25519) runs in the browser — no native bindings needed
 - Key generation, signing, and verification happen client-side via `CryptoUtils`
 - All API calls go directly to `bsp-registry-api` (no local relay — removed)
-- The registry API verifies Ed25519 signatures before relaying to Arweave
+- The registry API verifies Ed25519 signatures before relaying to Aptos
 
 ## Environment Variables
 
 | Variable | Description |
 |----------|-------------|
-| `ARWEAVE_NETWORK` | `testnet` or `mainnet` |
-| `ARWEAVE_OPERATOR_JWK` | Arweave wallet JSON (gas payer) |
-| `BSP_PROCESS_BEO_REGISTRY` | BEORegistry AO process ID |
-| `BSP_PROCESS_IEO_REGISTRY` | IEORegistry AO process ID |
-| `BSP_PROCESS_DOMAIN_REGISTRY` | DomainRegistry AO process ID |
-| `BSP_PROCESS_ACCESS_CONTROL` | AccessControl AO process ID |
+| `NEXT_PUBLIC_APTOS_NETWORK` | `testnet`, `mainnet`, or `devnet` |
+| `NEXT_PUBLIC_BSP_CONTRACT_ADDRESS` | BSP Move module address on Aptos |
 | `NEXT_PUBLIC_BSP_REGISTRY_URL` | Registry API URL |
+| `NEXT_PUBLIC_EXPLORER_URL` | `https://explorer.aptoslabs.com/txn/` |
 | `NEXT_PUBLIC_CANONICAL_URL` | `https://id.biologicalsovereigntyprotocol.com` |
 | `NEXT_PUBLIC_DEFAULT_LOCALE` | `pt-BR` |
 | `NEXT_PUBLIC_DEMO_MODE` | `true` or `false` |

@@ -64,7 +64,7 @@ export function DashboardHeader({ domain, initial, customSearchItems }: Dashboar
 
     const notifications = [
         { text: 'BEO created successfully', time: 'Just now', read: false },
-        { text: 'Identity verified on Arweave', time: '2 min ago', read: false },
+        { text: 'Identity verified on Aptos', time: '2 min ago', read: false },
         { text: 'Seed phrase backed up', time: '5 min ago', read: true },
     ]
 

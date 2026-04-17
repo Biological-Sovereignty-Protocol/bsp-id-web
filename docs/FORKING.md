@@ -6,11 +6,11 @@ The `bsp-id-web` repository is engineered to be forked by any Laboratory, Clinic
 Fork this GitHub repository into your organization.
 
 ## 2. Operator Wallet setup
-By default, the Ambrósio Institute relays gasless transactions (meaning we pay the Arweave gas so the user doesn't have to). If you are running your own fork, you will act as the Relayer.
+By default, the Ambrósio Institute relays gasless transactions (meaning we pay the Aptos gas so the user doesn't have to). If you are running your own fork, you will act as the Relayer.
 
-1. Generate an Arweave Wallet JSON keyfile.
-2. Fund it with `$AR`.
-3. Set the `ARWEAVE_OPERATOR_KEY` environment variable on your hosting platform.
+1. Create an Aptos account/wallet.
+2. Fund it with `$APT`.
+3. Configure the operator wallet on your hosting platform.
 
 ## 3. Styling & Theming
 You do not need to touch any React Component to re-skin the application.
@@ -24,4 +24,4 @@ Simply edit `src/styles/tokens.css` and change the colors and typography to matc
 ```
 
 ## 4. Deploying
-This codebase is a standard Next.js App Router project. Deploy via Coolify, Docker, or any Node.js hosting. Ensure your environment variables are mapped to either `testnet` or `mainnet` and point to the valid AO process IDs.
+This codebase is a standard Next.js App Router project. Deploy via Coolify, Docker, or any Node.js hosting. Ensure your environment variables are mapped to either `testnet` or `mainnet` and point to the valid Aptos contract IDs.
