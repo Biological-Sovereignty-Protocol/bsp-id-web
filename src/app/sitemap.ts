@@ -1,56 +1,45 @@
-import { MetadataRoute } from 'next';
+import type { MetadataRoute } from "next";
+
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://id.biologicalsovereigntyprotocol.com";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-    const baseUrl = 'https://bsp-id.com';
-    
+    const now = new Date();
     return [
         {
-            url: baseUrl,
-            lastModified: new Date(),
-            changeFrequency: 'weekly',
-            priority: 1,
+            url: `${SITE_URL}/`,
+            lastModified: now,
+            changeFrequency: "weekly",
+            priority: 1.0,
         },
         {
-            url: `${baseUrl}/create`,
-            lastModified: new Date(),
-            changeFrequency: 'monthly',
-            priority: 0.8,
+            url: `${SITE_URL}/create`,
+            lastModified: now,
+            changeFrequency: "monthly",
+            priority: 0.9,
         },
         {
-            url: `${baseUrl}/governance`,
-            lastModified: new Date(),
-            changeFrequency: 'monthly',
+            url: `${SITE_URL}/institution`,
+            lastModified: now,
+            changeFrequency: "monthly",
+            priority: 0.7,
+        },
+        {
+            url: `${SITE_URL}/governance`,
+            lastModified: now,
+            changeFrequency: "monthly",
             priority: 0.6,
         },
         {
-            url: `${baseUrl}/institution`,
-            lastModified: new Date(),
-            changeFrequency: 'monthly',
-            priority: 0.6,
-        },
-        {
-            url: `${baseUrl}/privacy`,
-            lastModified: new Date(),
-            changeFrequency: 'yearly',
+            url: `${SITE_URL}/privacy`,
+            lastModified: now,
+            changeFrequency: "yearly",
             priority: 0.5,
         },
         {
-            url: `${baseUrl}/terms`,
-            lastModified: new Date(),
-            changeFrequency: 'yearly',
+            url: `${SITE_URL}/terms`,
+            lastModified: now,
+            changeFrequency: "yearly",
             priority: 0.5,
-        },
-        {
-            url: `${baseUrl}/export`,
-            lastModified: new Date(),
-            changeFrequency: 'monthly',
-            priority: 0.4,
-        },
-        {
-            url: `${baseUrl}/destroy`,
-            lastModified: new Date(),
-            changeFrequency: 'monthly',
-            priority: 0.4,
         },
     ];
 }

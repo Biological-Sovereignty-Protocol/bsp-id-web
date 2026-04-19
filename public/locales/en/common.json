@@ -351,5 +351,66 @@
         "lang_en": "English",
         "lang_pt": "Portuguese",
         "lang_es": "Spanish"
+    },
+    "destroy": {
+        "badge": "Irreversible Action",
+        "title": "Sovereign Cryptographic Erasure",
+        "subtitle": "Destroy your private key and render all your biological data permanently inaccessible.",
+        "back_to_dashboard": "Back to dashboard",
+        "no_identity_title": "No identity found",
+        "no_identity_desc": "We could not find a sovereignty key on this device. There is nothing to destroy.",
+        "warning_title": "This action cannot be undone",
+        "warning_desc": "Destroying your key makes all BioRecords encrypted for this BEO permanently unreadable. No institution, not even the Ambrosio Institute, can recover them.",
+        "ack_1": "I understand this will permanently destroy my private key on this device.",
+        "ack_2": "I understand all my BioRecords will become cryptographically unreadable forever.",
+        "ack_3": "I have no intention of using this BEO again and have exported any data I want to keep.",
+        "cancel": "Cancel",
+        "continue": "Continue",
+        "back": "Back",
+        "confirm_title": "Confirm your identity",
+        "confirm_desc": "You are about to erase the following BEO from this device. This is your last chance to cancel before the final confirmation.",
+        "your_beo": "Your BEO",
+        "final_warning": "FINAL WARNING. This is irreversible. Your data will be cryptographically erased forever.",
+        "type_destroy": "Type DESTROY to confirm",
+        "destroying": "Destroying...",
+        "execute": "Destroy my key",
+        "error_generic": "Something went wrong while destroying your key. Please try again.",
+        "success_title": "Sovereignty erased",
+        "success_desc": "Your key has been destroyed. All data encrypted for this BEO is now permanently inaccessible and cryptographically erased.",
+        "go_home": "Return home"
+    },
+    "export": {
+        "badge": "Data Portability",
+        "title": "Export my BioRecords",
+        "subtitle": "Download all your biological data in a BSP-standard format. Your right under GDPR Article 20 and LGPD Article 18.",
+        "back_to_dashboard": "Back to dashboard",
+        "no_identity_title": "No identity found",
+        "no_identity_desc": "We could not find a sovereignty key on this device. Access your dashboard first.",
+        "section_title": "Download your data",
+        "section_desc": "Your BioRecords are decrypted locally using your private key and exported in the selected format. Nothing is uploaded.",
+        "your_beo": "Your BEO",
+        "format_label": "Choose format",
+        "format_json_desc": "Full BSP-standard structure, ideal for migration and audits.",
+        "format_csv_desc": "Flat tabular format, ideal for spreadsheets and quick review.",
+        "download_btn": "Download export",
+        "exporting": "Preparing export...",
+        "success": "Export downloaded at {{timestamp}}.",
+        "error_generic": "Something went wrong while exporting your data. Please try again.",
+        "compliance_note": "This export complies with data portability requirements under GDPR Article 20 and LGPD Article 18. BioRecords are decrypted locally in your browser and never transmitted to any server."
+    },
+    "notFound": {
+        "title": "Page not found",
+        "subtitle": "The page you are looking for does not exist or has been moved.",
+        "go_home": "Go home",
+        "go_dashboard": "Go to dashboard"
+    },
+    "errorBoundary": {
+        "title": "Something went wrong",
+        "subtitle": "An unexpected error occurred while rendering this page. You can try again or return home.",
+        "try_again": "Try again",
+        "go_home": "Go home"
+    },
+    "loadingState": {
+        "default": "Loading..."
     }
 }

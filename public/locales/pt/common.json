@@ -351,5 +351,66 @@
         "lang_en": "Inglês",
         "lang_pt": "Português",
         "lang_es": "Espanhol"
+    },
+    "destroy": {
+        "badge": "Ação Irreversível",
+        "title": "Apagamento Criptográfico Soberano",
+        "subtitle": "Destrua sua chave privada e torne todos os seus dados biológicos permanentemente inacessíveis.",
+        "back_to_dashboard": "Voltar ao painel",
+        "no_identity_title": "Nenhuma identidade encontrada",
+        "no_identity_desc": "Não encontramos uma chave de soberania neste dispositivo. Não há nada para destruir.",
+        "warning_title": "Esta ação não pode ser desfeita",
+        "warning_desc": "Destruir sua chave torna todos os BioRecords criptografados para este BEO permanentemente ilegíveis. Nenhuma instituição, nem mesmo o Instituto Ambrósio, pode recuperá-los.",
+        "ack_1": "Entendo que isso destruirá permanentemente minha chave privada neste dispositivo.",
+        "ack_2": "Entendo que todos os meus BioRecords se tornarão criptograficamente ilegíveis para sempre.",
+        "ack_3": "Não pretendo usar este BEO novamente e já exportei os dados que quero manter.",
+        "cancel": "Cancelar",
+        "continue": "Continuar",
+        "back": "Voltar",
+        "confirm_title": "Confirme sua identidade",
+        "confirm_desc": "Você está prestes a apagar o BEO abaixo deste dispositivo. Esta é sua última chance de cancelar antes da confirmação final.",
+        "your_beo": "Seu BEO",
+        "final_warning": "AVISO FINAL. Esta ação é irreversível. Seus dados serão criptograficamente apagados para sempre.",
+        "type_destroy": "Digite DESTROY para confirmar",
+        "destroying": "Destruindo...",
+        "execute": "Destruir minha chave",
+        "error_generic": "Algo deu errado ao destruir sua chave. Tente novamente.",
+        "success_title": "Soberania apagada",
+        "success_desc": "Sua chave foi destruída. Todos os dados criptografados para este BEO agora estão permanentemente inacessíveis e criptograficamente apagados.",
+        "go_home": "Voltar ao início"
+    },
+    "export": {
+        "badge": "Portabilidade de Dados",
+        "title": "Exportar meus BioRecords",
+        "subtitle": "Baixe todos os seus dados biológicos no formato padrão BSP. Seu direito pelo GDPR Artigo 20 e LGPD Artigo 18.",
+        "back_to_dashboard": "Voltar ao painel",
+        "no_identity_title": "Nenhuma identidade encontrada",
+        "no_identity_desc": "Não encontramos uma chave de soberania neste dispositivo. Acesse seu painel primeiro.",
+        "section_title": "Baixe seus dados",
+        "section_desc": "Seus BioRecords são descriptografados localmente com sua chave privada e exportados no formato escolhido. Nada é enviado a servidores.",
+        "your_beo": "Seu BEO",
+        "format_label": "Escolha o formato",
+        "format_json_desc": "Estrutura completa padrão BSP, ideal para migração e auditoria.",
+        "format_csv_desc": "Formato tabular simples, ideal para planilhas e revisão rápida.",
+        "download_btn": "Baixar exportação",
+        "exporting": "Preparando exportação...",
+        "success": "Exportação baixada em {{timestamp}}.",
+        "error_generic": "Algo deu errado ao exportar seus dados. Tente novamente.",
+        "compliance_note": "Esta exportação cumpre os requisitos de portabilidade de dados do GDPR Artigo 20 e LGPD Artigo 18. BioRecords são descriptografados localmente no seu navegador e nunca transmitidos a servidores."
+    },
+    "notFound": {
+        "title": "Página não encontrada",
+        "subtitle": "A página que você procura não existe ou foi movida.",
+        "go_home": "Voltar ao início",
+        "go_dashboard": "Ir ao painel"
+    },
+    "errorBoundary": {
+        "title": "Algo deu errado",
+        "subtitle": "Ocorreu um erro inesperado ao renderizar esta página. Você pode tentar novamente ou voltar ao início.",
+        "try_again": "Tentar novamente",
+        "go_home": "Voltar ao início"
+    },
+    "loadingState": {
+        "default": "Carregando..."
     }
 }

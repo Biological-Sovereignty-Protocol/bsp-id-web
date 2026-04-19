@@ -351,5 +351,66 @@
         "lang_en": "Inglés",
         "lang_pt": "Portugués",
         "lang_es": "Español"
+    },
+    "destroy": {
+        "badge": "Acción Irreversible",
+        "title": "Borrado Criptográfico Soberano",
+        "subtitle": "Destruye tu llave privada y haz que todos tus datos biológicos sean permanentemente inaccesibles.",
+        "back_to_dashboard": "Volver al panel",
+        "no_identity_title": "No se encontró identidad",
+        "no_identity_desc": "No encontramos una llave de soberanía en este dispositivo. No hay nada que destruir.",
+        "warning_title": "Esta acción no se puede deshacer",
+        "warning_desc": "Destruir tu llave hace que todos los BioRecords cifrados para este BEO sean permanentemente ilegibles. Ninguna institución, ni siquiera el Instituto Ambrosio, puede recuperarlos.",
+        "ack_1": "Entiendo que esto destruirá permanentemente mi llave privada en este dispositivo.",
+        "ack_2": "Entiendo que todos mis BioRecords se volverán criptográficamente ilegibles para siempre.",
+        "ack_3": "No tengo intención de usar este BEO nuevamente y ya exporté los datos que quiero conservar.",
+        "cancel": "Cancelar",
+        "continue": "Continuar",
+        "back": "Volver",
+        "confirm_title": "Confirma tu identidad",
+        "confirm_desc": "Estás a punto de borrar el siguiente BEO de este dispositivo. Esta es tu última oportunidad para cancelar antes de la confirmación final.",
+        "your_beo": "Tu BEO",
+        "final_warning": "ADVERTENCIA FINAL. Esta acción es irreversible. Tus datos serán criptográficamente borrados para siempre.",
+        "type_destroy": "Escribe DESTROY para confirmar",
+        "destroying": "Destruyendo...",
+        "execute": "Destruir mi llave",
+        "error_generic": "Algo salió mal al destruir tu llave. Por favor intenta de nuevo.",
+        "success_title": "Soberanía borrada",
+        "success_desc": "Tu llave ha sido destruida. Todos los datos cifrados para este BEO ahora son permanentemente inaccesibles y criptográficamente borrados.",
+        "go_home": "Volver al inicio"
+    },
+    "export": {
+        "badge": "Portabilidad de Datos",
+        "title": "Exportar mis BioRecords",
+        "subtitle": "Descarga todos tus datos biológicos en formato estándar BSP. Tu derecho bajo el GDPR Artículo 20 y la LGPD Artículo 18.",
+        "back_to_dashboard": "Volver al panel",
+        "no_identity_title": "No se encontró identidad",
+        "no_identity_desc": "No encontramos una llave de soberanía en este dispositivo. Accede a tu panel primero.",
+        "section_title": "Descarga tus datos",
+        "section_desc": "Tus BioRecords se descifran localmente usando tu llave privada y se exportan en el formato seleccionado. Nada se sube a servidores.",
+        "your_beo": "Tu BEO",
+        "format_label": "Elige el formato",
+        "format_json_desc": "Estructura estándar BSP completa, ideal para migración y auditoría.",
+        "format_csv_desc": "Formato tabular plano, ideal para hojas de cálculo y revisión rápida.",
+        "download_btn": "Descargar exportación",
+        "exporting": "Preparando exportación...",
+        "success": "Exportación descargada a las {{timestamp}}.",
+        "error_generic": "Algo salió mal al exportar tus datos. Por favor intenta de nuevo.",
+        "compliance_note": "Esta exportación cumple con los requisitos de portabilidad de datos del GDPR Artículo 20 y la LGPD Artículo 18. Los BioRecords se descifran localmente en tu navegador y nunca se transmiten a ningún servidor."
+    },
+    "notFound": {
+        "title": "Página no encontrada",
+        "subtitle": "La página que buscas no existe o ha sido movida.",
+        "go_home": "Ir al inicio",
+        "go_dashboard": "Ir al panel"
+    },
+    "errorBoundary": {
+        "title": "Algo salió mal",
+        "subtitle": "Ocurrió un error inesperado al renderizar esta página. Puedes intentar de nuevo o volver al inicio.",
+        "try_again": "Intentar de nuevo",
+        "go_home": "Ir al inicio"
+    },
+    "loadingState": {
+        "default": "Cargando..."
     }
 }
