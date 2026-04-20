@@ -83,7 +83,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang={process.env.NEXT_PUBLIC_DEFAULT_LOCALE ?? 'en'} suppressHydrationWarning>
       <body className="antialiased min-h-screen flex flex-col transition-colors duration-300"
         style={{ background: 'var(--color-bg)', color: 'var(--color-text)' }}>
         <a
