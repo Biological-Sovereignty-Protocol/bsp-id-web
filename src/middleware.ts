@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { jwtVerify } from 'jose'
 
 const RATE_LIMIT = 30
 const WINDOW_MS = 60 * 1000
@@ -18,8 +19,43 @@ function getClientIp(req: NextRequest): string {
   )
 }
 
-export function middleware(req: NextRequest) {
-  if (!req.nextUrl.pathname.startsWith('/api/')) {
+async function verifySession(req: NextRequest): Promise<boolean> {
+  const secret = process.env.SESSION_SECRET
+  if (!secret) return false
+
+  const key = new TextEncoder().encode(secret)
+
+  const cookie = req.cookies.get('bsp_session')?.value
+  const authHeader = req.headers.get('authorization')
+  const bearer = authHeader?.startsWith('Bearer ') ? authHeader.slice(7) : null
+
+  const token = cookie ?? bearer
+  if (!token) return false
+
+  try {
+    await jwtVerify(token, key)
+    return true
+  } catch {
+    return false
+  }
+}
+
+export async function middleware(req: NextRequest) {
+  const { pathname } = req.nextUrl
+
+  // Auth guard for /dashboard/*
+  if (pathname.startsWith('/dashboard')) {
+    const authenticated = await verifySession(req)
+    if (!authenticated) {
+      const loginUrl = new URL('/login', req.url)
+      loginUrl.searchParams.set('next', pathname)
+      return NextResponse.redirect(loginUrl)
+    }
+    return NextResponse.next()
+  }
+
+  // Rate limiting for /api/* routes
+  if (!pathname.startsWith('/api/')) {
     return NextResponse.next()
   }
 
@@ -58,5 +94,5 @@ export function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: '/api/:path*',
+  matcher: ['/dashboard/:path*', '/api/:path*'],
 }
