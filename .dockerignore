@@ -1,0 +1,42 @@
+# Dependencies & build output
+node_modules
+.next
+out
+dist
+build
+
+# Tests and reports
+e2e
+playwright-report
+test-results
+coverage
+*.test.ts
+*.spec.ts
+
+# VCS and editor
+.git
+.gitignore
+.github
+.vscode
+.idea
+*.swp
+
+# Env and secrets
+.env
+.env.*
+!.env.example
+
+# Logs and OS
+*.log
+npm-debug.log*
+.DS_Store
+Thumbs.db
+
+# Docs (optional, not needed at runtime)
+docs
+README.md
+SECURITY.md
+LICENSE
+
+# Misc
+tsconfig.tsbuildinfo
