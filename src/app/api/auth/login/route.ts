@@ -2,12 +2,16 @@ import { NextRequest, NextResponse } from 'next/server'
 import { SignJWT } from 'jose'
 import nacl from 'tweetnacl'
 import bs58 from 'bs58'
+import { pendingNonces } from '../nonce/route'
 
 const SESSION_DURATION_SECS = 30 * 24 * 60 * 60 // 30 days
 const BSP_REGISTRY_URL = process.env.BSP_REGISTRY_URL ?? 'https://registry.bsp.bio'
 
-// Nonce replay protection — in-memory store with TTL
-const usedNonces = new Map<string, number>() // nonceKey -> expiry ms
+// Fix 1: Validate SESSION_SECRET at startup
+const SESSION_SECRET = process.env.SESSION_SECRET
+if (!SESSION_SECRET || SESSION_SECRET.length < 32) {
+  throw new Error('SESSION_SECRET must be at least 32 characters')
+}
 
 interface LoginBody {
   domain: string
@@ -46,10 +50,7 @@ function verifySignature(
 }
 
 export async function POST(req: NextRequest) {
-  const secret = process.env.SESSION_SECRET
-  if (!secret) {
-    return NextResponse.json({ error: 'Server misconfigured' }, { status: 500 })
-  }
+  const ip = req.headers.get('x-forwarded-for') ?? 'unknown'
 
   let body: LoginBody
   try {
@@ -67,29 +68,37 @@ export async function POST(req: NextRequest) {
   // Reject stale timestamps (5 min window)
   const nowSecs = Math.floor(Date.now() / 1000)
   if (Math.abs(nowSecs - timestamp_secs) > 300) {
+    console.error(JSON.stringify({ event: 'auth_failure', reason: 'timestamp_expired', domain, ip, ts: new Date().toISOString() }))
     return NextResponse.json({ error: 'Timestamp expired' }, { status: 401 })
   }
 
-  // Nonce replay protection
-  const nonceKey = `${domain}:${nonce}`
-  const now = Date.now()
-  for (const [k, exp] of usedNonces) { if (exp < now) usedNonces.delete(k) }
-  if (usedNonces.has(nonceKey)) {
-    return NextResponse.json({ error: 'Nonce already used' }, { status: 409 })
+  // Fix 3: Server-side nonce validation — look up nonce issued by /api/auth/nonce
+  const pending = pendingNonces.get(nonce)
+  if (!pending) {
+    console.error(JSON.stringify({ event: 'auth_failure', reason: 'nonce_not_found_or_expired', domain, ip, ts: new Date().toISOString() }))
+    return NextResponse.json({ error: 'Nonce not found or expired' }, { status: 409 })
   }
-  usedNonces.set(nonceKey, now + 5 * 60 * 1000) // TTL 5 min
+  if (pending.domain !== domain) {
+    pendingNonces.delete(nonce)
+    console.error(JSON.stringify({ event: 'auth_failure', reason: 'nonce_domain_mismatch', domain, ip, ts: new Date().toISOString() }))
+    return NextResponse.json({ error: 'Nonce domain mismatch' }, { status: 409 })
+  }
+  // Consume nonce (single use)
+  pendingNonces.delete(nonce)
 
   const publicKey = await fetchPublicKey(domain)
   if (!publicKey) {
+    console.error(JSON.stringify({ event: 'auth_failure', reason: 'domain_not_found', domain, ip, ts: new Date().toISOString() }))
     return NextResponse.json({ error: 'Domain not found in registry' }, { status: 401 })
   }
 
   const valid = verifySignature(domain, nonce, timestamp_secs, signature, publicKey)
   if (!valid) {
+    console.error(JSON.stringify({ event: 'auth_failure', reason: 'invalid_signature', domain, ip, ts: new Date().toISOString() }))
     return NextResponse.json({ error: 'Invalid signature' }, { status: 401 })
   }
 
-  const key = new TextEncoder().encode(secret)
+  const key = new TextEncoder().encode(SESSION_SECRET)
   const token = await new SignJWT({ domain })
     .setProtectedHeader({ alg: 'HS256' })
     .setIssuedAt()
@@ -99,7 +108,7 @@ export async function POST(req: NextRequest) {
   const res = NextResponse.json({ success: true, domain })
   res.cookies.set('bsp_session', token, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
+    secure: true, // Fix 2: always secure
     sameSite: 'lax',
     maxAge: SESSION_DURATION_SECS,
     path: '/',
