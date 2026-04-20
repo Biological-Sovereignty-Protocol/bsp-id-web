@@ -6,6 +6,9 @@ import bs58 from 'bs58'
 const SESSION_DURATION_SECS = 30 * 24 * 60 * 60 // 30 days
 const BSP_REGISTRY_URL = process.env.BSP_REGISTRY_URL ?? 'https://registry.bsp.bio'
 
+// Nonce replay protection — in-memory store with TTL
+const usedNonces = new Map<string, number>() // nonceKey -> expiry ms
+
 interface LoginBody {
   domain: string
   signature: string
@@ -66,6 +69,15 @@ export async function POST(req: NextRequest) {
   if (Math.abs(nowSecs - timestamp_secs) > 300) {
     return NextResponse.json({ error: 'Timestamp expired' }, { status: 401 })
   }
+
+  // Nonce replay protection
+  const nonceKey = `${domain}:${nonce}`
+  const now = Date.now()
+  for (const [k, exp] of usedNonces) { if (exp < now) usedNonces.delete(k) }
+  if (usedNonces.has(nonceKey)) {
+    return NextResponse.json({ error: 'Nonce already used' }, { status: 409 })
+  }
+  usedNonces.set(nonceKey, now + 5 * 60 * 1000) // TTL 5 min
 
   const publicKey = await fetchPublicKey(domain)
   if (!publicKey) {
