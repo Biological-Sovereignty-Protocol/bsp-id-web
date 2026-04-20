@@ -1,8 +1,9 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "@/styles/globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { ServiceWorkerRegister } from "@/components/ServiceWorkerRegister";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://id.biologicalsovereigntyprotocol.com";
 const SITE_NAME = "BSP Identity";
@@ -67,6 +68,13 @@ export const metadata: Metadata = {
   icons: {
     icon: "/favicon.ico",
   },
+  manifest: "/manifest.json",
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: "#0076ff",
 };
 
 export default function RootLayout({
@@ -78,14 +86,21 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className="antialiased min-h-screen flex flex-col transition-colors duration-300"
         style={{ background: 'var(--color-bg)', color: 'var(--color-text)' }}>
+        <a
+          href="#main"
+          className="sr-only focus:not-sr-only fixed top-2 left-2 z-50 bg-white text-black px-4 py-2 rounded shadow"
+        >
+          Skip to content
+        </a>
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
 
           <Header />
-          <main className="flex-1 w-full pt-[64px]">
+          <main id="main" className="flex-1 w-full pt-[64px]">
             {children}
           </main>
 
           <Footer />
+          <ServiceWorkerRegister />
 
         </ThemeProvider>
       </body>

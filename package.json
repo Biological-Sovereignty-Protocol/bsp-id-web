@@ -30,6 +30,8 @@
     "tweetnacl": "^1.0.3"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.11.2",
+    "@next/bundle-analyzer": "^16.2.4",
     "@playwright/test": "^1.59.1",
     "@tailwindcss/postcss": "^4",
     "@types/bs58": "^4.0.4",

@@ -220,19 +220,27 @@ export default function GuardiansPage() {
                             <div className="p-6 space-y-4" style={{ background: 'var(--color-surface)', borderRadius: 16, border: '1px solid var(--color-primary)', boxShadow: '0 1px 3px rgba(0,0,0,0.04)' }}>
                                 <h3 className="text-sm font-semibold" style={{ color: 'var(--color-text)' }}>{t('guardians.add_title')}</h3>
                                 <div className="grid gap-3">
+                                    <label htmlFor="guardian-name-input" className="sr-only">{t('guardians.placeholder_name')}</label>
                                     <input
+                                        id="guardian-name-input"
                                         type="text"
                                         value={formName}
                                         onChange={e => setFormName(e.target.value)}
                                         placeholder={t('guardians.placeholder_name')}
+                                        aria-label={t('guardians.placeholder_name')}
+                                        autoComplete="name"
                                         className="w-full px-4 py-3 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] transition-all"
                                         style={{ background: 'var(--color-bg)', border: '1px solid var(--color-border)', color: 'var(--color-text)' }}
                                     />
+                                    <label htmlFor="guardian-contact-input" className="sr-only">{t('guardians.placeholder_contact')}</label>
                                     <input
-                                        type="text"
+                                        id="guardian-contact-input"
+                                        type="email"
                                         value={formContact}
                                         onChange={e => setFormContact(e.target.value)}
                                         placeholder={t('guardians.placeholder_contact')}
+                                        aria-label={t('guardians.placeholder_contact')}
+                                        autoComplete="email"
                                         className="w-full px-4 py-3 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] transition-all"
                                         style={{ background: 'var(--color-bg)', border: '1px solid var(--color-border)', color: 'var(--color-text)' }}
                                     />

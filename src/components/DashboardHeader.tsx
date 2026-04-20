@@ -102,7 +102,7 @@ export function DashboardHeader({ domain, initial, customSearchItems }: Dashboar
             {/* Right — Actions */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 {/* Search */}
-                <button onClick={() => setShowSearch(true)} style={{
+                <button type="button" aria-label={t('dashboard_header.search')} onClick={() => setShowSearch(true)} style={{
                     display: 'flex', alignItems: 'center', gap: '8px', padding: '6px 14px',
                     borderRadius: '8px', fontSize: '0.8rem', cursor: 'pointer',
                     background: isDark ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.03)',
@@ -116,7 +116,7 @@ export function DashboardHeader({ domain, initial, customSearchItems }: Dashboar
 
                 {/* Notifications */}
                 <div style={{ position: 'relative' }}>
-                    <button onClick={() => setShowNotifs(!showNotifs)} style={{
+                    <button type="button" aria-label="Notifications" aria-haspopup="menu" onClick={() => setShowNotifs(!showNotifs)} style={{
                         display: 'flex', alignItems: 'center', justifyContent: 'center',
                         width: '32px', height: '32px', borderRadius: '8px', cursor: 'pointer', position: 'relative',
                         background: isDark ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.03)',
@@ -129,7 +129,7 @@ export function DashboardHeader({ domain, initial, customSearchItems }: Dashboar
 
                     {showNotifs && (
                         <>
-                            <div onClick={() => setShowNotifs(false)} style={{ position: 'fixed', inset: 0, zIndex: 40 }} />
+                            <button type="button" aria-label="Close notifications" onClick={() => setShowNotifs(false)} style={{ position: 'fixed', inset: 0, zIndex: 40, background: 'transparent', border: 'none', padding: 0, cursor: 'default' }} />
                             <div style={{
                                 position: 'absolute', right: 0, top: '40px', zIndex: 50,
                                 width: '300px', borderRadius: '12px', overflow: 'hidden',
@@ -176,7 +176,7 @@ export function DashboardHeader({ domain, initial, customSearchItems }: Dashboar
                 </div>
 
                 {/* Theme */}
-                <button onClick={() => setTheme(isDark ? "light" : "dark")}
+                <button type="button" aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"} onClick={() => setTheme(isDark ? "light" : "dark")}
                     style={{
                         position: 'relative', display: 'flex', alignItems: 'center',
                         width: '36px', height: '20px', borderRadius: '10px', border: 'none', cursor: 'pointer',
@@ -195,7 +195,7 @@ export function DashboardHeader({ domain, initial, customSearchItems }: Dashboar
                 {/* Avatar + Dropdown Menu */}
                 {initial && (
                     <div style={{ position: 'relative', marginLeft: '4px' }}>
-                        <button onClick={() => setShowMenu(!showMenu)} style={{
+                        <button type="button" aria-label="User menu" aria-haspopup="menu" onClick={() => setShowMenu(!showMenu)} style={{
                             width: 32, height: 32, borderRadius: '50%',
                             background: 'linear-gradient(135deg, var(--color-primary), #3b82f6)',
                             color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -204,7 +204,7 @@ export function DashboardHeader({ domain, initial, customSearchItems }: Dashboar
 
                         {showMenu && (
                             <>
-                                <div onClick={() => setShowMenu(false)} style={{ position: 'fixed', inset: 0, zIndex: 40 }} />
+                                <button type="button" aria-label="Close menu" onClick={() => setShowMenu(false)} style={{ position: 'fixed', inset: 0, zIndex: 40, background: 'transparent', border: 'none', padding: 0, cursor: 'default' }} />
                                 <div style={{
                                     position: 'absolute', right: 0, top: '40px', zIndex: 50,
                                     width: '200px', borderRadius: '12px', overflow: 'hidden',
@@ -242,7 +242,7 @@ export function DashboardHeader({ domain, initial, customSearchItems }: Dashboar
 
             {showSearch && (
                 <>
-                    <div onClick={() => setShowSearch(false)} style={{ position: 'fixed', inset: 0, zIndex: 100, background: 'rgba(0,0,0,0.4)', backdropFilter: 'blur(4px)' }} />
+                    <button type="button" aria-label="Close search" onClick={() => setShowSearch(false)} style={{ position: 'fixed', inset: 0, zIndex: 100, background: 'rgba(0,0,0,0.4)', backdropFilter: 'blur(4px)', border: 'none', padding: 0, cursor: 'pointer' }} />
                     <div style={{
                         position: 'fixed', top: '20%', left: '50%', transform: 'translateX(-50%)',
                         zIndex: 101, width: '100%', maxWidth: '480px',
@@ -252,11 +252,15 @@ export function DashboardHeader({ domain, initial, customSearchItems }: Dashboar
                         boxShadow: '0 20px 60px rgba(0,0,0,0.3)'
                     }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '14px 16px', borderBottom: `1px solid ${isDark ? 'rgba(255,255,255,0.06)' : '#f1f5f9'}` }}>
-                            <Search size={16} style={{ color: isDark ? '#64748b' : '#94a3b8', flexShrink: 0 }} />
+                            <Search size={16} style={{ color: isDark ? '#64748b' : '#94a3b8', flexShrink: 0 }} aria-hidden="true" />
+                            <label htmlFor="dashboard-search-input" className="sr-only">{t('dashboard_header.search')}</label>
                             <input
+                                id="dashboard-search-input"
                                 autoFocus
+                                type="search"
                                 value={searchQuery}
                                 onChange={e => setSearchQuery(e.target.value)}
+                                aria-label={t('dashboard_header.search')}
                                 placeholder={t('dashboard_header.search')}
                                 style={{
                                     flex: 1, background: 'transparent', border: 'none', outline: 'none',

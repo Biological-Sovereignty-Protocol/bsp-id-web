@@ -207,9 +207,12 @@ export default function ConsentPage() {
 
                         <div className="p-6 space-y-6" style={{ background: 'var(--color-surface)', borderRadius: 16, border: '1px solid var(--color-border)', boxShadow: '0 1px 3px rgba(0,0,0,0.04)' }}>
                             <div className="space-y-3">
-                                <label className="text-sm font-medium text-[var(--color-text-muted)]">{t('consent.label_institution')}</label>
+                                <label htmlFor="consent-ieo-input" className="text-sm font-medium text-[var(--color-text-muted)]">{t('consent.label_institution')}</label>
                                 <input
+                                    id="consent-ieo-input"
                                     type="text"
+                                    inputMode="text"
+                                    autoCapitalize="none"
                                     value={ieoDomain}
                                     onChange={(e) => setIeoDomain(e.target.value.toLowerCase())}
                                     placeholder="ex: fleury.bsp"
@@ -283,10 +286,11 @@ export default function ConsentPage() {
 
                             {/* Expiration Date Picker */}
                             <div style={{ marginTop: '16px' }}>
-                                <label style={{ display: 'block', fontSize: '0.82rem', color: 'var(--color-text-muted)', marginBottom: '8px', fontWeight: 500 }}>
+                                <label htmlFor="consent-expires-input" style={{ display: 'block', fontSize: '0.82rem', color: 'var(--color-text-muted)', marginBottom: '8px', fontWeight: 500 }}>
                                     {t('consent.label_expires') || 'Consent Expiration'}
                                 </label>
                                 <input
+                                    id="consent-expires-input"
                                     type="datetime-local"
                                     value={expiresAt}
                                     onChange={e => setExpiresAt(e.target.value)}
@@ -400,9 +404,12 @@ export default function ConsentPage() {
 
                             {/* Add new intent */}
                             <div style={{ display: 'flex', gap: '8px' }}>
+                                <label htmlFor="consent-new-intent-input" className="sr-only">{t('consent.new_intent_placeholder')}</label>
                                 <input
+                                    id="consent-new-intent-input"
                                     type="text"
                                     placeholder={t('consent.new_intent_placeholder')}
+                                    aria-label={t('consent.new_intent_placeholder')}
                                     style={{
                                         flex: 1, padding: '10px 14px', borderRadius: '10px',
                                         border: '1px solid var(--color-border)', background: 'var(--color-bg)',

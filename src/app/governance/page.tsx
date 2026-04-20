@@ -107,15 +107,18 @@ export default function GovernancePage() {
                             const Icon = item.icon
                             const isActive = item.id === activeTab
                             return (
-                                <div key={item.id} onClick={() => setActiveTab(item.id)} style={{
+                                <button key={item.id} type="button" onClick={() => setActiveTab(item.id)}
+                                    aria-current={isActive ? 'page' : undefined}
+                                    style={{
                                     display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 12px',
                                     borderRadius: '10px', cursor: 'pointer', marginBottom: '4px',
                                     background: isActive ? 'var(--color-primary-soft)' : 'transparent',
                                     color: isActive ? 'var(--color-primary)' : 'var(--color-text-muted)',
-                                    fontWeight: isActive ? 600 : 400, fontSize: '0.85rem'
+                                    fontWeight: isActive ? 600 : 400, fontSize: '0.85rem',
+                                    width: '100%', border: 'none', textAlign: 'left'
                                 }}>
                                     <Icon size={18} /><span>{item.label}</span>
-                                </div>
+                                </button>
                             )
                         })}
                         <div style={{ borderTop: '1px solid var(--color-border)', marginTop: '1rem', paddingTop: '1rem' }}>

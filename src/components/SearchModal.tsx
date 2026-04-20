@@ -92,14 +92,17 @@ export function SearchModal({ open, onClose, isDark, items }: SearchModalProps) 
     return (
         <>
             {/* Backdrop */}
-            <div
+            <button
+                type="button"
                 onClick={onClose}
+                aria-label="Close search"
                 style={{
                     position: "fixed", inset: 0, zIndex: 100,
                     background: "rgba(0,0,0,0.5)",
                     backdropFilter: "blur(6px)",
                     opacity: visible ? 1 : 0,
                     transition: "opacity 0.15s ease",
+                    border: "none", padding: 0, cursor: "pointer",
                 }}
             />
 
@@ -131,11 +134,15 @@ export function SearchModal({ open, onClose, isDark, items }: SearchModalProps) 
                     padding: "14px 16px",
                     borderBottom: "1px solid var(--color-border)",
                 }}>
-                    <Search size={16} style={{ color: "var(--color-text-muted)", flexShrink: 0 }} />
+                    <Search size={16} style={{ color: "var(--color-text-muted)", flexShrink: 0 }} aria-hidden="true" />
+                    <label htmlFor="search-modal-input" className="sr-only">{t("dashboard_header.search", { defaultValue: "Search pages..." })}</label>
                     <input
+                        id="search-modal-input"
                         ref={inputRef}
+                        type="search"
                         value={query}
                         onChange={e => setQuery(e.target.value)}
+                        aria-label={t("dashboard_header.search", { defaultValue: "Search pages..." })}
                         placeholder={t("dashboard_header.search", { defaultValue: "Search pages..." })}
                         style={{
                             flex: 1,
