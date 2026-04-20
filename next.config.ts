@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import bundleAnalyzer from "@next/bundle-analyzer";
 
 // Security headers applied to all routes.
 // CSP is strict but allows inline styles (Tailwind runtime) and images from Aptos/BSP endpoints.
@@ -37,9 +38,16 @@ const securityHeaders = [
   { key: "X-DNS-Prefetch-Control", value: "on" },
 ];
 
+// Dedicated cache headers for static service worker + manifest so the PWA shell stays fresh.
+const swHeaders = [
+  { key: "Cache-Control", value: "public, max-age=0, must-revalidate" },
+  { key: "Service-Worker-Allowed", value: "/" },
+];
+
 const nextConfig: NextConfig = {
+  // Build errors are not silenced — real type issues must be fixed or explicitly suppressed inline.
   typescript: {
-    ignoreBuildErrors: true,
+    ignoreBuildErrors: false,
   },
   serverExternalPackages: ["@aptos-labs/ts-sdk", "classic-level"],
   webpack: (config) => {
@@ -58,9 +66,21 @@ const nextConfig: NextConfig = {
         source: "/:path*",
         headers: securityHeaders,
       },
+      {
+        source: "/sw.js",
+        headers: swHeaders,
+      },
+      {
+        source: "/manifest.json",
+        headers: [{ key: "Cache-Control", value: "public, max-age=3600" }],
+      },
     ];
   },
   experimental: {},
 };
 
-export default nextConfig;
+const withBundleAnalyzer = bundleAnalyzer({
+  enabled: process.env.ANALYZE === "true",
+});
+
+export default withBundleAnalyzer(nextConfig);

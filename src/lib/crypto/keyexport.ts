@@ -26,7 +26,11 @@
 // ── Helpers ────────────────────────────────────────────────────────────────
 
 function toBuffer(arr: Uint8Array): ArrayBuffer {
-    return arr.buffer.slice(arr.byteOffset, arr.byteOffset + arr.byteLength)
+    // Normalize to a fresh ArrayBuffer to avoid ArrayBuffer | SharedArrayBuffer union
+    // that SubtleCrypto's type definitions disallow.
+    const out = new ArrayBuffer(arr.byteLength)
+    new Uint8Array(out).set(arr)
+    return out
 }
 
 function bytesToBase64(bytes: Uint8Array): string {

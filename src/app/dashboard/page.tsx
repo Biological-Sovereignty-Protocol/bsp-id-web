@@ -138,7 +138,7 @@ export default function Dashboard() {
             <div className="w-full min-h-[calc(100vh-64px)] flex flex-col lg:flex-row">
                 {/* LEFT — Visual */}
                 <div className="relative lg:w-[45%] lg:flex-none min-h-[30vh] lg:min-h-[calc(100vh-64px)] overflow-hidden order-1">
-                    <img src="/hero-image.jpg" alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+                    <img src="/hero-image.jpg" alt="" aria-hidden="true" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
                     <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, rgba(0,30,80,0.75), rgba(0,50,120,0.5))' }} />
                     <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.15) 1px, transparent 1px)', backgroundSize: '28px 28px', opacity: 0.2 }} />
                     <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
@@ -307,14 +307,15 @@ export default function Dashboard() {
 
                     {/* Bottom actions */}
                     <div style={{ padding: '0 0.75rem', borderTop: '1px solid var(--color-border)', paddingTop: '1rem' }}>
-                        <div onClick={() => setShowExportModal(true)} style={{
+                        <button type="button" onClick={() => setShowExportModal(true)} style={{
                             display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 12px',
                             borderRadius: '10px', cursor: 'pointer', color: '#f43f5e',
-                            fontSize: '0.85rem', transition: 'all 0.15s'
+                            fontSize: '0.85rem', transition: 'all 0.15s', width: '100%',
+                            background: 'transparent', border: 'none', textAlign: 'left',
                         }}>
                             <Key size={18} />
                             <span>{t('dashboard.cards.export_title')}</span>
-                        </div>
+                        </button>
                     </div>
                 </aside>
 
@@ -582,9 +583,9 @@ export default function Dashboard() {
                         <Link href="/guardians" style={{ flex: 1, minWidth: '140px', textAlign: 'center', padding: '12px', borderRadius: '12px', border: '1px solid var(--color-border)', color: 'var(--color-text)', textDecoration: 'none', fontWeight: 600, fontSize: '0.85rem' }}>
                             {t('dashboard.cards.guardians_title')}
                         </Link>
-                        <div onClick={() => setShowExportModal(true)} style={{ flex: 1, minWidth: '140px', textAlign: 'center', padding: '12px', borderRadius: '12px', border: '1px solid rgba(244,63,94,0.3)', color: '#f43f5e', cursor: 'pointer', fontWeight: 600, fontSize: '0.85rem' }}>
+                        <button type="button" onClick={() => setShowExportModal(true)} style={{ flex: 1, minWidth: '140px', textAlign: 'center', padding: '12px', borderRadius: '12px', border: '1px solid rgba(244,63,94,0.3)', color: '#f43f5e', cursor: 'pointer', fontWeight: 600, fontSize: '0.85rem', background: 'transparent' }}>
                             {t('dashboard.cards.export_title')}
-                        </div>
+                        </button>
                     </div>
                 </main>
             </div>

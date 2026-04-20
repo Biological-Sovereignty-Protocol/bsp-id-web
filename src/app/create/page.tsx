@@ -85,7 +85,7 @@ export default function CreateBEOFlow() {
 
             {/* LEFT — Visual */}
             <div className="relative lg:w-[45%] lg:flex-none min-h-[30vh] lg:min-h-[calc(100vh-64px)] overflow-hidden order-1">
-                <img src="/hero-image.jpg" alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+                <img src="/hero-image.jpg" alt="" aria-hidden="true" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
                 <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, rgba(0,30,80,0.75), rgba(0,50,120,0.5))' }} />
                 <div className="absolute inset-0"
                     style={{ background: 'linear-gradient(to right, transparent 60%, var(--color-bg) 100%)' }} />
@@ -150,12 +150,17 @@ export default function CreateBEOFlow() {
                                 </div>
 
                                 <div className="relative flex items-center">
+                                    <label htmlFor="bsp-domain-input" className="sr-only">{t('create.placeholder_domain')}</label>
                                     <input
+                                        id="bsp-domain-input"
                                         autoFocus
                                         type="text"
+                                        inputMode="text"
+                                        autoCapitalize="none"
                                         value={domain}
                                         onChange={(e) => checkDomain(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ''))}
                                         placeholder={t('create.placeholder_domain')}
+                                        aria-label={t('create.placeholder_domain')}
                                         style={{ borderRadius: 12 }}
                                         className="w-full bg-[var(--color-surface)] border border-[var(--color-border)] px-6 py-4 text-xl outline-none focus:border-[var(--color-primary)] focus:shadow-[0_0_0_3px_var(--color-primary-soft)] transition-all text-[var(--color-text)]"
                                         autoComplete="off"

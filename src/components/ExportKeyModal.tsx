@@ -51,10 +51,12 @@ export default function ExportKeyModal({ domain, privateKeyHex, onClose }: Expor
     }
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-label="Export key backup">
             {/* Backdrop */}
-            <div
-                className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            <button
+                type="button"
+                aria-label="Close"
+                className="absolute inset-0 bg-black/60 backdrop-blur-sm border-0 p-0 cursor-pointer"
                 onClick={onClose}
             />
 
@@ -106,20 +108,23 @@ export default function ExportKeyModal({ domain, privateKeyHex, onClose }: Expor
                         <div className="space-y-4">
                             {/* Password */}
                             <div>
-                                <label className="block text-xs font-bold text-[var(--color-text-muted)] uppercase tracking-widest mb-2">
+                                <label htmlFor="export-key-password" className="block text-xs font-bold text-[var(--color-text-muted)] uppercase tracking-widest mb-2">
                                     Encryption password
                                 </label>
                                 <div className="relative">
                                     <input
+                                        id="export-key-password"
                                         type={showPassword ? "text" : "password"}
                                         value={password}
                                         onChange={e => setPassword(e.target.value)}
                                         placeholder="Choose a strong password"
+                                        autoComplete="new-password"
                                         className="w-full bg-[var(--color-bg)] border border-[var(--color-surface-border)] rounded-2xl px-4 py-3 pr-12 text-[var(--color-text)] placeholder:text-[var(--color-text-muted)]/50 focus:outline-none focus:border-[var(--color-primary)] transition-colors"
                                     />
                                     <button
                                         type="button"
                                         onClick={() => setShowPassword(v => !v)}
+                                        aria-label={showPassword ? "Hide password" : "Show password"}
                                         className="absolute right-4 top-1/2 -translate-y-1/2 text-[var(--color-text-muted)] hover:text-[var(--color-text)] transition-colors"
                                     >
                                         {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
@@ -143,20 +148,23 @@ export default function ExportKeyModal({ domain, privateKeyHex, onClose }: Expor
 
                             {/* Confirm */}
                             <div>
-                                <label className="block text-xs font-bold text-[var(--color-text-muted)] uppercase tracking-widest mb-2">
+                                <label htmlFor="export-key-confirm" className="block text-xs font-bold text-[var(--color-text-muted)] uppercase tracking-widest mb-2">
                                     Confirm password
                                 </label>
                                 <div className="relative">
                                     <input
+                                        id="export-key-confirm"
                                         type={showConfirm ? "text" : "password"}
                                         value={confirm}
                                         onChange={e => setConfirm(e.target.value)}
                                         placeholder="Repeat the password"
+                                        autoComplete="new-password"
                                         className="w-full bg-[var(--color-bg)] border border-[var(--color-surface-border)] rounded-2xl px-4 py-3 pr-12 text-[var(--color-text)] placeholder:text-[var(--color-text-muted)]/50 focus:outline-none focus:border-[var(--color-primary)] transition-colors"
                                     />
                                     <button
                                         type="button"
                                         onClick={() => setShowConfirm(v => !v)}
+                                        aria-label={showConfirm ? "Hide password" : "Show password"}
                                         className="absolute right-4 top-1/2 -translate-y-1/2 text-[var(--color-text-muted)] hover:text-[var(--color-text)] transition-colors"
                                     >
                                         {showConfirm ? <EyeOff size={16} /> : <Eye size={16} />}

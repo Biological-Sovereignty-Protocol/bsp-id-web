@@ -152,10 +152,13 @@ export default function RecoverPage() {
                         {method === 'seed' ? (
                             <div className="p-6 space-y-6" style={{ background: 'var(--color-surface)', borderRadius: 16, border: '1px solid var(--color-border)', boxShadow: '0 1px 3px rgba(0,0,0,0.04)' }}>
                                 <div className="space-y-3">
-                                    <label className="text-sm font-medium text-[var(--color-text-muted)]">{t('recover.label_domain')}</label>
+                                    <label htmlFor="recover-domain-input" className="text-sm font-medium text-[var(--color-text-muted)]">{t('recover.label_domain')}</label>
                                     <div className="relative flex items-center">
                                         <input
+                                            id="recover-domain-input"
                                             type="text"
+                                            inputMode="text"
+                                            autoCapitalize="none"
                                             value={domain}
                                             onChange={(e) => setDomain(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ''))}
                                             placeholder={t('create.placeholder_domain')}
@@ -168,8 +171,9 @@ export default function RecoverPage() {
                                     </div>
                                 </div>
                                 <div className="space-y-3">
-                                    <label className="text-sm font-medium text-[var(--color-text-muted)]">{t('recover.label_seed')}</label>
+                                    <label htmlFor="recover-seed-input" className="text-sm font-medium text-[var(--color-text-muted)]">{t('recover.label_seed')}</label>
                                     <textarea
+                                        id="recover-seed-input"
                                         rows={4}
                                         value={seedInput}
                                         onChange={(e) => setSeedInput(e.target.value.toLowerCase())}

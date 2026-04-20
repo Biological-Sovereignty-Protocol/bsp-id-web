@@ -150,7 +150,7 @@ export default function InstitutionPage() {
             <div className="w-full min-h-[calc(100vh-64px)] flex flex-col lg:flex-row">
                 {/* LEFT — Visual */}
                 <div className="relative lg:w-[45%] lg:flex-none min-h-[30vh] lg:min-h-[calc(100vh-64px)] overflow-hidden order-1">
-                    <img src="/hero-image.jpg" alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+                    <img src="/hero-image.jpg" alt="" aria-hidden="true" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
                     <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, rgba(0,30,80,0.75), rgba(0,50,120,0.5))' }} />
                     <div className="absolute inset-0" style={{ background: 'linear-gradient(to right, transparent 60%, var(--color-bg) 100%)' }} />
                     <div className="absolute inset-0 lg:hidden" style={{ background: 'linear-gradient(to bottom, transparent 60%, var(--color-bg) 100%)' }} />
@@ -204,8 +204,9 @@ export default function InstitutionPage() {
 
                             <div className="p-6 space-y-6" style={{ background: 'var(--color-surface)', borderRadius: 16, border: '1px solid var(--color-border)', boxShadow: '0 1px 3px rgba(0,0,0,0.04)' }}>
                                 <div className="space-y-3">
-                                    <label className="text-sm font-medium text-[var(--color-text-muted)]">{t('institution.label_name')}</label>
+                                    <label htmlFor="ieo-name-input" className="text-sm font-medium text-[var(--color-text-muted)]">{t('institution.label_name')}</label>
                                     <input
+                                        id="ieo-name-input"
                                         type="text"
                                         value={name}
                                         onChange={(e) => setName(e.target.value)}
@@ -218,10 +219,13 @@ export default function InstitutionPage() {
                                 </div>
 
                                 <div className="space-y-3">
-                                    <label className="text-sm font-medium text-[var(--color-text-muted)]">{t('institution.label_domain')}</label>
+                                    <label htmlFor="ieo-domain-input" className="text-sm font-medium text-[var(--color-text-muted)]">{t('institution.label_domain')}</label>
                                     <div className="relative flex items-center">
                                         <input
+                                            id="ieo-domain-input"
                                             type="text"
+                                            inputMode="text"
+                                            autoCapitalize="none"
                                             value={domain}
                                             onChange={(e) => setDomain(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ''))}
                                             placeholder={t('institution.placeholder_domain')}
@@ -325,32 +329,36 @@ export default function InstitutionPage() {
                             const Icon = item.icon
                             const isActive = activeTab === item.id
                             return (
-                                <div key={item.id}
+                                <button key={item.id}
+                                    type="button"
                                     onClick={() => setActiveTab(item.id)}
+                                    aria-current={isActive ? 'page' : undefined}
                                     style={{
                                         display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 12px',
                                         borderRadius: '10px', cursor: 'pointer', marginBottom: '4px',
                                         background: isActive ? 'var(--color-primary-soft)' : 'transparent',
                                         color: isActive ? 'var(--color-primary)' : 'var(--color-text-muted)',
-                                        fontWeight: isActive ? 600 : 400, fontSize: '0.85rem', transition: 'all 0.15s'
+                                        fontWeight: isActive ? 600 : 400, fontSize: '0.85rem', transition: 'all 0.15s',
+                                        width: '100%', border: 'none', textAlign: 'left'
                                     }}>
                                     <Icon size={18} />
                                     <span>{item.label}</span>
-                                </div>
+                                </button>
                             )
                         })}
                     </nav>
 
                     {/* Bottom actions */}
                     <div style={{ padding: '0 0.75rem', borderTop: '1px solid var(--color-border)', paddingTop: '1rem' }}>
-                        <div onClick={() => setIsRegistered(false)} style={{
+                        <button type="button" onClick={() => setIsRegistered(false)} style={{
                             display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 12px',
                             borderRadius: '10px', cursor: 'pointer', color: 'var(--color-text-muted)',
-                            fontSize: '0.85rem', transition: 'all 0.15s'
+                            fontSize: '0.85rem', transition: 'all 0.15s', width: '100%',
+                            background: 'transparent', border: 'none', textAlign: 'left'
                         }}>
                             <Key size={18} />
                             <span>{t('institution.switch_to_register')}</span>
-                        </div>
+                        </button>
                     </div>
                 </aside>
 

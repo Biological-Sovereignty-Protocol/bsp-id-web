@@ -190,8 +190,8 @@ export default function DestroyPage() {
                             <p className="text-sm font-medium" style={{ color: "#ef4444" }}>{t("destroy.final_warning")}</p>
                         </div>
                         <div>
-                            <label className="block text-sm font-medium mb-2" style={{ color: "var(--color-text)" }}>{t("destroy.type_destroy")}</label>
-                            <input type="text" value={confirmText} onChange={(e) => setConfirmText(e.target.value)} placeholder="DESTROY" disabled={isDestroying} className="w-full px-4 py-3 rounded-xl border font-mono text-base disabled:opacity-50" style={{ background: "var(--color-bg)", borderColor: canExecute ? "#ef4444" : "var(--color-border)", color: "var(--color-text)" }} />
+                            <label htmlFor="destroy-confirm-input" className="block text-sm font-medium mb-2" style={{ color: "var(--color-text)" }}>{t("destroy.type_destroy")}</label>
+                            <input id="destroy-confirm-input" type="text" inputMode="text" autoCapitalize="characters" value={confirmText} onChange={(e) => setConfirmText(e.target.value)} placeholder="DESTROY" disabled={isDestroying} className="w-full px-4 py-3 rounded-xl border font-mono text-base disabled:opacity-50" style={{ background: "var(--color-bg)", borderColor: canExecute ? "#ef4444" : "var(--color-border)", color: "var(--color-text)" }} />
                         </div>
                         {error && (
                             <div className="p-3 rounded-xl text-sm" style={{ background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.25)", color: "#ef4444" }}>{error}</div>
